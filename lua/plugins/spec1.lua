@@ -5,13 +5,15 @@
 -- * disable/enabled LazyVim plugins
 -- * override the configuration of LazyVim plugins
 return {
-  { "EdenEast/nightfox.nvim" },
-  {
-    "LazyVim/LazyVim",
-    opts = {
-      colorscheme = "nightfox",
-    },
-  },
+  -- { "EdenEast/nightfox.nvim" },
+  -- { "rose-pine/neovim", name = "rose-pine" },
+  -- { "catppuccin/nvim", name = "catppuccin" },
+  -- {
+  --   "LazyVim/LazyVim",
+  --   opts = {
+  --     colorscheme = "nightfox",
+  --   },
+  -- },
 
   {
     "xiyaowong/transparent.nvim",
@@ -20,10 +22,18 @@ return {
 
   {
     "nvim-treesitter/nvim-treesitter",
+    -- enabled = false,
     opts = {
-      -- cpp is not working for some reasons
-      ignore_install = { "cpp" },
+      ensure_installed = {},
     },
+    config = function(_, opts)
+      if type(opts.ensure_installed) == "table" then
+        opts.ensure_installed = LazyVim.dedup(opts.ensure_installed)
+      end
+      require("nvim-treesitter.configs").setup(opts)
+      require("nvim-treesitter.install").prefer_git = false
+      require("nvim-treesitter.install").compilers = { "cl", "gcc" }
+    end,
   },
 
   -- {
@@ -87,6 +97,7 @@ return {
       -- refer to the configuration section below
       bigfile = { enabled = true },
       picker = { enabled = true },
+      image = { enabled = true, force = true },
       dashboard = {
         enabled = true,
         sections = {
