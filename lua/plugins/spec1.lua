@@ -36,28 +36,6 @@ return {
     end,
   },
 
-  -- {
-  --   "nvim-neorg/neorg",
-  --   lazy = false,
-  --   version = "*",
-  --   run = ":Neorg sync-parsers",
-  --   ft = "norg",
-  --   opts = {
-  --     load = {
-  --       ["core.defaults"] = {},
-  --       ["core.concealer"] = {},
-  --       ["core.dirman"] = {
-  --         config = {
-  --           workspaces = {
-  --             notes = "~/Dropbox (Personal)/PC (2)/Desktop/umich/notes",
-  --             notes_idse = "~/Dropbox (Personal)/PC (2)/Desktop/umich/notes_idse",
-  --           },
-  --         },
-  --       },
-  --     },
-  --   },
-  -- },
-
   {
     "kdheepak/lazygit.nvim",
     lazy = true,
@@ -84,6 +62,26 @@ return {
     dependencies = {
       "jmbuhr/otter.nvim",
     },
+  },
+
+  {
+    "benlubas/molten-nvim",
+    build = ":UpdateRemotePlugins",
+    dependencies = "willothy/wezterm.nvim",
+    init = function()
+      vim.g.molten_auto_open_output = false -- cannot be true if molten_image_provider = "wezterm"
+      vim.g.molten_output_show_more = true
+      vim.g.molten_image_provider = "wezterm"
+      vim.g.molten_output_virt_lines = true
+      vim.g.molten_split_direction = "right" --direction of the output window, options are "right", "left", "top", "bottom"
+      vim.g.molten_split_size = 40 --(0-100) % size of the screen dedicated to the output window
+      vim.g.molten_virt_text_output = true
+      vim.g.molten_use_border_highlights = true
+      vim.g.molten_virt_lines_off_by_1 = true
+      vim.g.molten_auto_image_popup = false
+      vim.g.python3_host_prog =
+        vim.fn.expand("C:/Users/zhiyu/Dropbox (Personal)/PC (2)/Desktop/Git/neovim-py/.venv/Scripts/python.exe")
+    end,
   },
 
   {
