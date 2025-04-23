@@ -61,6 +61,24 @@ return {
     "quarto-dev/quarto-nvim",
     dependencies = {
       "jmbuhr/otter.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    opts = {
+      lspFeatures = {
+        enabled = true,
+        languages = { "r", "python", "julia", "bash", "html" },
+        chunks = "curly",
+        completion = {
+          enabled = true,
+        },
+      },
+      codeRunner = {
+        enabled = true,
+        default_method = "slime",
+        ft_runners = {
+          python = "molten",
+        },
+      },
     },
   },
 
@@ -82,6 +100,27 @@ return {
       vim.g.python3_host_prog =
         vim.fn.expand("C:/Users/zhiyu/Dropbox (Personal)/PC (2)/Desktop/Git/neovim-py/.venv/Scripts/python.exe")
     end,
+  },
+
+  {
+    "nvim-neorg/neorg",
+    lazy = false,
+    version = "*",
+    run = ":Neorg sync-parsers",
+    ft = "norg",
+    opts = {
+      load = {
+        ["core.defaults"] = {},
+        ["core.concealer"] = {},
+        ["core.dirman"] = {
+          config = {
+            workspaces = {
+              notes = "~/Dropbox (Personal)/PC (2)/Desktop/umich/notes",
+            },
+          },
+        },
+      },
+    },
   },
 
   {
@@ -141,6 +180,45 @@ return {
       scroll = { enabled = true },
       statuscolumn = { enabled = true },
       words = { enabled = true },
+    },
+  },
+
+  -- formatter
+  {
+    "stevearc/conform.nvim",
+    opts = {
+      formatters_by_ft = {
+        lua = { "stylua" },
+        python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
+        qmd = { "pyright" },
+      },
+    },
+  },
+
+  -- package manager needed to install coc-pyright lsp
+  {
+    "neoclide/coc.nvim",
+    branch = "release",
+  },
+
+  {
+    -- directly open ipynb files as quarto docuements
+    -- and convert back behind the scenes
+    -- make sure you have jupytext python package installed
+    "GCBallesteros/jupytext.nvim",
+    opts = {
+      custom_language_formatting = {
+        python = {
+          extension = "qmd",
+          style = "quarto",
+          force_ft = "quarto",
+        },
+        r = {
+          extension = "qmd",
+          style = "quarto",
+          force_ft = "quarto",
+        },
+      },
     },
   },
 }
