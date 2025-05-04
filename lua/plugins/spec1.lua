@@ -188,17 +188,10 @@ return {
     "stevearc/conform.nvim",
     opts = {
       formatters_by_ft = {
-        lua = { "stylua" },
         python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
         qmd = { "pyright" },
       },
     },
-  },
-
-  -- package manager needed to install coc-pyright lsp
-  {
-    "neoclide/coc.nvim",
-    branch = "release",
   },
 
   {
@@ -218,6 +211,19 @@ return {
           style = "quarto",
           force_ft = "quarto",
         },
+      },
+    },
+  },
+
+  {
+    "saghen/blink.cmp",
+    keys = {
+      {
+        "<C-E>",
+        function()
+          require("blink.cmp").show()
+        end,
+        mode = { "i" },
       },
     },
   },
