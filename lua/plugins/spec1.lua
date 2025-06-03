@@ -5,16 +5,6 @@
 -- * disable/enabled LazyVim plugins
 -- * override the configuration of LazyVim plugins
 return {
-  -- { "EdenEast/nightfox.nvim" },
-  -- { "rose-pine/neovim", name = "rose-pine" },
-  -- { "catppuccin/nvim", name = "catppuccin" },
-  -- {
-  --   "LazyVim/LazyVim",
-  --   opts = {
-  --     colorscheme = "nightfox",
-  --   },
-  -- },
-
   {
     "xiyaowong/transparent.nvim",
     lazy = false,
@@ -34,27 +24,6 @@ return {
       require("nvim-treesitter.install").prefer_git = false
       require("nvim-treesitter.install").compilers = { "cl", "gcc" }
     end,
-  },
-
-  {
-    "kdheepak/lazygit.nvim",
-    lazy = true,
-    cmd = {
-      "LazyGit",
-      "LazyGitConfig",
-      "LazyGitCurrentFile",
-      "LazyGitFilter",
-      "LazyGitFilterCurrentFile",
-    },
-    -- optional for floating window border decoration
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-    -- setting the keybinding for LazyGit with 'keys' is recommended in
-    -- order to load the plugin when the command is run for the first time
-    keys = {
-      { "<leader>lg", "<cmd>LazyGit<cr>", desc = "LazyGit" },
-    },
   },
 
   {
@@ -135,6 +104,7 @@ return {
       bigfile = { enabled = true },
       picker = { enabled = true },
       image = { enabled = true, force = true },
+      lazygit = {},
       dashboard = {
         enabled = true,
         sections = {
@@ -181,6 +151,24 @@ return {
       statuscolumn = { enabled = true },
       words = { enabled = true },
     },
+    keys = {
+      {
+        "<leader>fz",
+        function()
+          Snacks.picker.zoxide({
+            finder = "files_zoxide",
+            format = "file",
+            confirm = "load_session",
+            win = {
+              preview = {
+                minimal = true,
+              },
+            },
+          })
+        end,
+        desc = "zoxide",
+      },
+    },
   },
 
   -- formatter
@@ -219,7 +207,7 @@ return {
     "saghen/blink.cmp",
     keys = {
       {
-        "<C-E>",
+        "<C-e>",
         function()
           require("blink.cmp").show()
         end,
