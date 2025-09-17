@@ -9,22 +9,39 @@ return {
     "xiyaowong/transparent.nvim",
     lazy = false,
   },
-
   {
-    "nvim-treesitter/nvim-treesitter",
-    -- enabled = false,
+    "mason-org/mason.nvim",
+    lazy = false,
     opts = {
-      ensure_installed = {},
+      ensure_installed = {
+        "stylua",
+        "shfmt",
+        "clangd",
+        "pyright",
+        "ruff",
+        "ty",
+        "r-languageserver",
+        "rust-analyzer",
+        "julia-lsp",
+      },
     },
-    config = function(_, opts)
-      if type(opts.ensure_installed) == "table" then
-        opts.ensure_installed = LazyVim.dedup(opts.ensure_installed)
-      end
-      require("nvim-treesitter.configs").setup(opts)
-      require("nvim-treesitter.install").prefer_git = false
-      require("nvim-treesitter.install").compilers = { "cl", "gcc" }
-    end,
   },
+
+  -- {
+  --   "nvim-treesitter/nvim-treesitter",
+  --   -- enabled = false,
+  --   opts = {
+  --     ensure_installed = {},
+  --   },
+  --   config = function(_, opts)
+  --     if type(opts.ensure_installed) == "table" then
+  --       opts.ensure_installed = LazyVim.dedup(opts.ensure_installed)
+  --     end
+  --     require("nvim-treesitter.configs").setup(opts)
+  --     require("nvim-treesitter.install").prefer_git = false
+  --     require("nvim-treesitter.install").compilers = { "cl", "gcc" }
+  --   end,
+  -- },
 
   {
     "quarto-dev/quarto-nvim",
@@ -71,26 +88,26 @@ return {
     end,
   },
 
-  {
-    "nvim-neorg/neorg",
-    lazy = false,
-    version = "*",
-    run = ":Neorg sync-parsers",
-    ft = "norg",
-    opts = {
-      load = {
-        ["core.defaults"] = {},
-        ["core.concealer"] = {},
-        ["core.dirman"] = {
-          config = {
-            workspaces = {
-              notes = "~/Dropbox (Personal)/PC (2)/Desktop/umich/notes",
-            },
-          },
-        },
-      },
-    },
-  },
+  -- {
+  --   "nvim-neorg/neorg",
+  --   lazy = false,
+  --   version = "*",
+  --   run = ":Neorg sync-parsers",
+  --   ft = "norg",
+  --   opts = {
+  --     load = {
+  --       ["core.defaults"] = {},
+  --       ["core.concealer"] = {},
+  --       ["core.dirman"] = {
+  --         config = {
+  --           workspaces = {
+  --             notes = "~/Dropbox (Personal)/PC (2)/Desktop/umich/notes",
+  --           },
+  --         },
+  --       },
+  --     },
+  --   },
+  -- },
 
   {
     "folke/snacks.nvim",
@@ -176,8 +193,12 @@ return {
     "stevearc/conform.nvim",
     opts = {
       formatters_by_ft = {
-        python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
         qmd = { "pyright" },
+        lua = { "stylua" },
+        python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
+        ruby = { "ruby-lsp" },
+        r = { "styler" },
+        julia = { "julials" },
       },
     },
   },
@@ -207,12 +228,27 @@ return {
     "saghen/blink.cmp",
     keys = {
       {
-        "<C-e>",
+        "<C-g>",
         function()
           require("blink.cmp").show()
         end,
         mode = { "i" },
       },
     },
+    opts = {
+      fuzzy = { implementation = "lua" },
+    },
+  },
+
+  {
+    "stevearc/oil.nvim",
+    ---@module 'oil'
+    ---@type oil.SetupOpts
+    opts = {},
+    -- Optional dependencies
+    dependencies = { { "nvim-mini/mini.icons", opts = {} } },
+    -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+    -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
+    lazy = false,
   },
 }
