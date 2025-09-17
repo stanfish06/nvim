@@ -12,4 +12,3 @@ vim.keymap.set(
   { silent = true, desc = "evaluate visual selection" }
 )
 vim.keymap.set("n", "-", "<cmd>Oil<CR>")
-vim.keymap.set("t", "<Esc><C-n>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
