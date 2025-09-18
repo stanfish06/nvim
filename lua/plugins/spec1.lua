@@ -127,7 +127,7 @@ return {
           {
             section = "terminal",
             align = "center",
-            cmd = "wsl --exec colorscript -e dna2",
+            cmd = "wsl --exec colorscript -e dna2 2>/dev/null || colorscript -e dna2",
             height = 8,
             indent = 2,
             padding = 1,
@@ -135,7 +135,7 @@ return {
           {
             pane = 2,
             section = "terminal",
-            cmd = "wsl --exec colorscript -e square",
+            cmd = "wsl --exec colorscript -e square 2>/dev/null || colorscript -e square",
             height = 5,
             padding = 1,
           },
