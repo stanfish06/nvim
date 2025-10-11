@@ -17,6 +17,7 @@ return {
         "shfmt",
         "clangd",
         -- "pyright",
+        "typescript-language-server",
         "pyrefly",
         "ruff",
         "ty",
