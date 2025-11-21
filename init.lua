@@ -7,6 +7,16 @@ vim.cmd.colorscheme("dark")
 vim.o.number = true
 vim.o.relativenumber = true
 
+-- keymap
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
+vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "[Q]uickfix list" })
+vim.keymap.set("n", "<leader>c", '<cmd>lclose<CR>', { desc = "[C]lose quickfix" })
+vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
+vim.keymap.set("n", "<c-/>", "<cmd>terminal<CR>")
+vim.keymap.set("n", "\\", "<cmd>Sexplore<CR>")
+
 -- misc settings
 vim.o.showmode = true
 vim.o.autoread = true
@@ -14,11 +24,19 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.shiftwidth = 4
 vim.o.history = 500
-vim.o.cursorline = true
-vim.o.cursorlineopt = 'number'
+vim.opt.cursorline = true
+vim.opt.cursorlineopt = "number"
+vim.o.undofile = true
+vim.o.splitright = true
+vim.o.splitbelow = true
+
+-- clipboard
+vim.schedule(function()
+	vim.o.clipboard = "unnamedplus"
+end)
 
 -- status
-vim.api.nvim_set_hl(0, "StatusLineModeNormal", { bg = "yellow", fg = "black" })
+vim.api.nvim_set_hl(0, "StatusLineModeNormal", { bg = "white", fg = "black" })
 vim.api.nvim_set_hl(0, "StatusLineModeInsert", { bg = "gray", fg = "black" })
 vim.api.nvim_set_hl(0, "StatusLineModeVisual", { bg = "orange", fg = "black" })
 local function current_mode()
@@ -49,7 +67,43 @@ local function current_file()
 		return home_path
 	end
 end
-function status_line()
+function StatusLine()
 	return current_mode() .. " " .. current_file()
 end
-vim.opt.statusline = "%!v:lua.status_line()"
+vim.opt.statusline = "%!v:lua.StatusLine()"
+
+-- lsp
+-- git clone https://github.com/neovim/nvim-lspconfig ~/.config/nvim/pack/nvim/start/nvim-lspconfig
+-- after v12, neovim will have built-in package manager
+-- lua
+vim.lsp.config["luals"] = {
+	-- Command and arguments to start the server.
+	-- see https://github.com/LuaLS/lua-language-server for installation instruction
+	cmd = { "lua-language-server" },
+
+	-- Filetypes to automatically attach to.
+	filetypes = { "lua" },
+
+	-- Sets the "root directory" to the parent directory of the file in the
+	-- current buffer that contains either a ".luarc.json" or a
+	-- ".luarc.jsonc" file. Files that share a root directory will reuse
+	-- the connection to the same LSP server.
+	-- Nested lists indicate equal priority, see |vim.lsp.Config|.
+	root_markers = { { ".luarc.json", ".luarc.jsonc" }, ".git" },
+
+	-- Specific settings to send to the server. The schema for this is
+	-- defined by the server. For example the schema for lua-language-server
+	-- can be found here https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json
+	settings = {
+		Lua = {
+			runtime = {
+				version = "LuaJIT",
+			},
+		},
+	},
+}
+vim.lsp.enable("luals")
+-- uv tool install pyright
+vim.lsp.enable('pyright')
+-- install per project
+vim.lsp.enable('pyrefly')
