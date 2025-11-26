@@ -1,27 +1,35 @@
--- note: opt is a "smarter" version of o. In simple assignments, they are inter-changeable
 -- color theme
 vim.opt.runtimepath:prepend(vim.fn.expand("~/Git/dark-theme"))
 vim.cmd.colorscheme("dark")
 
+-- note: opt is a "smarter" version of o. In simple assignments, they are inter-changeable
 -- line number
 vim.o.number = true
 vim.o.relativenumber = true
 
+-- note
+-- gt and gT are used to navigate between tabs
 -- keymap
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "[Q]uickfix list" })
-vim.keymap.set("n", "<leader>c", '<cmd>lclose<CR>', { desc = "[C]lose quickfix" })
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 vim.keymap.set("n", "<c-/>", "<cmd>terminal<CR>")
+vim.keymap.set("n", "<leader>tn", "<cmd>tabnew<CR>")
+vim.keymap.set("n", "<leader>bn", "<cmd>enew<CR>")
 vim.keymap.set("n", "\\", "<cmd>Sexplore<CR>")
+vim.keymap.set("v", ">", ">gv", { noremap = true, silent = true })
+vim.keymap.set("v", "<", "<gv", { noremap = true, silent = true })
+vim.keymap.set("n", "H", ":bprevious<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "L", ":bnext<CR>", { noremap = true, silent = true })
 
 -- misc settings
 vim.o.showmode = true
 vim.o.autoread = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
+vim.o.tabstop = 4
 vim.o.shiftwidth = 4
 vim.o.history = 500
 vim.opt.cursorline = true
@@ -29,6 +37,8 @@ vim.opt.cursorlineopt = "number"
 vim.o.undofile = true
 vim.o.splitright = true
 vim.o.splitbelow = true
+vim.o.inccommand = "split"
+vim.opt.termguicolors = true
 
 -- clipboard
 vim.schedule(function()
@@ -37,7 +47,7 @@ end)
 
 -- status
 vim.api.nvim_set_hl(0, "StatusLineModeNormal", { bg = "white", fg = "black" })
-vim.api.nvim_set_hl(0, "StatusLineModeInsert", { bg = "gray", fg = "black" })
+vim.api.nvim_set_hl(0, "StatusLineModeInsert", { bg = "#AA88DD", fg = "black" })
 vim.api.nvim_set_hl(0, "StatusLineModeVisual", { bg = "orange", fg = "black" })
 local function current_mode()
 	local m = vim.fn.mode()
@@ -104,6 +114,6 @@ vim.lsp.config["luals"] = {
 }
 vim.lsp.enable("luals")
 -- uv tool install pyright
-vim.lsp.enable('pyright')
+vim.lsp.enable("pyright")
 -- install per project
-vim.lsp.enable('pyrefly')
+vim.lsp.enable("pyrefly")
