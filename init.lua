@@ -13,9 +13,9 @@ vim.o.relativenumber = true
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
-vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "[Q]uickfix list" })
+vim.keymap.set("n", "<leader>d", vim.diagnostic.setloclist, { desc = "[D]iagnostic list" })
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
-vim.keymap.set("n", "<c-/>", "<cmd>terminal<CR>")
+vim.keymap.set("n", "<c-/>", "<cmd>botright 15split | terminal<CR>")
 vim.keymap.set("n", "<leader>tn", "<cmd>tabnew<CR>")
 vim.keymap.set("n", "<leader>bn", "<cmd>enew<CR>")
 vim.keymap.set("n", "\\", "<cmd>Sexplore<CR>")
@@ -23,6 +23,11 @@ vim.keymap.set("v", ">", ">gv", { noremap = true, silent = true })
 vim.keymap.set("v", "<", "<gv", { noremap = true, silent = true })
 vim.keymap.set("n", "H", ":bprevious<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "L", ":bnext<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>e", ":edit **/*")
+vim.keymap.set("n", "<leader>f", ":find **/*")
+vim.cmd.cnoreabbrev("vimgrep", "vimgrep /pattern/gj **/*")
+vim.keymap.set("n", "<leader>co", "<cmd>copen<CR>", { desc = "[O]pen quickfix list" })
+vim.keymap.set("n", "<leader>cc", "<cmd>cclose<CR>", { desc = "[C]lose quickfix list" })
 
 -- misc settings
 vim.o.showmode = true
@@ -39,6 +44,7 @@ vim.o.splitright = true
 vim.o.splitbelow = true
 vim.o.inccommand = "split"
 vim.opt.termguicolors = true
+vim.g.netrw_keepdir = 0
 
 -- clipboard
 vim.schedule(function()
@@ -46,9 +52,12 @@ vim.schedule(function()
 end)
 
 -- status
-vim.api.nvim_set_hl(0, "StatusLineModeNormal", { bg = "white", fg = "black" })
+vim.api.nvim_set_hl(0, "StatusLineModeNormal", { bg = "#66EB66", fg = "black" })
 vim.api.nvim_set_hl(0, "StatusLineModeInsert", { bg = "#AA88DD", fg = "black" })
 vim.api.nvim_set_hl(0, "StatusLineModeVisual", { bg = "orange", fg = "black" })
+vim.api.nvim_set_hl(0, "CursorInfo", { bg = "#B8C0E0", fg = "black" })
+vim.api.nvim_set_hl(0, "File", { bg = "#404040", fg = "#ABEBE2" })
+
 local function current_mode()
 	local m = vim.fn.mode()
 	local mode_map = {
@@ -64,21 +73,39 @@ local function current_mode()
 	local mode_info = mode_map[m] or { text = "[?]", hl = "StatusLineModeNormal" }
 	return string.format("%%#%s#%s%%*", mode_info.hl, mode_info.text)
 end
+
 local function current_file()
 	local root_path = vim.loop.cwd()
 	local root_dir = root_path:match("[^/]+$")
 	local home_path = vim.fn.expand("%:~")
 	local overlap, _ = home_path:find(root_dir)
+	local color = "%#File# "
 	if home_path == "" then
-		return root_path:gsub(vim.env.HOME, "~")
+		return color .. root_path:gsub(vim.env.HOME, "~") .. " %*"
 	elseif overlap then
-		return home_path:sub(overlap)
+		return color .. home_path:sub(overlap) .. " %*"
 	else
-		return home_path
+		return color .. home_path .. " %*"
 	end
 end
+
+local function current_cursor_info()
+	local linenr = vim.api.nvim_win_get_cursor(0)[1]
+	local colnr = vim.fn.col(".")
+	local nlines = vim.api.nvim_buf_line_count(0)
+	local percentage = 0
+	if nlines > 0 then
+		percentage = (linenr / nlines) * 100
+	end
+	return "%="
+		.. "%#CursorInfo#"
+		.. string.format("%.1f", percentage)
+		.. "%% "
+		.. string.format("%d:%d", linenr, colnr)
+end
+
 function StatusLine()
-	return current_mode() .. " " .. current_file()
+	return current_mode() .. current_file() .. current_cursor_info()
 end
 vim.opt.statusline = "%!v:lua.StatusLine()"
 
@@ -87,23 +114,9 @@ vim.opt.statusline = "%!v:lua.StatusLine()"
 -- after v12, neovim will have built-in package manager
 -- lua
 vim.lsp.config["luals"] = {
-	-- Command and arguments to start the server.
-	-- see https://github.com/LuaLS/lua-language-server for installation instruction
 	cmd = { "lua-language-server" },
-
-	-- Filetypes to automatically attach to.
 	filetypes = { "lua" },
-
-	-- Sets the "root directory" to the parent directory of the file in the
-	-- current buffer that contains either a ".luarc.json" or a
-	-- ".luarc.jsonc" file. Files that share a root directory will reuse
-	-- the connection to the same LSP server.
-	-- Nested lists indicate equal priority, see |vim.lsp.Config|.
 	root_markers = { { ".luarc.json", ".luarc.jsonc" }, ".git" },
-
-	-- Specific settings to send to the server. The schema for this is
-	-- defined by the server. For example the schema for lua-language-server
-	-- can be found here https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json
 	settings = {
 		Lua = {
 			runtime = {
@@ -117,3 +130,5 @@ vim.lsp.enable("luals")
 vim.lsp.enable("pyright")
 -- install per project
 vim.lsp.enable("pyrefly")
+-- install using system package manager
+vim.lsp.enable("clangd")
