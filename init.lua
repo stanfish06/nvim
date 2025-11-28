@@ -1,5 +1,6 @@
 -- color theme
-vim.opt.runtimepath:prepend(vim.fn.expand("~/Git/dark-theme"))
+-- git clone --depth 1 https://github.com/stanfish06/dark-theme.git ~/.config/nvim/pack/plugins/start/dark-theme
+-- vim.opt.runtimepath:prepend(vim.fn.expand("~/Git/dark-theme"))
 vim.cmd.colorscheme("dark")
 
 -- note: opt is a "smarter" version of o. In simple assignments, they are inter-changeable
