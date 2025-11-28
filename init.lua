@@ -18,7 +18,7 @@ vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" }
 vim.keymap.set("n", "<c-/>", "<cmd>botright 15split | terminal<CR>")
 vim.keymap.set("n", "<leader>tn", "<cmd>tabnew<CR>")
 vim.keymap.set("n", "<leader>bn", "<cmd>enew<CR>")
-vim.keymap.set("n", "\\", "<cmd>Sexplore<CR>")
+vim.keymap.set("n", "\\", "<cmd>Explore<CR>")
 vim.keymap.set("v", ">", ">gv", { noremap = true, silent = true })
 vim.keymap.set("v", "<", "<gv", { noremap = true, silent = true })
 vim.keymap.set("n", "H", ":bprevious<CR>", { noremap = true, silent = true })
@@ -28,6 +28,12 @@ vim.keymap.set("n", "<leader>f", ":find **/*")
 vim.cmd.cnoreabbrev("vimgrep", "vimgrep /pattern/gj **/*")
 vim.keymap.set("n", "<leader>co", "<cmd>copen<CR>", { desc = "[O]pen quickfix list" })
 vim.keymap.set("n", "<leader>cc", "<cmd>cclose<CR>", { desc = "[C]lose quickfix list" })
+-- completeion
+-- c-n for keyword completeion
+-- c-e to cancel completion
+vim.keymap.set('i', '<c-space>', '<c-x><c-o>', { desc = 'LSP completion' })
+vim.keymap.set('i', '<c-l>', '<c-x><c-l>', { desc = 'Line completion' })
+vim.keymap.set('i', '<c-f>', '<c-x><c-f>', { desc = 'File completion' })
 
 -- misc settings
 vim.o.showmode = true
@@ -52,6 +58,7 @@ vim.schedule(function()
 end)
 
 -- status
+-- ISSUE: does not work after theme switch
 vim.api.nvim_set_hl(0, "StatusLineModeNormal", { bg = "#66EB66", fg = "black" })
 vim.api.nvim_set_hl(0, "StatusLineModeInsert", { bg = "#AA88DD", fg = "black" })
 vim.api.nvim_set_hl(0, "StatusLineModeVisual", { bg = "orange", fg = "black" })
@@ -77,7 +84,8 @@ local function current_mode()
 		t = { text = "[T]", hl = "StatusLineModeInsert", hl_alt = "StatusLineModeInsertAlt" },
 	}
 	local mode_info = mode_map[m] or { text = "[?]", hl = "StatusLineModeNormal" }
-	return string.format("%%#%s#%s%%*", mode_info.hl, mode_info.text) .. string.format("%%#%s#%s%%*", mode_info.hl_alt, SOLID_RIGHT_ARROW)
+	return string.format("%%#%s#%s%%*", mode_info.hl, mode_info.text)
+		.. string.format("%%#%s#%s%%*", mode_info.hl_alt, SOLID_RIGHT_ARROW)
 end
 
 local function current_file()
@@ -120,6 +128,13 @@ function StatusLine()
 	return current_mode() .. current_file() .. current_cursor_info()
 end
 vim.opt.statusline = "%!v:lua.StatusLine()"
+
+-- fzf
+-- git clone --depth 1 https://github.com/ibhagwan/fzf-lua.git ~/.config/nvim/pack/plugins/start/fzf-lua
+vim.keymap.set("n", "<leader><leader>", ":FzfLua files<CR>")
+vim.keymap.set("n", "<leader>/", ":FzfLua live_grep<CR>")
+vim.keymap.set("n", "<leader>sl", ":FzfLua lines<CR>")
+vim.keymap.set("n", "<leader>sb", ":FzfLua buffers<CR>")
 
 -- lsp
 -- git clone https://github.com/neovim/nvim-lspconfig ~/.config/nvim/pack/nvim/start/nvim-lspconfig
