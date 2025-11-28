@@ -55,41 +55,50 @@ end)
 vim.api.nvim_set_hl(0, "StatusLineModeNormal", { bg = "#66EB66", fg = "black" })
 vim.api.nvim_set_hl(0, "StatusLineModeInsert", { bg = "#AA88DD", fg = "black" })
 vim.api.nvim_set_hl(0, "StatusLineModeVisual", { bg = "orange", fg = "black" })
+vim.api.nvim_set_hl(0, "StatusLineModeNormalAlt", { fg = "#66EB66", bg = "#404040" })
+vim.api.nvim_set_hl(0, "StatusLineModeInsertAlt", { fg = "#AA88DD", bg = "#404040" })
+vim.api.nvim_set_hl(0, "StatusLineModeVisualAlt", { fg = "orange", bg = "#404040" })
 vim.api.nvim_set_hl(0, "CursorInfo", { bg = "#B8C0E0", fg = "black" })
+vim.api.nvim_set_hl(0, "CursorInfoAlt", { fg = "#B8C0E0" })
 vim.api.nvim_set_hl(0, "File", { bg = "#404040", fg = "#ABEBE2" })
+vim.api.nvim_set_hl(0, "FileAlt", { fg = "#404040" })
 
 local function current_mode()
 	local m = vim.fn.mode()
+	local SOLID_RIGHT_ARROW = vim.fn.nr2char(0xe0b0)
 	local mode_map = {
-		n = { text = "[N]", hl = "StatusLineModeNormal" },
-		i = { text = "[I]", hl = "StatusLineModeInsert" },
-		v = { text = "[V]", hl = "StatusLineModeVisual" },
-		V = { text = "[VL]", hl = "StatusLineModeVisual" },
-		["\22"] = { text = "[VB]", hl = "StatusLineModeVisual" },
-		R = { text = "[R]", hl = "StatusLineModeInsert" },
-		c = { text = "[C]", hl = "StatusLineModeNormal" },
-		t = { text = "[T]", hl = "StatusLineModeInsert" },
+		n = { text = "[N]", hl = "StatusLineModeNormal", hl_alt = "StatusLineModeNormalAlt" },
+		i = { text = "[I]", hl = "StatusLineModeInsert", hl_alt = "StatusLineModeInsertAlt" },
+		v = { text = "[V]", hl = "StatusLineModeVisual", hl_alt = "StatusLineModeVisualAlt" },
+		V = { text = "[VL]", hl = "StatusLineModeVisual", hl_alt = "StatusLineModeVisualAlt" },
+		["\22"] = { text = "[VB]", hl = "StatusLineModeVisual", hl_alt = "StatusLineModeVisualAlt" },
+		R = { text = "[R]", hl = "StatusLineModeInsert", hl_alt = "StatusLineModeInsertAlt" },
+		c = { text = "[C]", hl = "StatusLineModeNormal", hl_alt = "StatusLineModeNormalAlt" },
+		t = { text = "[T]", hl = "StatusLineModeInsert", hl_alt = "StatusLineModeInsertAlt" },
 	}
 	local mode_info = mode_map[m] or { text = "[?]", hl = "StatusLineModeNormal" }
-	return string.format("%%#%s#%s%%*", mode_info.hl, mode_info.text)
+	return string.format("%%#%s#%s%%*", mode_info.hl, mode_info.text) .. string.format("%%#%s#%s%%*", mode_info.hl_alt, SOLID_RIGHT_ARROW)
 end
 
 local function current_file()
+	local SOLID_RIGHT_ARROW = vim.fn.nr2char(0xe0b0)
 	local root_path = vim.loop.cwd()
 	local root_dir = root_path:match("[^/]+$")
 	local home_path = vim.fn.expand("%:~")
 	local overlap, _ = home_path:find(root_dir)
 	local color = "%#File# "
+	local color_alt = "%#FileAlt#"
 	if home_path == "" then
-		return color .. root_path:gsub(vim.env.HOME, "~") .. " %*"
+		return color .. root_path:gsub(vim.env.HOME, "~") .. " %*" .. color_alt .. SOLID_RIGHT_ARROW .. "%*"
 	elseif overlap then
-		return color .. home_path:sub(overlap) .. " %*"
+		return color .. home_path:sub(overlap) .. " %*" .. color_alt .. SOLID_RIGHT_ARROW .. "%*"
 	else
-		return color .. home_path .. " %*"
+		return color .. home_path .. " %*" .. color_alt .. SOLID_RIGHT_ARROW .. "%*"
 	end
 end
 
 local function current_cursor_info()
+	local SOLID_LEFT_ARROW = vim.fn.nr2char(0xe0b2)
 	local linenr = vim.api.nvim_win_get_cursor(0)[1]
 	local colnr = vim.fn.col(".")
 	local nlines = vim.api.nvim_buf_line_count(0)
@@ -98,6 +107,9 @@ local function current_cursor_info()
 		percentage = (linenr / nlines) * 100
 	end
 	return "%="
+		.. "%#CursorInfoAlt#"
+		.. SOLID_LEFT_ARROW
+		.. "%*"
 		.. "%#CursorInfo#"
 		.. string.format("%.1f", percentage)
 		.. "%% "
