@@ -31,9 +31,9 @@ vim.keymap.set("n", "<leader>cc", "<cmd>cclose<CR>", { desc = "[C]lose quickfix 
 -- completeion
 -- c-n for keyword completeion
 -- c-e to cancel completion
-vim.keymap.set('i', '<c-space>', '<c-x><c-o>', { desc = 'LSP completion' })
-vim.keymap.set('i', '<c-l>', '<c-x><c-l>', { desc = 'Line completion' })
-vim.keymap.set('i', '<c-f>', '<c-x><c-f>', { desc = 'File completion' })
+vim.keymap.set("i", "<c-space>", "<c-x><c-o>", { desc = "LSP completion" })
+vim.keymap.set("i", "<c-l>", "<c-x><c-l>", { desc = "Line completion" })
+vim.keymap.set("i", "<c-f>", "<c-x><c-f>", { desc = "File completion" })
 
 -- misc settings
 vim.o.showmode = true
@@ -51,6 +51,7 @@ vim.o.splitbelow = true
 vim.o.inccommand = "split"
 vim.opt.termguicolors = true
 vim.g.netrw_keepdir = 0
+vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
 -- clipboard
 vim.schedule(function()
@@ -131,10 +132,16 @@ vim.opt.statusline = "%!v:lua.StatusLine()"
 
 -- fzf
 -- git clone --depth 1 https://github.com/ibhagwan/fzf-lua.git ~/.config/nvim/pack/plugins/start/fzf-lua
-vim.keymap.set("n", "<leader><leader>", ":FzfLua files<CR>")
-vim.keymap.set("n", "<leader>/", ":FzfLua live_grep<CR>")
-vim.keymap.set("n", "<leader>sl", ":FzfLua lines<CR>")
-vim.keymap.set("n", "<leader>sb", ":FzfLua buffers<CR>")
+local ok, fzf = pcall(require, "fzf-lua")
+if ok then
+	vim.keymap.set("n", "<leader><leader>", fzf.files)
+	vim.keymap.set("n", "<leader>/", fzf.live_grep)
+	vim.keymap.set("n", "<leader>sl", fzf.lines)
+	vim.keymap.set("n", "<leader>sb", fzf.buffers)
+end
+
+-- sneaks
+-- git clone --depth 1 https://github.com/justinmk/vim-sneak ~/.config/nvim/pack/plugins/start/vim-sneak
 
 -- lsp
 -- git clone https://github.com/neovim/nvim-lspconfig ~/.config/nvim/pack/nvim/start/nvim-lspconfig
