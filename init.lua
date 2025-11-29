@@ -1,8 +1,3 @@
--- color theme
--- git clone --depth 1 https://github.com/stanfish06/dark-theme.git ~/.config/nvim/pack/plugins/start/dark-theme
--- vim.opt.runtimepath:prepend(vim.fn.expand("~/Git/dark-theme"))
-vim.cmd.colorscheme("dark")
-
 -- note: opt is a "smarter" version of o. In simple assignments, they are inter-changeable
 -- line number
 vim.o.number = true
@@ -59,6 +54,30 @@ vim.schedule(function()
 	vim.o.clipboard = "unnamedplus"
 end)
 
+-- status
+-- callback that runs every time after colorscheme changes to make sure statusline stay the same
+vim.api.nvim_create_autocmd("ColorScheme", {
+	pattern = "*",
+	callback = function()
+		vim.api.nvim_set_hl(0, "StatusLineModeNormal", { bg = "#66EB66", fg = "black" })
+		vim.api.nvim_set_hl(0, "StatusLineModeInsert", { bg = "#AA88DD", fg = "black" })
+		vim.api.nvim_set_hl(0, "StatusLineModeVisual", { bg = "orange", fg = "black" })
+		vim.api.nvim_set_hl(0, "StatusLineModeNormalAlt", { fg = "#66EB66", bg = "#404040" })
+		vim.api.nvim_set_hl(0, "StatusLineModeInsertAlt", { fg = "#AA88DD", bg = "#404040" })
+		vim.api.nvim_set_hl(0, "StatusLineModeVisualAlt", { fg = "orange", bg = "#404040" })
+		vim.api.nvim_set_hl(0, "CursorInfo", { bg = "#B8C0E0", fg = "black" })
+		vim.api.nvim_set_hl(0, "CursorInfoAlt", { fg = "#B8C0E0" })
+		vim.api.nvim_set_hl(0, "File", { bg = "#404040", fg = "#ABEBE2" })
+		vim.api.nvim_set_hl(0, "FileAlt", { fg = "#404040" })
+		vim.cmd("redrawstatus")
+	end,
+})
+
+-- color theme
+-- git clone --depth 1 https://github.com/stanfish06/dark-theme.git ~/.config/nvim/pack/plugins/start/dark-theme
+-- vim.opt.runtimepath:prepend(vim.fn.expand("~/Git/dark-theme"))
+vim.cmd.colorscheme("dark")
+
 -- cursor
 local function set_cursor_color()
 	vim.api.nvim_set_hl(0, "myCursor", { fg = "#FFA500", bg = "#FFA500" })
@@ -70,19 +89,6 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 })
 set_cursor_color()
 vim.opt.guicursor = "n-v-c:block-myCursor,i-ci-ve:ver25-myICursor"
-
--- status
--- ISSUE: does not work after theme switch
-vim.api.nvim_set_hl(0, "StatusLineModeNormal", { bg = "#66EB66", fg = "black" })
-vim.api.nvim_set_hl(0, "StatusLineModeInsert", { bg = "#AA88DD", fg = "black" })
-vim.api.nvim_set_hl(0, "StatusLineModeVisual", { bg = "orange", fg = "black" })
-vim.api.nvim_set_hl(0, "StatusLineModeNormalAlt", { fg = "#66EB66", bg = "#404040" })
-vim.api.nvim_set_hl(0, "StatusLineModeInsertAlt", { fg = "#AA88DD", bg = "#404040" })
-vim.api.nvim_set_hl(0, "StatusLineModeVisualAlt", { fg = "orange", bg = "#404040" })
-vim.api.nvim_set_hl(0, "CursorInfo", { bg = "#B8C0E0", fg = "black" })
-vim.api.nvim_set_hl(0, "CursorInfoAlt", { fg = "#B8C0E0" })
-vim.api.nvim_set_hl(0, "File", { bg = "#404040", fg = "#ABEBE2" })
-vim.api.nvim_set_hl(0, "FileAlt", { fg = "#404040" })
 
 local function current_mode()
 	local m = vim.fn.mode()
