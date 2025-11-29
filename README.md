@@ -1,4 +1,3 @@
-A minimal neovim setup
 <table width="100%">
   <tr>
     <th>Example</th>
