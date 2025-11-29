@@ -52,12 +52,24 @@ vim.o.splitbelow = true
 vim.o.inccommand = "split"
 vim.opt.termguicolors = true
 vim.g.netrw_keepdir = 0
-vim.opt.completeopt = { "menu", "menuone", "noselect" }
+vim.opt.completeopt = { "menu", "menuone", "noinsert", "fuzzy" }
 
 -- clipboard
 vim.schedule(function()
 	vim.o.clipboard = "unnamedplus"
 end)
+
+-- cursor
+local function set_cursor_color()
+	vim.api.nvim_set_hl(0, "myCursor", { fg = "#FFA500", bg = "#FFA500" })
+	vim.api.nvim_set_hl(0, "myICursor", { fg = "#FFA500", bg = "#FFA500" })
+end
+vim.api.nvim_create_autocmd("ColorScheme", {
+	pattern = "*",
+	callback = set_cursor_color,
+})
+set_cursor_color()
+vim.opt.guicursor = "n-v-c:block-myCursor,i-ci-ve:ver25-myICursor"
 
 -- status
 -- ISSUE: does not work after theme switch
