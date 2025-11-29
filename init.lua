@@ -179,3 +179,21 @@ vim.lsp.enable("pyright")
 vim.lsp.enable("pyrefly")
 -- install using system package manager
 vim.lsp.enable("clangd")
+
+-- treesitter
+-- git clone --depth 1 https://github.com/nvim-treesitter/nvim-treesitter.git ~/.config/nvim/pack/plugins/start/nvim-treestter
+require("nvim-treesitter.configs").setup({
+	ensure_installed = {
+		"c",
+		"cpp",
+		"bash",
+		"lua",
+		"vim",
+		"vimdoc",
+		"markdown",
+		"markdown_inline",
+	},
+	auto_install = true,
+	highlight = { enable = true },
+	indent = { enable = true },
+})
