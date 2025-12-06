@@ -135,40 +135,40 @@ local function current_cursor_info()
 		.. SOLID_LEFT_ARROW
 		.. "%*"
 		.. "%#CursorInfo#"
-        .. string.format("%.1f", percentage)
-        .. "%% "
-        .. string.format("%d:%d", linenr, colnr)
+		.. string.format("%.1f", percentage)
+		.. "%% "
+		.. string.format("%d:%d", linenr, colnr)
 end
 
 function StatusLine()
-    return current_mode() .. current_file() .. current_cursor_info()
+	return current_mode() .. current_file() .. current_cursor_info()
 end
 vim.opt.statusline = "%!v:lua.StatusLine()"
 
 -- packages
 local package_list = {
-    ["fzf-lua"] = "https://github.com/ibhagwan/fzf-lua.git",
-    ["nvim-lspconfig"] = "https://github.com/neovim/nvim-lspconfig",
-    ["sneaks.vim"] = "https://github.com/justinmk/vim-sneak",
-    ["nvim-treesitter"] = "https://github.com/nvim-treesitter/nvim-treesitter.git",
-    ["dark-theme"] = "https://github.com/stanfish06/dark-theme.git"
+	["fzf-lua"] = "https://github.com/ibhagwan/fzf-lua.git",
+	["nvim-lspconfig"] = "https://github.com/neovim/nvim-lspconfig",
+	["sneaks.vim"] = "https://github.com/justinmk/vim-sneak",
+	["nvim-treesitter"] = "https://github.com/nvim-treesitter/nvim-treesitter.git",
+	["dark-theme"] = "https://github.com/stanfish06/dark-theme.git",
 }
 function sync_packages()
-    local package_dir = os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/"
-    print("Sync packages...")
-    for pkg_name, pkg_url in pairs(package_list) do
-        local full_path = package_dir .. pkg_name
-        if vim.fn.isdirectory(full_path) then
-            print("Reinstalling " .. pkg_name .. "...")
-            vim.fn.delete(full_path, "rf")
-        else
-            print("Installing " .. pkg_name .. "...")
-        end
-        os.execute("git clone --depth 1 --quiet " .. pkg_url .. ' ' .. full_path .. " > /dev/null 2>&1")
-    end
-    print("Done!")
+	local package_dir = os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/"
+	print("Sync packages...")
+	for pkg_name, pkg_url in pairs(package_list) do
+		local full_path = package_dir .. pkg_name .. "/"
+		if vim.fn.isdirectory(full_path) == 1 then
+			print("Reinstalling " .. pkg_name .. "...")
+			vim.fn.delete(full_path, "rf")
+		else
+			print("Installing " .. pkg_name .. "...")
+		end
+		os.execute("git clone --depth 1 --quiet " .. pkg_url .. " " .. full_path .. " > /dev/null 2>&1")
+	end
+	print("Done!")
 end
-vim.api.nvim_create_user_command('SyncPkgs', sync_packages, {})
+vim.api.nvim_create_user_command("SyncPkgs", sync_packages, {})
 
 -- fzf
 -- git clone --depth 1 https://github.com/ibhagwan/fzf-lua.git ~/.config/nvim/pack/plugins/start/fzf-lua
@@ -209,25 +209,27 @@ vim.lsp.enable("clangd")
 -- npm instal -g typescript-language-server
 vim.lsp.enable("ts_ls")
 
-
 -- treesitter
 -- git clone --depth 1 https://github.com/nvim-treesitter/nvim-treesitter.git ~/.config/nvim/pack/plugins/start/nvim-treestter
-require("nvim-treesitter.configs").setup({
-	ensure_installed = {
-		"c",
-		"cpp",
-		"bash",
-		"lua",
-		"vim",
-		"vimdoc",
-		"javascript",
-		"markdown",
-		"markdown_inline",
-	},
-	auto_install = true,
-	highlight = { enable = true },
-	indent = { enable = true },
-})
+local ts_status, ts_configs = pcall(require, "nvim-treesitter.configs")
+if ts_status then
+	ts_configs.setup({
+		ensure_installed = {
+			"c",
+			"cpp",
+			"bash",
+			"lua",
+			"vim",
+			"vimdoc",
+			"javascript",
+			"markdown",
+			"markdown_inline",
+		},
+		auto_install = true,
+		highlight = { enable = true },
+		indent = { enable = true },
+	})
+end
 
 -- color theme
 -- git clone --depth 1 https://github.com/stanfish06/dark-theme.git ~/.config/nvim/pack/plugins/start/dark-theme
