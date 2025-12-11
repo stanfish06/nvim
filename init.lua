@@ -30,6 +30,9 @@ vim.keymap.set("n", "<leader>cc", "<cmd>cclose<CR>", { desc = "[C]lose quickfix 
 vim.keymap.set("i", "<c-space>", "<c-x><c-o>", { desc = "LSP completion" })
 vim.keymap.set("i", "<c-l>", "<c-x><c-l>", { desc = "Line completion" })
 vim.keymap.set("i", "<c-f>", "<c-x><c-f>", { desc = "File completion" })
+-- lsp
+vim.keymap.set("n", "gd", ":lua vim.lsp.buf.definition()<CR>")
+vim.keymap.set("n", "gr", ":lua vim.lsp.buf.references()<CR>")
 
 -- misc settings
 vim.o.showmode = true
@@ -49,6 +52,7 @@ vim.o.inccommand = "split"
 vim.opt.termguicolors = true
 vim.g.netrw_keepdir = 0
 vim.opt.completeopt = { "menu", "menuone", "noinsert", "fuzzy" }
+vim.opt.signcolumn = "yes"
 
 -- clipboard
 vim.schedule(function()
