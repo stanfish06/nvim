@@ -71,9 +71,11 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 		vim.api.nvim_set_hl(0, "StatusLineModeInsertAlt", { fg = "#AA88DD", bg = "#404040" })
 		vim.api.nvim_set_hl(0, "StatusLineModeVisualAlt", { fg = "orange", bg = "#404040" })
 		vim.api.nvim_set_hl(0, "CursorInfo", { bg = "#B8C0E0", fg = "black" })
-		vim.api.nvim_set_hl(0, "CursorInfoAlt", { fg = "#B8C0E0" })
+		vim.api.nvim_set_hl(0, "CursorInfoAlt", { fg = "#B8C0E0", bg = "#3E8FB0" })
 		vim.api.nvim_set_hl(0, "File", { bg = "#404040", fg = "#ABEBE2" })
 		vim.api.nvim_set_hl(0, "FileAlt", { fg = "#404040" })
+		vim.api.nvim_set_hl(0, "FileType", { fg = "black", bg = "#3E8FB0" })
+		vim.api.nvim_set_hl(0, "FileTypeAlt", { fg = "#3E8FB0" })
 		vim.cmd("redrawstatus")
 	end,
 })
@@ -108,6 +110,33 @@ local function current_mode()
 		.. string.format("%%#%s#%s%%*", mode_info.hl_alt, SOLID_RIGHT_ARROW)
 end
 
+local filetype_icons = {
+	lua = "",
+	python = "",
+	rust = "󱘗",
+	c = "",
+	go = "",
+	javascript = "",
+	typescript = "",
+}
+-- set to false if no nerd font
+vim.g.have_nerd_font = true
+local function current_filetype()
+	local SOLID_LEFT_ARROW = vim.fn.nr2char(0xe0b2)
+	local filetype = vim.bo.filetype
+	local color = "%#FileType#"
+	local color_alt = "%#FileTypeAlt#"
+	if not vim.g.have_nerd_font then
+		return "%=" .. color_alt .. SOLID_LEFT_ARROW .. "%*" .. color .. filetype .. "  " .. " "
+	else
+		local icon = filetype_icons[filetype]
+		if icon == nil then
+			icon = " "
+		end
+		return "%=" .. color_alt .. SOLID_LEFT_ARROW .. "%*" .. color .. filetype .. " " .. icon .. " "
+	end
+end
+
 local function current_file()
 	local SOLID_RIGHT_ARROW = vim.fn.nr2char(0xe0b0)
 	local root_path = vim.loop.cwd()
@@ -134,7 +163,7 @@ local function current_cursor_info()
 	if nlines > 0 then
 		percentage = (linenr / nlines) * 100
 	end
-	return "%="
+	return ""
 		.. "%#CursorInfoAlt#"
 		.. SOLID_LEFT_ARROW
 		.. "%*"
@@ -145,7 +174,7 @@ local function current_cursor_info()
 end
 
 function StatusLine()
-	return current_mode() .. current_file() .. current_cursor_info()
+	return current_mode() .. current_file() .. current_filetype() .. current_cursor_info()
 end
 vim.opt.statusline = "%!v:lua.StatusLine()"
 
