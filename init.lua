@@ -124,7 +124,7 @@ vim.g.have_nerd_font = true
 local function current_filetype()
 	local SOLID_LEFT_ARROW = vim.fn.nr2char(0xe0b2)
 	local filetype = vim.bo.filetype
-	local color = "%#FileType#"
+	local color = "%#FileType# "
 	local color_alt = "%#FileTypeAlt#"
 	if not vim.g.have_nerd_font then
 		return "%=" .. color_alt .. SOLID_LEFT_ARROW .. "%*" .. color .. filetype .. "  " .. " "
@@ -167,7 +167,7 @@ local function current_cursor_info()
 		.. "%#CursorInfoAlt#"
 		.. SOLID_LEFT_ARROW
 		.. "%*"
-		.. "%#CursorInfo#"
+		.. "%#CursorInfo# "
 		.. string.format("%.1f", percentage)
 		.. "%% "
 		.. string.format("%d:%d", linenr, colnr)
