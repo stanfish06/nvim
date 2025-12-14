@@ -1,3 +1,5 @@
+local mod_async = require("lib.async")
+
 -- note: opt is a "smarter" version of o. In simple assignments, they are inter-changeable
 -- line number
 vim.o.number = true
@@ -131,9 +133,11 @@ local function current_filetype()
 	else
 		local icon = filetype_icons[filetype]
 		if icon == nil then
-			icon = " "
+			icon = ""
+		else
+			icon = " " .. icon
 		end
-		return "%=" .. color_alt .. SOLID_LEFT_ARROW .. "%*" .. color .. filetype .. " " .. icon .. " "
+		return "%=" .. color_alt .. SOLID_LEFT_ARROW .. "%*" .. color .. filetype .. icon .. " "
 	end
 end
 
@@ -189,18 +193,40 @@ local package_list = {
 	["tokyonight"] = "https://github.com/folke/tokyonight.nvim.git",
 }
 function sync_packages()
-	local package_dir = os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/"
-	print("Sync packages...")
-	for pkg_name, pkg_url in pairs(package_list) do
-		local full_path = package_dir .. pkg_name .. "/"
-		if vim.fn.isdirectory(full_path) == 1 then
-			print("Reinstalling " .. pkg_name .. "...")
-			vim.fn.delete(full_path, "rf")
-		else
-			print("Installing " .. pkg_name .. "...")
-		end
-		os.execute("git clone --depth 1 --quiet " .. pkg_url .. " " .. full_path .. " > /dev/null 2>&1")
-	end
+	mod_async
+		.new(function()
+			local package_dir = os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/"
+			print("Sync packages...")
+			local jobs = {}
+			for pkg_name, pkg_url in pairs(package_list) do
+				local job = mod_async.new(function()
+					local full_path = package_dir .. pkg_name .. "/"
+					if vim.fn.isdirectory(full_path) == 1 then
+						print("Reinstall: " .. pkg_name .. "...")
+						vim.fn.delete(full_path, "rf")
+					else
+						print("Install: " .. pkg_name .. "...")
+					end
+					vim.system({
+						"git",
+						"clone",
+						"--depth",
+						"1",
+						"--quiet",
+						pkg_url,
+						full_path,
+					}):wait()
+					print("Synced: " .. pkg_name)
+				end)
+				table.insert(jobs, job)
+			end
+			for _, job in ipairs(jobs) do
+				while job:running() do
+					mod_async.yield()
+				end
+			end
+		end)
+		:wait()
 	print("Done!")
 end
 vim.api.nvim_create_user_command("SyncPkgs", sync_packages, {})
@@ -260,7 +286,7 @@ if ts_status then
 			"markdown",
 			"markdown_inline",
 		},
-		auto_install = true,
+		auto_install = false, -- not sure what it does but it will trigger issues after running my custom SyncPkgs command
 		highlight = { enable = true },
 		indent = { enable = true },
 	})
