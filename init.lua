@@ -291,6 +291,18 @@ if ts_status then
 		indent = { enable = true },
 	})
 end
+local function is_ts_enabled()
+	local bufnr = vim.api.nvim_get_current_buf()
+	return vim.treesitter.highlighter.active[bufnr] ~= nil
+end
+function ts_highlight()
+	if is_ts_enabled() then
+		vim.treesitter.stop()
+	else
+		vim.treesitter.start()
+	end
+end
+vim.api.nvim_create_user_command("TSBufToggle", ts_highlight, {})
 
 -- color theme
 -- git clone --depth 1 https://github.com/stanfish06/dark-theme.git ~/.config/nvim/pack/plugins/start/dark-theme
