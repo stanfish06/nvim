@@ -304,7 +304,7 @@ function ts_highlight()
 end
 vim.api.nvim_create_user_command("TSBufToggle", ts_highlight, {})
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { '<filetype>' },
+  pattern = { '*' },
   callback = function() vim.treesitter.start() end,
 })
 
