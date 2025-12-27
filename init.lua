@@ -304,8 +304,13 @@ function ts_highlight()
 end
 vim.api.nvim_create_user_command("TSBufToggle", ts_highlight, {})
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { '*' },
-  callback = function() vim.treesitter.start() end,
+	pattern = { '*' },
+	callback = function()
+		local ok, err = pcall(vim.treesitter.start)
+		if not ok then
+			vim.cmd('syntax on')
+		end
+	end,
 })
 
 -- color theme
