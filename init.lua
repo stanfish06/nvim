@@ -55,6 +55,7 @@ vim.opt.termguicolors = true
 vim.g.netrw_keepdir = 0
 vim.opt.completeopt = { "menu", "menuone", "noinsert", "fuzzy" }
 vim.opt.signcolumn = "yes"
+vim.o.scrolloff = 8
 
 -- clipboard
 vim.schedule(function()
@@ -93,10 +94,12 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 })
 set_cursor_color()
 vim.opt.guicursor = "n-v-c:block-myCursor,i-ci-ve:ver25-myICursor"
-
+-- local SOLID_LEFT_ARROW = vim.fn.nr2char(0xe0b2)
+-- local SOLID_RIGHT_ARROW = vim.fn.nr2char(0xe0b0)
+local SOLID_LEFT_ARROW = "░▒▓"
+local SOLID_RIGHT_ARROW = "▓▒░"
 local function current_mode()
 	local m = vim.fn.mode()
-	local SOLID_RIGHT_ARROW = vim.fn.nr2char(0xe0b0)
 	local mode_map = {
 		n = { text = "[N]", hl = "StatusLineModeNormal", hl_alt = "StatusLineModeNormalAlt" },
 		i = { text = "[I]", hl = "StatusLineModeInsert", hl_alt = "StatusLineModeInsertAlt" },
@@ -124,7 +127,6 @@ local filetype_icons = {
 -- set to false if no nerd font
 vim.g.have_nerd_font = true
 local function current_filetype()
-	local SOLID_LEFT_ARROW = vim.fn.nr2char(0xe0b2)
 	local filetype = vim.bo.filetype
 	local color = "%#FileType# "
 	local color_alt = "%#FileTypeAlt#"
@@ -142,7 +144,6 @@ local function current_filetype()
 end
 
 local function current_file()
-	local SOLID_RIGHT_ARROW = vim.fn.nr2char(0xe0b0)
 	local root_path = vim.loop.cwd()
 	local root_dir = root_path:match("[^/]+$")
 	local home_path = vim.fn.expand("%:~")
@@ -159,7 +160,6 @@ local function current_file()
 end
 
 local function current_cursor_info()
-	local SOLID_LEFT_ARROW = vim.fn.nr2char(0xe0b2)
 	local linenr = vim.api.nvim_win_get_cursor(0)[1]
 	local colnr = vim.fn.col(".")
 	local nlines = vim.api.nvim_buf_line_count(0)
