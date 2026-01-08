@@ -96,7 +96,7 @@ set_cursor_color()
 vim.opt.guicursor = "n-v-c:block-myCursor,i-ci-ve:ver25-myICursor"
 -- local SOLID_LEFT_ARROW = vim.fn.nr2char(0xe0b2)
 -- local SOLID_RIGHT_ARROW = vim.fn.nr2char(0xe0b0)
-local SOLID_LEFT_ARROW = "░▒▓"
+local SOLID_LEFT_ARROW = "░▒▓" -- needs a nerd font
 local SOLID_RIGHT_ARROW = "▓▒░"
 local function current_mode()
 	local m = vim.fn.mode()
