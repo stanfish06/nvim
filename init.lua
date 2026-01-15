@@ -97,7 +97,9 @@ vim.opt.guicursor = "n-v-c:block-myCursor,i-ci-ve:ver25-myICursor"
 -- local SOLID_LEFT_ARROW = vim.fn.nr2char(0xe0b2)
 -- local SOLID_RIGHT_ARROW = vim.fn.nr2char(0xe0b0)
 local SOLID_LEFT_ARROW = "░▒▓" -- needs a nerd font
+local SOLID_LEFT_ARROW_PART = "▓"
 local SOLID_RIGHT_ARROW = "▓▒░"
+local SOLID_RIGHT_ARROW_PART = "▓"
 local function current_mode()
 	local m = vim.fn.mode()
 	local mode_map = {
@@ -111,7 +113,8 @@ local function current_mode()
 		t = { text = "[T]", hl = "StatusLineModeInsert", hl_alt = "StatusLineModeInsertAlt" },
 	}
 	local mode_info = mode_map[m] or { text = "[?]", hl = "StatusLineModeNormal" }
-	return string.format("%%#%s#%s%%*", mode_info.hl, mode_info.text)
+	return string.format("%%#%s#%s%%*", mode_info.hl_alt, SOLID_LEFT_ARROW_PART)
+        .. string.format("%%#%s#%s%%*", mode_info.hl, mode_info.text)
 		.. string.format("%%#%s#%s%%*", mode_info.hl_alt, SOLID_RIGHT_ARROW)
 end
 
@@ -174,7 +177,9 @@ local function current_cursor_info()
 		.. "%#CursorInfo# "
 		.. string.format("%.1f", percentage)
 		.. "%% "
-		.. string.format("%d:%d", linenr, colnr)
+		.. string.format("%d:%d ", linenr, colnr)
+		.. "%#CursorInfoAlt#"
+		.. SOLID_RIGHT_ARROW_PART
 end
 
 function StatusLine()
