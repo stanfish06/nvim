@@ -114,7 +114,7 @@ local function current_mode()
 	}
 	local mode_info = mode_map[m] or { text = "[?]", hl = "StatusLineModeNormal" }
 	return string.format("%%#%s#%s%%*", mode_info.hl_alt, SOLID_LEFT_ARROW_PART)
-        .. string.format("%%#%s#%s%%*", mode_info.hl, mode_info.text)
+		.. string.format("%%#%s#%s%%*", mode_info.hl, mode_info.text)
 		.. string.format("%%#%s#%s%%*", mode_info.hl_alt, SOLID_RIGHT_ARROW)
 end
 
@@ -308,15 +308,29 @@ function ts_highlight()
 	end
 end
 vim.api.nvim_create_user_command("TSBufToggle", ts_highlight, {})
-vim.api.nvim_create_autocmd('FileType', {
-	pattern = { '*' },
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = { "*" },
 	callback = function()
 		local ok, err = pcall(vim.treesitter.start)
 		if not ok then
-			vim.cmd('syntax on')
+			vim.cmd("syntax on")
 		end
 	end,
 })
+
+-- Auto-indent when press enter (e.g. if () {<CR>})
+vim.keymap.set("i", "<CR>", function()
+	local line = vim.api.nvim_get_current_line()
+	local col_cursor = vim.api.nvim_win_get_cursor(0)[2]
+
+	local char_prev = line:sub(col_cursor, col_cursor)
+	local char_next = line:sub(col_cursor + 1, col_cursor + 1)
+	local char_neighbors = char_prev .. char_next
+	if char_neighbors == "{}" or char_neighbors == "()" then
+		return "<CR><Esc>O"
+	end
+	return "<CR>"
+end, { expr = true, noremap = true })
 
 -- color theme
 -- git clone --depth 1 https://github.com/stanfish06/dark-theme.git ~/.config/nvim/pack/plugins/start/dark-theme
