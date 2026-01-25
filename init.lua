@@ -57,6 +57,39 @@ vim.opt.completeopt = { "menu", "menuone", "noinsert", "fuzzy" }
 vim.opt.signcolumn = "yes"
 vim.o.scrolloff = 8
 
+-- mouse
+vim.o.mousescroll = "ver:25,hor:6"
+vim.o.switchbuf = "usetab"
+vim.o.shada = "'100,<50,s10,:1000,/100,@100,h"
+
+-- wrapped line
+vim.o.breakindent = true
+vim.o.breakindentopt = "list:-1"
+vim.o.linebreak = true
+
+-- ui
+vim.o.colorcolumn = "+1"
+vim.o.list = true
+vim.o.pumheight = 10 -- height limit for completion pop-up, useful for long list
+vim.o.splitkeep = "screen"
+vim.o.winborder = "single" -- makes hover window like lsp fancier with a border
+vim.o.fillchars = "eob: ,fold:╌"
+vim.o.listchars = "extends:…,nbsp:␣,precedes:…,tab:> "
+
+-- folding
+vim.o.foldlevel = 10
+vim.o.foldmethod = "indent"
+vim.o.foldnestmax = 10
+vim.o.foldtext = ""
+
+-- editing
+vim.o.formatoptions = "rqnl1j"
+vim.o.infercase = true
+vim.o.spelloptions = "camel"
+vim.o.virtualedit = "block"
+vim.o.iskeyword = "@,48-57,_,192-255,-"
+vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
+
 -- clipboard
 vim.schedule(function()
 	vim.o.clipboard = "unnamedplus"
