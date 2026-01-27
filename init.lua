@@ -333,23 +333,21 @@ end
 
 -- treesitter
 -- git clone --depth 1 https://github.com/nvim-treesitter/nvim-treesitter.git ~/.config/nvim/pack/plugins/start/nvim-treestter
-local ts_status, ts_configs = pcall(require, "nvim-treesitter.configs")
+-- require tree-sitter-cli (do npm install -g tree-sitter-cli)
+local ts_status, ts = pcall(require, "nvim-treesitter")
 if ts_status then
-    ts_configs.setup({
-        ensure_installed = {
-            "c",
-            "cpp",
-            "bash",
-            "lua",
-            "vim",
-            "vimdoc",
-            "javascript",
-            "markdown",
-            "markdown_inline",
-        },
-        auto_install = false, -- not sure what it does but it will trigger issues after running my custom SyncPkgs command
-        highlight = { enable = true },
-        indent = { enable = true },
+    ts.install({
+        "c",
+        "python",
+        "julia",
+        "cpp",
+        "bash",
+        "lua",
+        "vim",
+        "vimdoc",
+        "javascript",
+        "markdown",
+        "markdown_inline",
     })
 end
 local function is_ts_enabled()
