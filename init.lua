@@ -428,6 +428,43 @@ vim.keymap.set("i", "<CR>", function()
     return "<CR>"
 end, { expr = true, noremap = true })
 
+-- scope line
+local valid_scopes = {
+    ["function_declaration"] = true,
+    ["if_statement"] = true,
+    ["for_statement"] = true,
+    ["while_statement"] = true,
+}
+local ns_scope_line = vim.api.nvim_create_namespace("scope_line")
+function draw_scope_lines()
+    local buf = vim.api.nvim_get_current_buf()
+    vim.api.nvim_buf_clear_namespace(buf, ns_scope_line, 0, -1)
+    local cursor = vim.api.nvim_win_get_cursor(0)
+    local ts_node = vim.treesitter.get_node({ pos = { cursor[1], cursor[2] } })
+    while ts_node do
+        if valid_scopes[ts_node:type()] then
+            local start_row, start_col, end_row, end_col = vim.treesitter.get_node_range(ts_node)
+            for i = start_row + 1, end_row - 1 do
+                pcall(
+                    vim.api.nvim_buf_set_extmark,
+                    buf,
+                    ns_scope_line,
+                    i,
+                    start_col,
+                    { virt_text = { { "|", {} } }, virt_text_pos = "overlay" }
+                )
+            end
+            break
+        end
+        ts_node = ts_node:parent()
+    end
+end
+vim.api.nvim_create_augroup("ScopeLines", { clear = true })
+vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+    group = "ScopeLines",
+    callback = draw_scope_lines,
+})
+
 -- color theme
 -- git clone --depth 1 https://github.com/stanfish06/dark-theme.git ~/.config/nvim/pack/plugins/start/dark-theme
 -- vim.opt.runtimepath:prepend(vim.fn.expand("~/Git/dark-theme"))
