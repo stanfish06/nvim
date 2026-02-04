@@ -433,6 +433,7 @@ end, { expr = true, noremap = true })
 -- scope line
 local valid_scopes = {
     ["function_declaration"] = true,
+    ["function_definition"] = true,
     ["if_statement"] = true,
     ["for_statement"] = true,
     ["while_statement"] = true,
