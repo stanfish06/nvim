@@ -338,10 +338,12 @@ end
 -- this function needs to be updated occasionally, as of 260130, glibc should be at least 2.30
 local function get_glibc_version()
     local handle = io.popen("ldd --version 2>&1 | head -n1")
-    if not handle then return nil end
+    if not handle then
+        return nil
+    end
     local result = handle:read("*a")
     handle:close()
-    
+
     local version = result:match("(%d+%.%d+)%s*$") or result:match("GLIBC (%d+%.%d+)")
     if version then
         return tonumber(version)
@@ -356,23 +358,23 @@ end
 local function can_auto_install_parsers()
     local glibc_version = get_glibc_version()
     local has_cli = has_tree_sitter_cli()
-    
+
     if glibc_version and glibc_version < 2.30 then
         vim.notify(
-            string.format("Tree-sitter parser install skipped: glibc %.2f < 2.30 (e.g. compile parsers manually)", glibc_version),
+            string.format(
+                "Tree-sitter parser install skipped: glibc %.2f < 2.30 (e.g. compile parsers manually)",
+                glibc_version
+            ),
             vim.log.levels.WARN
         )
         return false
     end
-    
+
     if not has_cli then
-        vim.notify(
-            "Tree-sitter parser install skipped: tree-sitter-cli not found (e.g. use npm)",
-            vim.log.levels.WARN
-        )
+        vim.notify("Tree-sitter parser install skipped: tree-sitter-cli not found (e.g. use npm)", vim.log.levels.WARN)
         return false
     end
-    
+
     return true
 end
 
@@ -436,6 +438,13 @@ local valid_scopes = {
     ["while_statement"] = true,
 }
 local ns_scope_line = vim.api.nvim_create_namespace("scope_line")
+function char_at(row, col)
+    local current_cursor = vim.api.nvim_win_get_cursor(0)
+    vim.fn.setcursorcharpos(row, col)
+    local char = string.sub(vim.api.nvim_get_current_line(), col, col)
+    vim.api.nvim_win_set_cursor(0, current_cursor)
+    return char
+end
 function draw_scope_lines()
     local buf = vim.api.nvim_get_current_buf()
     vim.api.nvim_buf_clear_namespace(buf, ns_scope_line, 0, -1)
@@ -445,14 +454,17 @@ function draw_scope_lines()
         if valid_scopes[ts_node:type()] then
             local start_row, start_col, end_row, end_col = vim.treesitter.get_node_range(ts_node)
             for i = start_row + 1, end_row - 1 do
-                pcall(
-                    vim.api.nvim_buf_set_extmark,
-                    buf,
-                    ns_scope_line,
-                    i,
-                    start_col,
-                    { virt_text = { { "|", {} } }, virt_text_pos = "overlay" }
-                )
+                local char = char_at(i + 1, start_col + 1) -- treesitter is 0 based
+                if char == " " then
+                    pcall(
+                        vim.api.nvim_buf_set_extmark,
+                        buf,
+                        ns_scope_line,
+                        i,
+                        start_col,
+                        { virt_text = { { "|", {} } }, virt_text_pos = "overlay" }
+                    )
+                end
             end
             break
         end
