@@ -7,6 +7,7 @@ local package_list = {
     ["sneaks.vim"] = "https://github.com/justinmk/vim-sneak",
     ["nvim-treesitter"] = "https://github.com/nvim-treesitter/nvim-treesitter.git",
     ["conform.nvim"] = "https://github.com/stevearc/conform.nvim.git",
+    ["gitsigns.nvim"] = "https://github.com/lewis6991/gitsigns.nvim.git",
     ["dark-theme"] = "https://github.com/stanfish06/dark-theme.git",
     ["rose-pine"] = "https://github.com/rose-pine/neovim.git",
     ["tokyonight"] = "https://github.com/folke/tokyonight.nvim.git",

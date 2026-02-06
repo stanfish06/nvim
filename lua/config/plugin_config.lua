@@ -37,6 +37,41 @@ vim.lsp.enable("clangd")
 -- npm instal -g typescript-language-server
 vim.lsp.enable("ts_ls")
 
+-- gitsigns
+local gs_ok, gitsigns = pcall(require, "gitsigns")
+if gs_ok then
+    gitsigns.setup({
+        on_attach = function(bufnr)
+            local gs = require("gitsigns")
+            local function map(mode, l, r, opts)
+                opts = opts or {}
+                opts.buffer = bufnr
+                vim.keymap.set(mode, l, r, opts)
+            end
+            map("n", "]c", function()
+                if vim.wo.diff then
+                    vim.cmd.normal({ "]c", bang = true })
+                else
+                    gs.nav_hunk("next")
+                end
+            end)
+            map("n", "[c", function()
+                if vim.wo.diff then
+                    vim.cmd.normal({ "[c", bang = true })
+                else
+                    gs.nav_hunk("prev")
+                end
+            end)
+            map("n", "<leader>hs", gs.stage_hunk)
+            map("n", "<leader>hr", gs.reset_hunk)
+            map("n", "<leader>hp", gs.preview_hunk)
+            map("n", "<leader>hb", function() gs.blame_line({ full = true }) end)
+            map("n", "<leader>hd", gs.diffthis)
+            map("n", "<leader>tb", gs.toggle_current_line_blame)
+        end,
+    })
+end
+
 -- conform (formatting)
 local conform_ok, conform = pcall(require, "conform")
 if conform_ok then
