@@ -4,6 +4,7 @@ require("config.plugins")
 require("config.plugin_config")
 require("config.treesitter")
 require("config.scopeline")
+require("config.filetree")
 
 -- color theme
 -- git clone --depth 1 https://github.com/stanfish06/dark-theme.git ~/.config/nvim/pack/plugins/start/dark-theme
