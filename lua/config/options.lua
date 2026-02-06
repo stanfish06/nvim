@@ -90,19 +90,19 @@ vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
 
 -- clipboard
 vim.schedule(function()
-    vim.o.clipboard = "unnamedplus"
+	vim.o.clipboard = "unnamedplus"
 end)
 
 -- Auto-indent when press enter (e.g. if () {<CR>})
 vim.keymap.set("i", "<CR>", function()
-    local line = vim.api.nvim_get_current_line()
-    local col_cursor = vim.api.nvim_win_get_cursor(0)[2]
+	local line = vim.api.nvim_get_current_line()
+	local col_cursor = vim.api.nvim_win_get_cursor(0)[2]
 
-    local char_prev = line:sub(col_cursor, col_cursor)
-    local char_next = line:sub(col_cursor + 1, col_cursor + 1)
-    local char_neighbors = char_prev .. char_next
-    if char_neighbors == "{}" or char_neighbors == "()" then
-        return "<CR><Esc>O"
-    end
-    return "<CR>"
+	local char_prev = line:sub(col_cursor, col_cursor)
+	local char_next = line:sub(col_cursor + 1, col_cursor + 1)
+	local char_neighbors = char_prev .. char_next
+	if char_neighbors == "{}" or char_neighbors == "()" then
+		return "<CR><Esc>O"
+	end
+	return "<CR>"
 end, { expr = true, noremap = true })
