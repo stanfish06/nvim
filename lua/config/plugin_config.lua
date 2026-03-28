@@ -2,6 +2,30 @@
 -- git clone --depth 1 https://github.com/ibhagwan/fzf-lua.git ~/.config/nvim/pack/plugins/start/fzf-lua
 local ok, fzf = pcall(require, "fzf-lua")
 if ok then
+    fzf.setup({
+        files = {
+            rg_opts = [[--color=never --hidden --files -g "!.git" -g "!.jj"]],
+            hidden = true,
+            actions = {
+                ["ctrl-alt-h"] = FzfLua.actions.toggle_hidden,
+            },
+        },
+        grep = {
+            rg_opts = table.concat({
+                "--hidden",
+                "--column",
+                "--line-number",
+                "--no-heading",
+                "--color=always",
+                "--smart-case",
+                "--max-columns=4096 -e",
+            }, " "),
+            hidden = true,
+            actions = {
+                ["ctrl-alt-h"] = FzfLua.actions.toggle_hidden,
+            },
+        },
+    })
     vim.keymap.set("n", "<leader><leader>", fzf.files)
     vim.keymap.set("n", "<leader>/", fzf.live_grep)
     vim.keymap.set("n", "<leader>sl", fzf.lines)
