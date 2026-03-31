@@ -121,4 +121,9 @@ end
 function StatusLine()
     return current_mode() .. current_file() .. current_filetype() .. current_cursor_info()
 end
-vim.opt.statusline = "%!v:lua.StatusLine()"
+
+if vim.g.vscode then
+    vim.opt.statusline = ""
+else
+    vim.opt.statusline = "%!v:lua.StatusLine()"
+end
