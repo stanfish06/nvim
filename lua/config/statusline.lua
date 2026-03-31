@@ -15,6 +15,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
         vim.api.nvim_set_hl(0, "FileAlt", { fg = "#3A3A3A" })
         vim.api.nvim_set_hl(0, "FileType", { fg = "black", bg = "#3E8FB0" })
         vim.api.nvim_set_hl(0, "FileTypeAlt", { fg = "#3E8FB0" })
+        vim.api.nvim_set_hl(0, "DiagnosticSignError", { bg = "#7E85A5", fg = "black" })
         vim.cmd("redrawstatus")
     end,
 })
@@ -55,13 +56,13 @@ local function current_mode()
 end
 
 local filetype_icons = {
-    lua = "",
-    python = "",
+    lua = "",
+    python = "",
     rust = "󱘗",
-    c = "",
-    go = "",
-    javascript = "",
-    typescript = "",
+    c = "",
+    go = "󰟓",
+    javascript = "󰌞",
+    typescript = "󰛦",
 }
 -- set to false if no nerd font
 vim.g.have_nerd_font = true
@@ -78,7 +79,7 @@ local function current_filetype()
         else
             icon = " " .. icon
         end
-        return "%=" .. color_alt .. SOLID_LEFT_ARROW .. "%*" .. color .. filetype .. icon .. " "
+        return "%=" .. color_alt .. SOLID_LEFT_ARROW .. "%*" .. color .. filetype .. icon .. ""
     end
 end
 
@@ -118,8 +119,50 @@ local function current_cursor_info()
         .. SOLID_RIGHT_ARROW_PART
 end
 
+local function current_diagnostics()
+    local ok, _ = pcall(vim.diagnostic.get)
+    if not ok then
+        return ""
+    end
+    local _diag_tbl = vim.diagnostic.get(0)
+    local _n_ERROR = 0
+    local _n_WARN = 0
+    local _n_INFO = 0
+    local _n_HINT = 0
+    for k, v in pairs(_diag_tbl) do
+        if v.severity == vim.diagnostic.severity.ERROR then
+            _n_ERROR = _n_ERROR + 1
+        end
+        if v.severity == vim.diagnostic.severity.WARN then
+            _n_WARN = _n_WARN + 1
+        end
+        if v.severity == vim.diagnostic.severity.INFO then
+            _n_INFO = _n_INFO + 1
+        end
+        if v.severity == vim.diagnostic.severity.HINT then
+            _n_HINT = _n_HINT + 1
+        end
+    end
+    return " "
+        .. "%#DiagnosticSignError#"
+        .. SOLID_LEFT_ARROW
+        .. "  "
+        .. _n_ERROR
+        .. "┊"
+        .. " "
+        .. _n_WARN
+        .. "┊"
+        .. "󰋽 "
+        .. _n_INFO
+        .. "┊"
+        .. " "
+        .. _n_HINT
+        .. " "
+        .. SOLID_RIGHT_ARROW
+end
+
 function StatusLine()
-    return current_mode() .. current_file() .. current_filetype() .. current_cursor_info()
+    return current_mode() .. current_file() .. current_filetype() .. current_diagnostics() .. current_cursor_info()
 end
 
 if vim.g.vscode then
