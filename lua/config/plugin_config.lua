@@ -1,7 +1,8 @@
+local is_vscode = vim.g.vscode
 -- fzf
 -- git clone --depth 1 https://github.com/ibhagwan/fzf-lua.git ~/.config/nvim/pack/plugins/start/fzf-lua
 local ok, fzf = pcall(require, "fzf-lua")
-if ok then
+if ok and not is_vscode then
     fzf.setup({
         files = {
             rg_opts = [[--color=never --hidden --files -g "!.git" -g "!.jj"]],
@@ -39,31 +40,33 @@ end
 -- git clone https://github.com/neovim/nvim-lspconfig ~/.config/nvim/pack/nvim/start/nvim-lspconfig
 -- after v12, neovim will have built-in package manager
 -- lua
-vim.lsp.config["luals"] = {
-    cmd = { "lua-language-server" },
-    filetypes = { "lua" },
-    root_markers = { { ".luarc.json", ".luarc.jsonc" }, ".git" },
-    settings = {
-        Lua = {
-            runtime = {
-                version = "LuaJIT",
+if not is_vscode then
+    vim.lsp.config["luals"] = {
+        cmd = { "lua-language-server" },
+        filetypes = { "lua" },
+        root_markers = { { ".luarc.json", ".luarc.jsonc" }, ".git" },
+        settings = {
+            Lua = {
+                runtime = {
+                    version = "LuaJIT",
+                },
             },
         },
-    },
-}
-vim.lsp.enable("luals")
--- uv tool install pyright
-vim.lsp.enable("pyright")
--- install per project
-vim.lsp.enable("pyrefly")
--- install using system package manager
-vim.lsp.enable("clangd")
--- npm instal -g typescript-language-server
-vim.lsp.enable("ts_ls")
+    }
+    vim.lsp.enable("luals")
+    -- uv tool install pyright
+    vim.lsp.enable("pyright")
+    -- install per project
+    vim.lsp.enable("pyrefly")
+    -- install using system package manager
+    vim.lsp.enable("clangd")
+    -- npm instal -g typescript-language-server
+    vim.lsp.enable("ts_ls")
+end
 
 -- conform (formatting)
 local conform_ok, conform = pcall(require, "conform")
-if conform_ok then
+if conform_ok and not is_vscode then
     conform.setup({
         default_format_opts = {
             lsp_format = "fallback",
