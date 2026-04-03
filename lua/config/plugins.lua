@@ -10,6 +10,7 @@ local package_list = {
     ["dark-theme"] = "https://github.com/stanfish06/dark-theme.git",
     ["rose-pine"] = "https://github.com/rose-pine/neovim.git",
     ["tokyonight"] = "https://github.com/folke/tokyonight.nvim.git",
+    ["eldritch"] = "https://github.com/eldritch-theme/eldritch.nvim.git",
 }
 function sync_packages()
     mod_async
