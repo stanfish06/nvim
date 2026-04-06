@@ -53,6 +53,7 @@ if not is_vscode then
             },
         },
     }
+    -- brew install lua-language-server
     vim.lsp.enable("luals")
     -- uv tool install pyright
     vim.lsp.enable("pyright")
@@ -62,6 +63,8 @@ if not is_vscode then
     vim.lsp.enable("clangd")
     -- npm instal -g typescript-language-server
     vim.lsp.enable("ts_ls")
+    -- rust
+    vim.lsp.enable("rust_analyzer")
 end
 
 -- conform (formatting)
