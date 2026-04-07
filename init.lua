@@ -1,6 +1,6 @@
+require("config.plugins")
 require("config.options")
 require("config.statusline")
-require("config.plugins")
 require("config.plugin_config")
 require("config.treesitter")
 require("config.scopeline")
