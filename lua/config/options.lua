@@ -108,7 +108,9 @@ vim.keymap.set("i", "<CR>", function()
 end, { expr = true, noremap = true })
 
 -- experimental options
-local ok, ui2 = pcall(require, "vim._core.ui2")
-if ok then
-    pcall(ui2.enable)
+if not vim.g.vscode then
+    local ok, ui2 = pcall(require, "vim._core.ui2")
+    if ok then
+        pcall(ui2.enable)
+    end
 end
