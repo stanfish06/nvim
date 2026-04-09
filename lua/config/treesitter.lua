@@ -46,21 +46,25 @@ local function can_auto_install_parsers()
 end
 
 local ts_status, ts = pcall(require, "nvim-treesitter")
-if ts_status and can_auto_install_parsers() then
-    ts.install({
-        "c",
-        "python",
-        "julia",
-        "cpp",
-        "bash",
-        "lua",
-        "vim",
-        "vimdoc",
-        "javascript",
-        "markdown",
-        "markdown_inline",
-    })
+local function ts_install()
+    if ts_status and can_auto_install_parsers() then
+        ts.install({
+            "c",
+            "python",
+            "julia",
+            "cpp",
+            "bash",
+            "lua",
+            "vim",
+            "vimdoc",
+            "javascript",
+            "markdown",
+            "markdown_inline",
+        })
+    end
 end
+ts_install()
+
 local function is_ts_enabled()
     local bufnr = vim.api.nvim_get_current_buf()
     return vim.treesitter.highlighter.active[bufnr] ~= nil
@@ -72,7 +76,20 @@ function ts_highlight()
         vim.treesitter.start()
     end
 end
+-- sometimes ts dont update all parsers and it fails things, you need to remove both parser and queries folder
+function ts_update()
+    if ts_status and can_auto_install_parsers() then
+        local parser_dir = require('nvim-treesitter.config').get_install_dir('parser')
+        local queries_dir = require('nvim-treesitter.config').get_install_dir('queries')
+        print("Remove parser and queries folders...")
+        vim.fn.delete(parser_dir, "rf")
+        vim.fn.delete(queries_dir, "rf")
+        ts_install()
+        print("You need to restart neovim after compilation")
+    end
+end
 vim.api.nvim_create_user_command("TSBufToggle", ts_highlight, {})
+vim.api.nvim_create_user_command("TSSync", ts_update, {})
 vim.api.nvim_create_autocmd("FileType", {
     pattern = { "*" },
     callback = function()
