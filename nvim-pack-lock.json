@@ -5,7 +5,7 @@
       "src": "https://github.com/stevearc/conform.nvim.git"
     },
     "dark-theme": {
-      "rev": "7839e71f9d9130d2a9a8e6689ed01d73929102fe",
+      "rev": "f2ec928c3d77aafa751f34655117174bff458849",
       "src": "https://github.com/stanfish06/dark-theme.git"
     },
     "eldritch": {
@@ -13,7 +13,7 @@
       "src": "https://github.com/eldritch-theme/eldritch.nvim.git"
     },
     "fzf-lua": {
-      "rev": "9f0432fdd7825ab163520045831a40b6df82ea28",
+      "rev": "657c1bbb7357c61e26a20d868b53a460b05c18c0",
       "src": "https://github.com/ibhagwan/fzf-lua.git"
     },
     "gitsigns.nvim": {
@@ -21,7 +21,7 @@
       "src": "https://github.com/lewis6991/gitsigns.nvim.git"
     },
     "nvim-lspconfig": {
-      "rev": "bedca8b426b2fee0ccac596d167d71bbe971253f",
+      "rev": "cb5bc0b2b35a6d513e3298d285db81453e791f4f",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
@@ -29,7 +29,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "rose-pine": {
-      "rev": "cf2a288696b03d0934da713d66c6d71557b5c997",
+      "rev": "9504524e5ed0e326534698f637f9d038ba4cd0ee",
       "src": "https://github.com/rose-pine/neovim.git"
     },
     "sneaks.vim": {
