@@ -5,7 +5,7 @@
       "src": "https://github.com/stevearc/conform.nvim.git"
     },
     "dark-theme": {
-      "rev": "f2ec928c3d77aafa751f34655117174bff458849",
+      "rev": "092dda8a619d134103b077b04a49ba77ce088b76",
       "src": "https://github.com/stanfish06/dark-theme.git"
     },
     "eldritch": {
