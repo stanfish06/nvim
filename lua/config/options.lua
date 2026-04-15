@@ -107,6 +107,12 @@ vim.keymap.set("i", "<CR>", function()
     return "<CR>"
 end, { expr = true, noremap = true })
 
+-- check full kepmap and dump to a new buffer
+function which_key()
+    vim.cmd("redir @a | silent map | redir END | new | put a")
+end
+vim.api.nvim_create_user_command("DescribeKey", which_key, {})
+
 -- experimental options
 if not vim.g.vscode then
     local ok, ui2 = pcall(require, "vim._core.ui2")

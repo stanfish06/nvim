@@ -3,6 +3,7 @@ local mod_async = require("lib.async")
 -- packages
 local package_list = {
     { name = "fzf-lua", src = "https://github.com/ibhagwan/fzf-lua.git" },
+    { name = "fff.nvim", src = "https://github.com/dmtrKovalenko/fff.nvim" },
     { name = "nvim-lspconfig", src = "https://github.com/neovim/nvim-lspconfig" },
     { name = "sneaks.vim", src = "https://github.com/justinmk/vim-sneak" },
     { name = "nvim-treesitter", src = "https://github.com/nvim-treesitter/nvim-treesitter.git" },
