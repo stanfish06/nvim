@@ -13,7 +13,7 @@
       "src": "https://github.com/eldritch-theme/eldritch.nvim.git"
     },
     "fff.nvim": {
-      "rev": "2606dce6bc0514b3addf46d6726c868f6752180f",
+      "rev": "7de55be63d725d94944e5e89206284a67b8baa08",
       "src": "https://github.com/dmtrKovalenko/fff.nvim"
     },
     "fzf-lua": {
@@ -25,7 +25,7 @@
       "src": "https://github.com/lewis6991/gitsigns.nvim.git"
     },
     "nvim-lspconfig": {
-      "rev": "8a9378a822719346a0288fa004dab302ca3c0a8f",
+      "rev": "d10ce09e42bb0ca8600fd610c3bb58676e61208d",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {

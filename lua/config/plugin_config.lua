@@ -114,16 +114,18 @@ vim.g.fff = {
         show_scores = true,
     },
 }
-vim.keymap.set(
-    'n',
-    'ff',
-    function() require('fff').find_files() end,
-    { desc = 'fff files' }
-)
--- you can toggle between grep, fuzzy grep, regex grep with shift+tab after launching fff grep
-vim.keymap.set(
-    'n',
-    'fg',
-    function() require('fff').live_grep() end,
-    { desc = 'fff grep' }
-)
+if not is_vscode then
+    vim.keymap.set(
+        'n',
+        'ff',
+        function() require('fff').find_files() end,
+        { desc = 'fff files' }
+    )
+    -- you can toggle between grep, fuzzy grep, regex grep with shift+tab after launching fff grep
+    vim.keymap.set(
+        'n',
+        'fg',
+        function() require('fff').live_grep() end,
+        { desc = 'fff grep' }
+    )
+end
