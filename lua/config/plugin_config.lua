@@ -65,6 +65,8 @@ if not is_vscode then
     vim.lsp.enable("ts_ls")
     -- rust
     vim.lsp.enable("rust_analyzer")
+    -- go
+    vim.lsp.enable("gopls")
     -- swift
     vim.lsp.config["sourcekit"] = {
         cmd = { "sourcekit-lsp" },
