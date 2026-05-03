@@ -3,7 +3,7 @@ local mod_async = require("lib.async")
 -- packages
 local package_list = {
     { name = "fzf-lua", src = "https://github.com/ibhagwan/fzf-lua.git" },
-    { name = "fff.nvim", src = "https://github.com/dmtrKovalenko/fff.nvim" },
+    { name = "fff.nvim", src = "https://github.com/dmtrKovalenko/fff.nvim", lazy = true },
     { name = "nvim-lspconfig", src = "https://github.com/neovim/nvim-lspconfig" },
     { name = "sneaks.vim", src = "https://github.com/justinmk/vim-sneak" },
     { name = "nvim-treesitter", src = "https://github.com/nvim-treesitter/nvim-treesitter.git" },
@@ -25,7 +25,7 @@ function sync_packages()
                 print("Check and remove old installs...")
                 local jobs = {}
                 for _, entry in ipairs(package_list) do
-                    local pkg_name = entry.name 
+                    local pkg_name = entry.name
                     local job = mod_async.new(function()
                         local full_path = old_package_dir .. pkg_name .. "/"
                         if vim.fn.isdirectory(full_path) == 1 then
@@ -53,10 +53,12 @@ function sync_packages()
                 print("Sync packages (old approach)...")
                 local jobs = {}
                 for _, entry in ipairs(package_list) do
-                    local pkg_name = entry.name 
+                    local pkg_name = entry.name
                     local pkg_url = entry.src
+                    local sub_dir = entry.lazy and "opt/" or "start/"
+                    local pkg_root = vim.fn.stdpath("config") .. "/pack/plugins/" .. sub_dir
                     local job = mod_async.new(function()
-                        local full_path = old_package_dir .. pkg_name .. "/"
+                        local full_path = pkg_root .. pkg_name .. "/"
                         if vim.fn.isdirectory(full_path) == 1 then
                             print("Reinstall: " .. pkg_name .. "...")
                             vim.fn.delete(full_path, "rf")
