@@ -98,24 +98,29 @@ if conform_ok and not is_vscode then
 end
 
 -- fff
-vim.api.nvim_create_autocmd('PackChanged', {
-    callback = function(ev)
-        local name, kind = ev.data.spec.name, ev.data.kind
-        if name == 'fff.nvim' and (kind == 'install' or kind == 'update') then
-            if not ev.data.active then
-                vim.cmd.packadd('fff.nvim')
+local fff_ok, _ = pcall(function()
+    vim.api.nvim_create_autocmd('PackChanged', {
+        callback = function(ev)
+            local name, kind = ev.data.spec.name, ev.data.kind
+            if name == 'fff.nvim' and (kind == 'install' or kind == 'update') then
+                if not ev.data.active then
+                    vim.cmd.packadd('fff.nvim')
+                end
+                require('fff.download').download_or_build_binary()
             end
-            require('fff.download').download_or_build_binary()
-        end
-    end,
-})
-vim.g.fff = {
-    lazy_sync = true,
-    debug = {
-        enabled = true,
-        show_scores = true,
-    },
-}
+        end,
+    })
+end)
+if fff_ok then
+    vim.g.fff = {
+        lazy_sync = true,
+        debug = {
+            enabled = true,
+            show_scores = true,
+        },
+    }
+end
+
 if not is_vscode then
     vim.keymap.set(
         'n',
