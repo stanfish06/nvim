@@ -27,6 +27,10 @@ pcall(vim.cmd.colorscheme, "dark")
     -- <C-w o> or :only allows you to close all window except the current one, useful in case you have splits and you want to keep and maximize the current one only
     -- <C-c> allows you to change from insert/command mode to normal, maybe useful if you find esc annoying
 
+-- cool features potentially to try
+    -- terminal events (check help terminal)
+        -- OSC 7 you can make neovim change working directory by letting shell emit this code
+
 -- by default, makeprg is make, so :make uses make, but you can set it to empty string that allows you to run anything and pop output in a buf
     -- you can now do ls, grep, make, etc (e.g. :make ls, :make grep, :make make)
 -- you can set anything you want, such as gmake, latex, etc
