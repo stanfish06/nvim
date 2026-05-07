@@ -13,11 +13,15 @@
       "src": "https://github.com/eldritch-theme/eldritch.nvim.git"
     },
     "fff.nvim": {
-      "rev": "1bcbce2bc67d1eca5a6b2f540b5c0bf8a3fdeb2c",
+      "rev": "ed0e84d4fc5707a59c4c40f9baba48485ade76a2",
       "src": "https://github.com/dmtrKovalenko/fff.nvim"
     },
+    "fugitive.vim": {
+      "rev": "3b753cf8c6a4dcde6edee8827d464ba9b8c4a6f0",
+      "src": "https://tpope.io/vim/fugitive.git"
+    },
     "fzf-lua": {
-      "rev": "10c19a5f08bfeed34b930a1efddda3a9a983e6e2",
+      "rev": "33fe4b6f0c817c4d99a7baeea82c4d17e57efd64",
       "src": "https://github.com/ibhagwan/fzf-lua.git"
     },
     "gitsigns.nvim": {

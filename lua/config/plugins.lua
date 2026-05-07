@@ -6,6 +6,7 @@ local package_list = {
     { name = "fff.nvim", src = "https://github.com/dmtrKovalenko/fff.nvim", lazy = true },
     { name = "nvim-lspconfig", src = "https://github.com/neovim/nvim-lspconfig" },
     { name = "sneaks.vim", src = "https://github.com/justinmk/vim-sneak" },
+    { name = "fugitive.vim", src = "https://tpope.io/vim/fugitive.git" },
     { name = "nvim-treesitter", src = "https://github.com/nvim-treesitter/nvim-treesitter.git" },
     { name = "conform.nvim", src = "https://github.com/stevearc/conform.nvim.git" },
     { name = "gitsigns.nvim", src = "https://github.com/lewis6991/gitsigns.nvim.git" },
