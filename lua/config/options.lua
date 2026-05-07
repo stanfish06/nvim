@@ -31,8 +31,8 @@ vim.keymap.set("i", "<c-space>", "<c-x><c-o>", { desc = "LSP completion" })
 vim.keymap.set("i", "<c-l>", "<c-x><c-l>", { desc = "Line completion" })
 vim.keymap.set("i", "<c-f>", "<c-x><c-f>", { desc = "File completion" })
 -- lsp
-vim.keymap.set("n", "gd", ":lua vim.lsp.buf.definition()<CR>")
-vim.keymap.set("n", "gr", ":lua vim.lsp.buf.references()<CR>")
+vim.keymap.set("n", "gd", vim.lsp.buf.definition)
+vim.keymap.set("n", "gr", vim.lsp.buf.references)
 
 -- misc settings
 vim.o.showmode = true
@@ -86,7 +86,7 @@ vim.o.infercase = true
 vim.o.spelloptions = "camel"
 vim.o.virtualedit = "block"
 vim.o.iskeyword = "@,48-57,_,192-255,-"
-vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
+vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.]\)]*\s\+]]
 
 -- clipboard
 vim.schedule(function()
