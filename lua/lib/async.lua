@@ -10,7 +10,7 @@ local M = {}
 M._active = {}
 ---@type Async[]
 M._suspended = {}
-M._executor = assert(vim.loop.new_check())
+M._executor = assert(vim.uv.new_check())
 
 M.BUDGET = 10
 
