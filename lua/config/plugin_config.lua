@@ -70,6 +70,7 @@ if not is_vscode then
     -- swift
     vim.lsp.config["sourcekit"] = {
         cmd = { "sourcekit-lsp" },
+        filetypes = { "swift", "objective-c", "objective-cpp" },
         root_markers = { "Package.swift", "compilation_commands.json", ".git" },
     }
     vim.lsp.enable("sourcekit")
@@ -135,4 +136,3 @@ if fff_ok then
         )
     end
 end
-
