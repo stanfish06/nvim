@@ -11,6 +11,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
         vim.api.nvim_set_hl(0, "StatusLineModeVisualAlt", { fg = "#E5C07B", bg = "#3A3A3A" })
         vim.api.nvim_set_hl(0, "CursorInfo", { bg = "#B8C0E0", fg = "black" })
         vim.api.nvim_set_hl(0, "CursorInfoAlt", { fg = "#B8C0E0", bg = "#3E8FB0" })
+        vim.api.nvim_set_hl(0, "Git", { bg = "#3A3A3A", fg = "#E5C07B" })
         vim.api.nvim_set_hl(0, "File", { bg = "#3A3A3A", fg = "#ABEBE2" })
         vim.api.nvim_set_hl(0, "FileAlt", { fg = "#3A3A3A" })
         vim.api.nvim_set_hl(0, "FileType", { fg = "black", bg = "#3E8FB0" })
@@ -19,6 +20,15 @@ vim.api.nvim_create_autocmd("ColorScheme", {
         vim.cmd("redrawstatus")
     end,
 })
+
+-- git sign
+function current_git_branch()
+    local ok, gs = pcall(require, "gitsigns")
+    if not ok then return "" end
+    local branch = vim.b.gitsigns_head
+    if not branch or branch == "" then return "" end
+    return "%#Git#⎇ " .. branch .. " " .. "%*"
+end
 
 -- cursor
 local function set_cursor_color()
@@ -162,7 +172,7 @@ local function current_diagnostics()
 end
 
 function StatusLine()
-    return current_mode() .. current_file() .. current_filetype() .. current_diagnostics() .. current_cursor_info()
+    return current_mode() .. current_file() .. current_git_branch() .. current_filetype() .. current_diagnostics() .. current_cursor_info()
 end
 
 if vim.g.vscode then
