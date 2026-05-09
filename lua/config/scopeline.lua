@@ -7,12 +7,12 @@ local valid_scopes = {
     ["while_statement"] = true,
 }
 local ns_scope_line = vim.api.nvim_create_namespace("scope_line")
-function char_at(row, col)
+local function char_at(row, col)
     -- row is 1-based, col is 1-based
     local line = vim.api.nvim_buf_get_lines(0, row - 1, row, false)[1] or ""
     return string.sub(line, col, col)
 end
-function draw_scope_lines()
+local function draw_scope_lines()
     local buf = vim.api.nvim_get_current_buf()
     vim.api.nvim_buf_clear_namespace(buf, ns_scope_line, 0, -1)
     local cursor = vim.api.nvim_win_get_cursor(0)

@@ -69,7 +69,7 @@ local function is_ts_enabled()
     local bufnr = vim.api.nvim_get_current_buf()
     return vim.treesitter.highlighter.active[bufnr] ~= nil
 end
-function ts_highlight()
+local function ts_highlight()
     if is_ts_enabled() then
         vim.treesitter.stop()
     else
@@ -77,7 +77,7 @@ function ts_highlight()
     end
 end
 -- sometimes ts dont update all parsers and it fails things, you need to remove both parser and queries folder
-function ts_update()
+local function ts_update()
     if ts_status and can_auto_install_parsers() then
         local parser_dir = require('nvim-treesitter.config').get_install_dir('parser')
         local queries_dir = require('nvim-treesitter.config').get_install_dir('queries')

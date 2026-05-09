@@ -1,6 +1,6 @@
 local mod_ui = require("lib.ui")
 
-function preview_image(path)
+local function preview_image(path)
     -- image api does not associate with window at this point, check later
     -- mod_ui.Window.create_tmp_float_window()
     local id = vim.ui.img.set(

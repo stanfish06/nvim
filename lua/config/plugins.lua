@@ -16,7 +16,7 @@ local package_list = {
     { name = "eldritch", src = "https://github.com/eldritch-theme/eldritch.nvim.git" },
 }
 local vim_pack_ok, _ = pcall(require, "vim.pack")
-function sync_packages()
+local function sync_packages()
     -- local old_package_dir = os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/"
     local old_package_dir = vim.fn.stdpath("config") .. "/pack/plugins/start/"
     if vim_pack_ok then
