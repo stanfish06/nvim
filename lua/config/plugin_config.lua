@@ -58,7 +58,7 @@ if not is_vscode then
     -- uv tool install pyright
     vim.lsp.enable("pyright")
     -- install per project
-    vim.lsp.enable("pyrefly")
+    -- vim.lsp.enable("pyrefly")
     -- install using system package manager
     vim.lsp.enable("clangd")
     -- npm instal -g typescript-language-server
