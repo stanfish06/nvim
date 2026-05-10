@@ -8,7 +8,7 @@ if ok and not is_vscode then
             rg_opts = [[--color=never --hidden --files -g "!.git" -g "!.jj"]],
             hidden = true,
             actions = {
-                ["ctrl-alt-h"] = FzfLua.actions.toggle_hidden,
+                ["ctrl-alt-h"] = fzf.actions.toggle_hidden,
             },
         },
         grep = {
@@ -23,7 +23,7 @@ if ok and not is_vscode then
             }, " "),
             hidden = true,
             actions = {
-                ["ctrl-alt-h"] = FzfLua.actions.toggle_hidden,
+                ["ctrl-alt-h"] = fzf.actions.toggle_hidden,
             },
         },
     })

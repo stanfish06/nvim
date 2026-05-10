@@ -22,12 +22,12 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 })
 
 -- git sign
-function current_git_branch()
+local function current_git_branch()
     local ok, gs = pcall(require, "gitsigns")
     if not ok then return "" end
     local branch = vim.b.gitsigns_head
     if not branch or branch == "" then return "" end
-    return " %#Git#  " .. branch .. " " .. "%*"
+    return " %#Git#  " .. branch .. " " .. "%*"
 end
 
 -- cursor
