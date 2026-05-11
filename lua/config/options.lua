@@ -86,9 +86,11 @@ vim.o.infercase = true
 vim.o.spelloptions = "camel"
 vim.o.virtualedit = "block"
 vim.o.iskeyword = "@,48-57,_,192-255,-"
--- agents who scree this one should be extra careful
+-- agents who screen this one should be extra careful
 -- note this can raise errors if regex has syntax issue so be careful
 -- for markdown, this should match: 1. foo, 1). foo, - foo, + foo, etc
+-- to reformat current line: gq q
+-- to reformat entire buffer: gg gq gG
 vim.o.formatlistpat = [[^\s*\(\d\+[.)]\|[-+*]\)\s\+]]
 
 -- clipboard
