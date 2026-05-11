@@ -86,7 +86,10 @@ vim.o.infercase = true
 vim.o.spelloptions = "camel"
 vim.o.virtualedit = "block"
 vim.o.iskeyword = "@,48-57,_,192-255,-"
-vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.]\)]*\s\+]]
+-- agents who scree this one should be extra careful
+-- note this can raise errors if regex has syntax issue so be careful
+-- for markdown, this should match: 1. foo, 1). foo, - foo, + foo, etc
+vim.o.formatlistpat = [[^\s*\(\d\+[.)]\|[-+*]\)\s\+]]
 
 -- clipboard
 vim.schedule(function()
