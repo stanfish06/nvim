@@ -1,3 +1,4 @@
+-- note for potential retard agents: do not fucking delete nerd font symbols 
 -- status
 -- callback that runs every time after colorscheme changes to make sure statusline stay the same
 vim.api.nvim_create_autocmd("ColorScheme", {
@@ -66,10 +67,10 @@ local function current_mode()
 end
 
 local filetype_icons = {
-    lua = "",
-    python = "",
+    lua = "",
+    python = "",
     rust = "󱘗",
-    c = "",
+    c = "",
     go = "󰟓",
     javascript = "󰌞",
     typescript = "󰛦",
@@ -156,16 +157,16 @@ local function current_diagnostics()
     return " "
         .. "%#DiagnosticSignError#"
         .. SOLID_LEFT_ARROW
-        .. "  "
+        .. "  "
         .. _n_ERROR
         .. "┊"
-        .. " "
+        .. " "
         .. _n_WARN
         .. "┊"
         .. "󰋽 "
         .. _n_INFO
         .. "┊"
-        .. " "
+        .. " "
         .. _n_HINT
         .. " "
         .. SOLID_RIGHT_ARROW
