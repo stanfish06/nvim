@@ -14,6 +14,7 @@ local package_list = {
     { name = "rose-pine", src = "https://github.com/rose-pine/neovim.git" },
     { name = "tokyonight", src = "https://github.com/folke/tokyonight.nvim.git" },
     { name = "eldritch", src = "https://github.com/eldritch-theme/eldritch.nvim.git" },
+    { name = "solarized-osaka.nvim", src = "https://github.com/craftzdog/solarized-osaka.nvim.git" },
 }
 local vim_pack_ok, _ = pcall(require, "vim.pack")
 local function sync_packages()
