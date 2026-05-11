@@ -31,6 +31,26 @@ local function current_git_branch()
     return " %#Git#  " .. branch .. " " .. "%*"
 end
 
+local function current_lsp_clients()
+    if not vim.lsp or not vim.lsp.get_clients then
+        return ""
+    end
+    local ok, clients = pcall(vim.lsp.get_clients, { bufnr = 0 })
+    if not ok or #clients == 0 then
+        return ""
+    end
+    local names = {}
+    for _, client in ipairs(clients) do
+        if client and client.name and client.name ~= "" then
+            table.insert(names, client.name)
+        end
+    end
+    if #names == 0 then
+        return ""
+    end
+    return " %#Git# [" .. table.concat(names, ",") .. "] %*"
+end
+
 -- cursor
 local function set_cursor_color()
     vim.api.nvim_set_hl(0, "myCursor", { fg = "#FFA500", bg = "#FFA500" })
@@ -173,7 +193,13 @@ local function current_diagnostics()
 end
 
 function StatusLine()
-    return current_mode() .. current_file() .. current_git_branch() .. current_filetype() .. current_diagnostics() .. current_cursor_info()
+    return current_mode()
+        .. current_file()
+        .. current_git_branch()
+        .. current_lsp_clients()
+        .. current_filetype()
+        .. current_diagnostics()
+        .. current_cursor_info()
 end
 
 if vim.g.vscode then
