@@ -13,6 +13,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
         vim.api.nvim_set_hl(0, "CursorInfo", { bg = "#B8C0E0", fg = "black" })
         vim.api.nvim_set_hl(0, "CursorInfoAlt", { fg = "#B8C0E0", bg = "#3E8FB0" })
         vim.api.nvim_set_hl(0, "Git", { bg = "#3A3A3A", fg = "#E5C07B" })
+        vim.api.nvim_set_hl(0, "LspClients", { bg = "#3A3A3A", fg = "#E5C07B" })
         vim.api.nvim_set_hl(0, "File", { bg = "#3A3A3A", fg = "#ABEBE2" })
         vim.api.nvim_set_hl(0, "FileAlt", { fg = "#3A3A3A" })
         vim.api.nvim_set_hl(0, "FileType", { fg = "black", bg = "#3E8FB0" })
@@ -48,7 +49,7 @@ local function current_lsp_clients()
     if #names == 0 then
         return ""
     end
-    return " %#Git# [" .. table.concat(names, ",") .. "] %*"
+    return " %#LspClients# [" .. table.concat(names, ", ") .. "] %*"
 end
 
 -- cursor
