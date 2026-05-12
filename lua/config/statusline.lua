@@ -32,6 +32,17 @@ local function current_git_branch()
     return " %#Git#  " .. branch .. " " .. "%*"
 end
 
+local function current_buf_flags()
+    local flags = ""
+    if vim.bo.modified then
+        flags = flags .. " %#DiagnosticWarn#[+]%*"
+    end
+    if vim.bo.readonly or not vim.bo.modifiable then
+        flags = flags .. " %#DiagnosticError#[RO]%*"
+    end
+    return flags
+end
+
 local function current_lsp_clients()
     if not vim.lsp or not vim.lsp.get_clients then
         return ""
@@ -196,6 +207,7 @@ end
 function StatusLine()
     return current_mode()
         .. current_file()
+        .. current_buf_flags()
         .. current_git_branch()
         .. current_lsp_clients()
         .. current_filetype()

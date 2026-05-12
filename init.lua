@@ -26,6 +26,7 @@ pcall(vim.cmd.colorscheme, "dark")
     -- lcd allows you to set root directory for current window, which might be useful in some cases
     -- <C-w o> or :only allows you to close all window except the current one, useful in case you have splits and you want to keep and maximize the current one only
     -- <C-c> allows you to change from insert/command mode to normal, maybe useful if you find esc annoying
+    -- :set readonly and :set noreadonly to toggle read-only mode
 
 -- cool features potentially to try
     -- terminal events (check help terminal)
