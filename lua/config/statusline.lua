@@ -29,7 +29,7 @@ local function current_git_branch()
     if not ok then return "" end
     local branch = vim.b.gitsigns_head
     if not branch or branch == "" then return "" end
-    return " %#Git#  " .. branch .. " " .. "%*"
+    return " %#Git#  " .. branch .. " " .. "%*"
 end
 
 local function current_buf_flags()
@@ -99,10 +99,10 @@ local function current_mode()
 end
 
 local filetype_icons = {
-    lua = "",
-    python = "",
+    lua = "",
+    python = "",
     rust = "󱘗",
-    c = "",
+    c = "",
     go = "󰟓",
     javascript = "󰌞",
     typescript = "󰛦",
@@ -163,16 +163,15 @@ local function current_cursor_info()
 end
 
 local function current_diagnostics()
-    local ok, _ = pcall(vim.diagnostic.get)
+    local ok, _diag_tbl = pcall(vim.diagnostic.get, 0)
     if not ok then
         return ""
     end
-    local _diag_tbl = vim.diagnostic.get(0)
     local _n_ERROR = 0
     local _n_WARN = 0
     local _n_INFO = 0
     local _n_HINT = 0
-    for k, v in pairs(_diag_tbl) do
+    for _, v in pairs(_diag_tbl) do
         if v.severity == vim.diagnostic.severity.ERROR then
             _n_ERROR = _n_ERROR + 1
         end
@@ -189,16 +188,16 @@ local function current_diagnostics()
     return " "
         .. "%#StatusLineDiag#"
         .. SOLID_LEFT_ARROW
-        .. "  "
+        .. "  "
         .. _n_ERROR
         .. "┊"
-        .. " "
+        .. " "
         .. _n_WARN
         .. "┊"
         .. "󰋽 "
         .. _n_INFO
         .. "┊"
-        .. " "
+        .. " "
         .. _n_HINT
         .. " "
         .. SOLID_RIGHT_ARROW
