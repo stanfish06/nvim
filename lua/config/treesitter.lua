@@ -4,13 +4,10 @@
 
 -- this function needs to be updated occasionally, as of 260130, glibc should be at least 2.30
 local function get_glibc_version()
-    local handle = io.popen("ldd --version 2>&1 | head -n1")
-    if not handle then
+    local result = vim.fn.system("ldd --version 2>&1 | head -n1")
+    if vim.v.shell_error ~= 0 then
         return nil
     end
-    local result = handle:read("*a")
-    handle:close()
-
     local version = result:match("(%d+%.%d+)%s*$") or result:match("GLIBC (%d+%.%d+)")
     if version then
         return tonumber(version)
