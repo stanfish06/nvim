@@ -130,6 +130,7 @@ if not vim.g.vscode then
 end
 
 -- make the project and open quick fix list
+-- files are jumpable if they exist, compilation logs are not
 -- this trys to mirror emacs's compile, output can be saved in quickfix list
 local function compile(opts)
     vim.cmd(string.format("make %s", opts.args))
