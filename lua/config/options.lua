@@ -128,3 +128,17 @@ if not vim.g.vscode then
         vim.notify("ui2 disabled (could be old nvim or api shift, check options.lua)", vim.log.levels.WARN)
     end
 end
+
+-- make the project and open quick fix list
+-- this trys to mirror emacs's compile, output can be saved in quickfix list
+local function compile(opts)
+    vim.cmd(string.format("make %s", opts.args))
+    local qflist = vim.fn.getqflist()
+    if #qflist > 0 then
+        vim.cmd("copen")
+    else
+        vim.cmd("cclose")
+        vim.notify("make: no errors", vim.log.levels.INFO)
+    end
+end
+vim.api.nvim_create_user_command("Compile", compile, { nargs = "?" })
