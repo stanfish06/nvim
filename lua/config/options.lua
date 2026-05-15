@@ -9,7 +9,14 @@ vim.o.relativenumber = true
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
-vim.keymap.set("n", "<leader>d", vim.diagnostic.setloclist, { desc = "[D]iagnostic list" })
+-- this will show sources of diagnostics when multiple lsp involved
+vim.keymap.set("n", "<leader>d", function()
+    vim.diagnostic.setloclist({
+        format = function(d)
+            return string.format("[%s] %s", d.source or "?", d.message)
+        end,
+    })
+end, { desc = "[D]iagnostic list" })
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 vim.keymap.set("n", "<leader>,", "<cmd>botright 15split | terminal<CR>")
 vim.keymap.set("n", "<leader>tn", "<cmd>tabnew<CR>")
@@ -31,8 +38,24 @@ vim.keymap.set("i", "<c-space>", "<c-x><c-o>", { desc = "LSP completion" })
 vim.keymap.set("i", "<c-l>", "<c-x><c-l>", { desc = "Line completion" })
 vim.keymap.set("i", "<c-f>", "<c-x><c-f>", { desc = "File completion" })
 -- lsp
+-- todo: it is a bit annoying to have repeated entries when multiple lsps exist, should either dedup or show sources
 vim.keymap.set("n", "gd", vim.lsp.buf.definition)
 vim.keymap.set("n", "gr", vim.lsp.buf.references)
+
+-- diagnostics: tag source so multiple LSPs are distinguishable
+vim.diagnostic.config({
+    virtual_text = {
+        source = "if_many",
+        prefix = "●",
+    },
+    float = {
+        source = true,
+        border = "rounded",
+    },
+    signs = true,
+    underline = true,
+    severity_sort = true,
+})
 
 -- misc settings
 vim.o.showmode = true
