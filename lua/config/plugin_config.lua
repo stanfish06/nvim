@@ -101,14 +101,14 @@ end
 
 -- fff
 local fff_ok, _ = pcall(function()
-    vim.api.nvim_create_autocmd('PackChanged', {
+    vim.api.nvim_create_autocmd("PackChanged", {
         callback = function(ev)
             local name, kind = ev.data.spec.name, ev.data.kind
-            if name == 'fff.nvim' and (kind == 'install' or kind == 'update') then
+            if name == "fff.nvim" and (kind == "install" or kind == "update") then
                 if not ev.data.active then
-                    vim.cmd.packadd('fff.nvim')
+                    vim.cmd.packadd("fff.nvim")
                 end
-                require('fff.download').download_or_build_binary()
+                require("fff.download").download_or_build_binary()
             end
         end,
     })
@@ -122,18 +122,28 @@ if fff_ok then
         },
     }
     if not is_vscode then
-        vim.keymap.set(
-            'n',
-            'ff',
-            function() require('fff').find_files() end,
-            { desc = 'fff files' }
-        )
+        vim.keymap.set("n", "ff", function()
+            require("fff").find_files()
+        end, { desc = "fff files" })
         -- you can toggle between grep, fuzzy grep, regex grep with shift+tab after launching fff grep
-        vim.keymap.set(
-            'n',
-            'fg',
-            function() require('fff').live_grep() end,
-            { desc = 'fff grep' }
-        )
+        vim.keymap.set("n", "fg", function()
+            require("fff").live_grep()
+        end, { desc = "fff grep" })
     end
+end
+
+-- obsidian
+local obsidian_ok, obsidian = pcall(require, "obsidian")
+if obsidian_ok then
+    obsidian.setup({
+        workspaces = {
+            {
+                name = "notes",
+                path = "~/Git/notes",
+            },
+        },
+        daily_notes = {
+            folder = "journal",
+        },
+    })
 end

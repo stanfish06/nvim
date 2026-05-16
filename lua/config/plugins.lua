@@ -10,6 +10,8 @@ local package_list = {
     { name = "nvim-treesitter", src = "https://github.com/nvim-treesitter/nvim-treesitter.git" },
     { name = "conform.nvim", src = "https://github.com/stevearc/conform.nvim.git" },
     { name = "gitsigns.nvim", src = "https://github.com/lewis6991/gitsigns.nvim.git" },
+    { name = "obsidian.nvim", src = "https://github.com/epwalsh/obsidian.nvim.git" },
+    { name = "plenary.nvim", src = "https://github.com/nvim-lua/plenary.nvim.git" },
     { name = "dark-theme", src = "https://github.com/stanfish06/dark-theme.git" },
     { name = "rose-pine", src = "https://github.com/rose-pine/neovim.git" },
     { name = "tokyonight", src = "https://github.com/folke/tokyonight.nvim.git" },

@@ -1,7 +1,7 @@
 {
   "plugins": {
     "conform.nvim": {
-      "rev": "dca1a190aa85f9065979ef35802fb77131911106",
+      "rev": "18aeab3d63d350dcf44d64c462cc489a3412af40",
       "src": "https://github.com/stevearc/conform.nvim.git"
     },
     "dark-theme": {
@@ -9,11 +9,11 @@
       "src": "https://github.com/stanfish06/dark-theme.git"
     },
     "eldritch": {
-      "rev": "0415fa72c348e814a7a6cc9405593a4f812fe12f",
+      "rev": "c9131a5a11f00a2f428f563a4eb2c4aeb680d963",
       "src": "https://github.com/eldritch-theme/eldritch.nvim.git"
     },
     "fff.nvim": {
-      "rev": "8cb1f4768b4badab5edcb0c5f45184e236fa3f8a",
+      "rev": "6645a68ebc1f1a0dc98c1669a7e3f6d91625f79f",
       "src": "https://github.com/dmtrKovalenko/fff.nvim"
     },
     "fugitive.vim": {
@@ -21,7 +21,7 @@
       "src": "https://tpope.io/vim/fugitive.git"
     },
     "fzf-lua": {
-      "rev": "44816af2465bb0a17ae0f1f2d8a4f9c3df524fcd",
+      "rev": "311a630292310ea3bfe46dd616e17f283e975801",
       "src": "https://github.com/ibhagwan/fzf-lua.git"
     },
     "gitsigns.nvim": {
@@ -29,15 +29,23 @@
       "src": "https://github.com/lewis6991/gitsigns.nvim.git"
     },
     "nvim-lspconfig": {
-      "rev": "451d4ef9abd4f0f08e379ef0d55d1c391b6125a7",
+      "rev": "f9349d4d99e7d66403ae8bf4fbd357b154dca7a7",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
       "rev": "4916d6592ede8c07973490d9322f187e07dfefac",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
+    "obsidian.nvim": {
+      "rev": "726b60c89f4bafef267a714ea1faa1335bdd414a",
+      "src": "https://github.com/epwalsh/obsidian.nvim.git"
+    },
+    "plenary.nvim": {
+      "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
+      "src": "https://github.com/nvim-lua/plenary.nvim.git"
+    },
     "rose-pine": {
-      "rev": "6a961effd67f6130d36df6d1c05c48c739796dd2",
+      "rev": "ff483051a47e27d84bdef47703538df1ed9f4a47",
       "src": "https://github.com/rose-pine/neovim.git"
     },
     "sneaks.vim": {
