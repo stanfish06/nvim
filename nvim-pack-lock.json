@@ -5,7 +5,7 @@
       "src": "https://github.com/stevearc/conform.nvim.git"
     },
     "dark-theme": {
-      "rev": "092dda8a619d134103b077b04a49ba77ce088b76",
+      "rev": "b47efa872d99c070f3ed285a75bd8dba2077f544",
       "src": "https://github.com/stanfish06/dark-theme.git"
     },
     "eldritch": {
@@ -21,7 +21,7 @@
       "src": "https://tpope.io/vim/fugitive.git"
     },
     "fzf-lua": {
-      "rev": "311a630292310ea3bfe46dd616e17f283e975801",
+      "rev": "ca139b8fec043057038c69ce2b34cf4b8b83746e",
       "src": "https://github.com/ibhagwan/fzf-lua.git"
     },
     "gitsigns.nvim": {
