@@ -37,10 +37,8 @@ vim.keymap.set("n", "<leader>cc", "<cmd>cclose<CR>", { desc = "[C]lose quickfix 
 vim.keymap.set("i", "<c-space>", "<c-x><c-o>", { desc = "LSP completion" })
 vim.keymap.set("i", "<c-l>", "<c-x><c-l>", { desc = "Line completion" })
 vim.keymap.set("i", "<c-f>", "<c-x><c-f>", { desc = "File completion" })
--- lsp
+-- lsp keymaps: gd / gr set buffer-local in plugin_config.lua via LspAttach
 -- todo: it is a bit annoying to have repeated entries when multiple lsps exist, should either dedup or show sources
-vim.keymap.set("n", "gd", vim.lsp.buf.definition)
-vim.keymap.set("n", "gr", vim.lsp.buf.references)
 
 -- diagnostics: tag source so multiple LSPs are distinguishable
 vim.diagnostic.config({
