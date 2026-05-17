@@ -60,6 +60,11 @@ if not is_vscode then
     vim.lsp.enable("pyright")
     -- install via uv: uv tool install pyrefly, then pyrefly init inside project folder (will transfer configs from pyright if available)
     -- pyrefly seems capable of showing more type issues as far as I can tell
+    vim.lsp.config["pyrefly"] = {
+        cmd = { "pyrefly", "lsp" },
+        filetypes = { "python" },
+        root_markers = { "pyrefly.toml", "pyproject.toml", ".git" },
+    }
     vim.lsp.enable("pyrefly")
     -- install using system package manager
     vim.lsp.enable("clangd")
