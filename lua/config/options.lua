@@ -166,3 +166,17 @@ local function compile(opts)
     end
 end
 vim.api.nvim_create_user_command("Compile", compile, { nargs = "?" })
+
+-- tab title (format pid:program)
+function _G.TabLineCustom()
+    local s = ''
+    for i = 1, vim.fn.tabpagenr('$') do
+        local hl = i == vim.fn.tabpagenr() and '%#TabLineSel#' or '%#TabLine#'
+        local buflist = vim.fn.tabpagebuflist(i)
+        local bufname = vim.fn.bufname(buflist[vim.fn.tabpagewinnr(i)])
+        local name = vim.fn.fnamemodify(bufname, ':t')
+        s = s .. hl .. '%' .. i .. 'T ' .. (name == '' and '[No Name]' or name) .. ' '
+    end
+    return s .. '%#TabLineFill#%T'
+end
+vim.o.tabline = '%!v:lua.TabLineCustom()'

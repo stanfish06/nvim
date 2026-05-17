@@ -23,10 +23,14 @@ pcall(vim.cmd.colorscheme, "dark")
         -- m<latter> to mark file&line
         -- `<letter> to jump
         -- :marks to check marks
+        -- marks work in terminal too, very useful to mark for instance ai chat and jump from place to place
     -- lcd allows you to set root directory for current window, which might be useful in some cases
     -- <C-w o> or :only allows you to close all window except the current one, useful in case you have splits and you want to keep and maximize the current one only
     -- <C-c> allows you to change from insert/command mode to normal, maybe useful if you find esc annoying
     -- :set readonly and :set noreadonly to toggle read-only mode
+    -- use terminal
+        -- :te to open terminal
+        -- tabe | te program open terminal and launch program in a new tab (preferred way)
 
 -- cool features potentially to try
     -- terminal events (check help terminal)

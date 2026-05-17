@@ -31,6 +31,7 @@ if ok and not is_vscode then
     vim.keymap.set("n", "<leader>/", fzf.live_grep)
     vim.keymap.set("n", "<leader>sl", fzf.lines)
     vim.keymap.set("n", "<leader>sb", fzf.buffers)
+    vim.keymap.set("n", "<leader>sm", fzf.marks)
 end
 
 -- sneaks
