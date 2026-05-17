@@ -76,6 +76,13 @@ if not is_vscode then
         root_markers = { "Package.swift", "compile_commands.json", ".git" },
     }
     vim.lsp.enable("sourcekit")
+    vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(ev)
+            local opts = { buffer = ev.buf }
+            vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+            vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+        end,
+    })
 end
 
 -- conform (formatting)
