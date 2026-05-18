@@ -18,6 +18,7 @@ pcall(vim.cmd.colorscheme, "dark")
         -- you can also do recursive preview, for instance in this repo, you can do :e lua/**/ then <C-d> you can see files under subdirectories
         -- prefer git grep over regular grep when working in large code base
     -- gx is useful to open the buf under cursor using default program (e.g. open web link)
+    -- gf opens file under current cursor
     -- read !cmd to read shell command to current buffer
     -- use marks
         -- m<latter> to mark file&line
