@@ -144,7 +144,7 @@ local function ts_highlight()
         ts_highlight_active[bufnr] = true
     end
 end
-vim.api.nvim_create_autocmd("BufDelete", {
+vim.api.nvim_create_autocmd({ "BufDelete", "BufWipeout" }, {
     callback = function(ev) ts_highlight_active[ev.buf] = nil end,
 })
 
