@@ -133,17 +133,21 @@ local function build_latest_parsers(parser_dir)
         :wait()
 end
 
-local function is_ts_enabled()
-    local bufnr = vim.api.nvim_get_current_buf()
-    return vim.treesitter.highlighter.active[bufnr] ~= nil
-end
+local ts_highlight_active = {}
 local function ts_highlight()
-    if is_ts_enabled() then
-        vim.treesitter.stop()
+    local bufnr = vim.api.nvim_get_current_buf()
+    if ts_highlight_active[bufnr] then
+        vim.treesitter.stop(bufnr)
+        ts_highlight_active[bufnr] = false
     else
-        vim.treesitter.start()
+        vim.treesitter.start(bufnr)
+        ts_highlight_active[bufnr] = true
     end
 end
+vim.api.nvim_create_autocmd({ "BufDelete", "BufWipeout" }, {
+    callback = function(ev) ts_highlight_active[ev.buf] = nil end,
+})
+
 -- sometimes ts dont update all parsers and it fails things, you need to remove both parser and queries folder
 local function ts_update(opts)
     if ts_status and can_auto_install_parsers() then
@@ -165,9 +169,12 @@ vim.api.nvim_create_user_command("TSSync", ts_update, { nargs = "?" })
 vim.api.nvim_create_autocmd("FileType", {
     pattern = { "*" },
     callback = function()
-        local ok, err = pcall(vim.treesitter.start)
+        local bufnr = vim.api.nvim_get_current_buf()
+        local ok = pcall(vim.treesitter.start)
         if not ok then
             vim.cmd("syntax on")
+        else
+            ts_highlight_active[bufnr] = true
         end
     end,
 })
