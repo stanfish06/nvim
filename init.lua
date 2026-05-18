@@ -36,6 +36,19 @@ pcall(vim.cmd.colorscheme, "dark")
     -- use terminal
         -- :te to open terminal
         -- tabe | te program open terminal and launch program in a new tab (preferred way)
+    -- useful vim motions:
+        -- textobjects:
+            -- inside
+                -- change/visual/yank/delete inside: c/v/y/d + i + delimiter (e.g. foo "bar" -> ci" -> foo "│")
+            -- across
+                -- same as inside, you just swap i with a, then delimiter will be included too
+            -- can use treesitter to have more advanced textobjects such as function, etc
+        -- ]/[ (read :help ] or [ for full manual)
+            -- ]/[ + space: add blank lines below or above
+            -- ]/[ + m/M: jump below or above to method start(m)/end(M) (limited to some languages, treesitter-textobjects has ]\[ + f/c for function and class)
+                -- for now, I enabled ]\[ + f/F and ]\[ + c/C with treesitter-textobjects
+            -- ]/[ + b: jump buffers
+            -- ]/[ + (/)/{/}: jump to prev/next unmatched (/)/{/} (work if you are inside balanced parans/curly brackets)
 
 -- cool features potentially to try
     -- terminal events (check help terminal)

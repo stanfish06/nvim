@@ -140,6 +140,41 @@ if fff_ok then
     end
 end
 
+-- treesitter textobjects (move keymaps for function/class navigation)
+local tso_ok, tso = pcall(require, "nvim-treesitter-textobjects")
+if tso_ok and not is_vscode then
+    tso.setup({
+        move = {
+            set_jumps = true,
+        },
+    })
+    local move = require("nvim-treesitter-textobjects.move")
+    vim.keymap.set({ "n", "x", "o" }, "]f", function()
+        move.goto_next_start("@function.outer", "textobjects")
+    end, { desc = "Next function start" })
+    vim.keymap.set({ "n", "x", "o" }, "[f", function()
+        move.goto_previous_start("@function.outer", "textobjects")
+    end, { desc = "Prev function start" })
+    vim.keymap.set({ "n", "x", "o" }, "]c", function()
+        move.goto_next_start("@class.outer", "textobjects")
+    end, { desc = "Next class start" })
+    vim.keymap.set({ "n", "x", "o" }, "[c", function()
+        move.goto_previous_start("@class.outer", "textobjects")
+    end, { desc = "Prev class start" })
+    vim.keymap.set({ "n", "x", "o" }, "]F", function()
+        move.goto_next_end("@function.outer", "textobjects")
+    end, { desc = "Next function end" })
+    vim.keymap.set({ "n", "x", "o" }, "[F", function()
+        move.goto_previous_end("@function.outer", "textobjects")
+    end, { desc = "Prev function end" })
+    vim.keymap.set({ "n", "x", "o" }, "]C", function()
+        move.goto_next_end("@class.outer", "textobjects")
+    end, { desc = "Next class end" })
+    vim.keymap.set({ "n", "x", "o" }, "[C", function()
+        move.goto_previous_end("@class.outer", "textobjects")
+    end, { desc = "Prev class end" })
+end
+
 -- obsidian
 local obsidian_ok, obsidian = pcall(require, "obsidian")
 if obsidian_ok then

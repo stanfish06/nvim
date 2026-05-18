@@ -8,6 +8,7 @@ local package_list = {
     { name = "sneaks.vim", src = "https://github.com/justinmk/vim-sneak" },
     { name = "fugitive.vim", src = "https://tpope.io/vim/fugitive.git" },
     { name = "nvim-treesitter", src = "https://github.com/nvim-treesitter/nvim-treesitter.git" },
+    { name = "nvim-treesitter-textobjects", src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git" },
     { name = "conform.nvim", src = "https://github.com/stevearc/conform.nvim.git" },
     { name = "gitsigns.nvim", src = "https://github.com/lewis6991/gitsigns.nvim.git" },
     { name = "obsidian.nvim", src = "https://github.com/obsidian-nvim/obsidian.nvim.git" },
