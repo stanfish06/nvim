@@ -4,7 +4,6 @@ vim.o.number = true
 vim.o.relativenumber = true
 
 -- note
--- gt and gT are used to navigate between tabs
 -- keymap
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "

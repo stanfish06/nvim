@@ -30,6 +30,9 @@ pcall(vim.cmd.colorscheme, "dark")
     -- <C-w o> or :only allows you to close all window except the current one, useful in case you have splits and you want to keep and maximize the current one only
     -- <C-c> allows you to change from insert/command mode to normal, maybe useful if you find esc annoying
     -- :set readonly and :set noreadonly to toggle read-only mode
+    -- navigate across tabs
+        -- gt and gT to move back and forth
+        -- g<tab> to go back to last tab
     -- use terminal
         -- :te to open terminal
         -- tabe | te program open terminal and launch program in a new tab (preferred way)
