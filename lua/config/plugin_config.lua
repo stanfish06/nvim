@@ -140,6 +140,12 @@ if fff_ok then
     end
 end
 
+-- gitsigns
+local gitsigns_ok, gitsigns = pcall(require, "gitsigns")
+if gitsigns_ok and not is_vscode then
+    gitsigns.setup()
+end
+
 -- treesitter textobjects (move keymaps for function/class navigation)
 local tso_ok, tso = pcall(require, "nvim-treesitter-textobjects")
 if tso_ok and not is_vscode then
