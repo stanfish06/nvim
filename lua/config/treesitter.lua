@@ -15,6 +15,16 @@ local parser_repos = {
     { lang = "vimdoc", url = "https://github.com/neovim/tree-sitter-vimdoc" },
     { lang = "javascript", url = "https://github.com/tree-sitter/tree-sitter-javascript" },
     {
+        lang = "typescript",
+        url = "https://github.com/tree-sitter/tree-sitter-typescript",
+        location = "typescript",
+    },
+    {
+        lang = "tsx",
+        url = "https://github.com/tree-sitter/tree-sitter-typescript",
+        location = "tsx",
+    },
+    {
         lang = "markdown",
         url = "https://github.com/tree-sitter-grammars/tree-sitter-markdown",
         location = "tree-sitter-markdown",
@@ -79,6 +89,8 @@ local function ts_install()
             "vim",
             "vimdoc",
             "javascript",
+            "typescript",
+            "tsx",
             "markdown",
             "markdown_inline",
         })
