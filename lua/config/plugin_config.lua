@@ -78,6 +78,12 @@ if not is_vscode then
     vim.lsp.enable("sourcekit")
     vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(ev)
+            local client = vim.lsp.get_client_by_id(ev.data.client_id)
+            if client and client:supports_method("textDocument/completion") then
+                pcall(function()
+                    vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+                end)
+            end
             local opts = { buffer = ev.buf }
             vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
             vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
