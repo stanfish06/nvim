@@ -16,7 +16,7 @@ local function draw_scope_lines()
     local buf = vim.api.nvim_get_current_buf()
     vim.api.nvim_buf_clear_namespace(buf, ns_scope_line, 0, -1)
     local cursor = vim.api.nvim_win_get_cursor(0)
-    local ts_node = vim.treesitter.get_node({ pos = { cursor[1], cursor[2] } })
+    local ts_node = vim.treesitter.get_node({ pos = { cursor[1] - 1, cursor[2] } })
     while ts_node do
         if valid_scopes[ts_node:type()] then
             local start_row, start_col, end_row, end_col = ts_node:range()
