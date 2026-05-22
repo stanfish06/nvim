@@ -109,7 +109,13 @@ if conform_ok and not is_vscode then
         conform.format()
     end, { desc = "Format buffer" })
     vim.keymap.set("v", "<leader>lf", function()
-        conform.format()
+        conform.format({
+            lsp_format = "fallback",
+            range = {
+                start = vim.api.nvim_buf_get_mark(0, "<"),
+                ["end"] = vim.api.nvim_buf_get_mark(0, ">"),
+            },
+        })
     end, { desc = "Format selection" })
 end
 
