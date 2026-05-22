@@ -12,6 +12,10 @@ require("config.image")
 pcall(vim.cmd.colorscheme, "dark")
 
 -- usage tips
+    -- check path of current file
+        -- :lua print(vim.api.nvim_buf_get_name(0))
+        -- <C-g> shows relative path
+        -- 1 + <C-g> shows full path
     -- when navigating large code base, prefer built-in vim search instead of fuzzy finders
         -- use <C-d> when you do :b (for navigating buffers) or :e (for navigating files) to get a preview of available options
         -- you can do something like :e *EA* then press <C-d>, which will filter the preview list using the regex to get you for instance just README.md
