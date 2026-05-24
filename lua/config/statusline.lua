@@ -127,8 +127,8 @@ local function current_filetype()
 end
 
 local function current_file()
-    local root_path = vim.uv.cwd()
-    local root_dir = root_path:match("[^/]+$")
+    local root_path = vim.uv.cwd() or ""
+    local root_dir = root_path:match("[^/]+$") or ""
     local home_path = vim.fn.expand("%:~")
     local overlap, _ = home_path:find(root_dir)
     local color = "%#File# "
