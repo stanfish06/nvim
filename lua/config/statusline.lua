@@ -29,7 +29,7 @@ local function current_git_branch()
     if not ok then return "" end
     local branch = vim.b.gitsigns_head
     if not branch or branch == "" then return "" end
-    return " %#Git#  " .. branch .. " " .. "%*"
+    return " %#Git#  " .. branch .. " " .. "%*"
 end
 
 local function current_buf_flags()
@@ -99,10 +99,10 @@ local function current_mode()
 end
 
 local filetype_icons = {
-    lua = "",
-    python = "",
+    lua = "",
+    python = "",
     rust = "󱘗",
-    c = "",
+    c = "",
     go = "󰟓",
     javascript = "󰌞",
     typescript = "󰛦",
@@ -127,8 +127,8 @@ local function current_filetype()
 end
 
 local function current_file()
-    local root_path = vim.uv.cwd()
-    local root_dir = root_path:match("[^/]+$")
+    local root_path = vim.uv.cwd() or ""
+    local root_dir = root_path:match("[^/]+$") or ""
     local home_path = vim.fn.expand("%:~")
     local overlap, _ = home_path:find(root_dir)
     local color = "%#File# "
@@ -188,16 +188,16 @@ local function current_diagnostics()
     return " "
         .. "%#StatusLineDiag#"
         .. SOLID_LEFT_ARROW
-        .. "  "
+        .. "  "
         .. _n_ERROR
         .. "┊"
-        .. " "
+        .. " "
         .. _n_WARN
         .. "┊"
         .. "󰋽 "
         .. _n_INFO
         .. "┊"
-        .. " "
+        .. " "
         .. _n_HINT
         .. " "
         .. SOLID_RIGHT_ARROW
