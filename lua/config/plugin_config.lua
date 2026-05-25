@@ -32,6 +32,10 @@ if ok and not is_vscode then
     vim.keymap.set("n", "<leader>sl", fzf.lines)
     vim.keymap.set("n", "<leader>sb", fzf.buffers)
     vim.keymap.set("n", "<leader>sm", fzf.marks)
+    vim.keymap.set("n", "<leader>gc", fzf.git_commits, { desc = "Git commits (repo)" })
+    vim.keymap.set("n", "<leader>gb", fzf.git_bcommits, { desc = "Git commits (buffer)" })
+    vim.keymap.set("n", "<leader>gB", fzf.git_branches, { desc = "Git branches" })
+    vim.keymap.set("n", "<leader>gs", fzf.git_status, { desc = "Git status" })
 end
 
 -- sneaks
