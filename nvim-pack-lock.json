@@ -1,7 +1,7 @@
 {
   "plugins": {
     "conform.nvim": {
-      "rev": "18aeab3d63d350dcf44d64c462cc489a3412af40",
+      "rev": "619363c30309d29ffa631e67c8183f2a72caa373",
       "src": "https://github.com/stevearc/conform.nvim.git"
     },
     "dark-theme": {
@@ -13,7 +13,7 @@
       "src": "https://github.com/eldritch-theme/eldritch.nvim.git"
     },
     "fff.nvim": {
-      "rev": "19ca421550782066660d941dd11e7e8e853dcb19",
+      "rev": "030a583b37802416ce9108295b209d2e6b9d0079",
       "src": "https://github.com/dmtrKovalenko/fff.nvim"
     },
     "fugitive.vim": {
@@ -21,7 +21,7 @@
       "src": "https://tpope.io/vim/fugitive.git"
     },
     "fzf-lua": {
-      "rev": "3ff77862f6c62f7b850668435ae43aa026de8758",
+      "rev": "fea9eedc6894c44d44cbb772a5cd11c93b82d7a1",
       "src": "https://github.com/ibhagwan/fzf-lua.git"
     },
     "gitsigns.nvim": {
@@ -29,7 +29,7 @@
       "src": "https://github.com/lewis6991/gitsigns.nvim.git"
     },
     "nvim-lspconfig": {
-      "rev": "246572944c2a1e2a646c2e7609ff619b0fe74c18",
+      "rev": "a4ed4e761c400849e8c9f8bda33e5083f890268c",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
@@ -41,7 +41,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
     },
     "obsidian.nvim": {
-      "rev": "896d4515a7193676aacf8a95239882397fdd6b27",
+      "rev": "8820505daa28eff1391019e4590d9c4e5fb1d908",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim.git"
     },
     "plenary.nvim": {
