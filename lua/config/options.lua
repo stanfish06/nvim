@@ -30,8 +30,8 @@ vim.keymap.set("n", "<leader>f", ":find **/*")
 vim.cmd.cnoreabbrev("vimgrep", "vimgrep /pattern/gj **/*")
 vim.keymap.set("n", "<leader>co", "<cmd>copen<CR>", { desc = "[O]pen quickfix list" })
 vim.keymap.set("n", "<leader>cc", "<cmd>cclose<CR>", { desc = "[C]lose quickfix list" })
--- completeion
--- c-n for keyword completeion
+-- completion
+-- c-n for keyword completion
 -- c-e to cancel completion
 vim.keymap.set("i", "<c-space>", "<c-x><c-o>", { desc = "LSP completion" })
 vim.keymap.set("i", "<c-l>", "<c-x><c-l>", { desc = "Line completion" })
@@ -132,7 +132,7 @@ vim.keymap.set("i", "<CR>", function()
     return "<CR>"
 end, { expr = true, noremap = true })
 
--- check full kepmap and dump to a new buffer
+-- check full keymap and dump to a new buffer
 local function which_key()
     vim.cmd("redir @a | silent map | redir END | new | put a")
 end
@@ -142,7 +142,8 @@ vim.api.nvim_create_user_command("DescribeKey", which_key, {})
 if not vim.g.vscode then
     local ok, ui2 = pcall(require, "vim._core.ui2")
     if ok then
-        pcall(ui2.enable)
+        -- {} required: calling enable() without args is a documented Neovim bug (neovim/neovim#38594)
+        pcall(ui2.enable, {})
         vim.notify("ui2 enabled", vim.log.levels.INFO)
     else
         vim.notify("ui2 disabled (could be old nvim or api shift, check options.lua)", vim.log.levels.WARN)
