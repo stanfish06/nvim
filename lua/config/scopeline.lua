@@ -1,10 +1,29 @@
 -- scope line
 local valid_scopes = {
+    -- C / C++ / Go / JS / TS
     ["function_declaration"] = true,
     ["function_definition"] = true,
+    ["method_declaration"] = true,
     ["if_statement"] = true,
     ["for_statement"] = true,
     ["while_statement"] = true,
+    -- Rust
+    ["function_item"] = true,
+    ["impl_item"] = true,
+    ["match_expression"] = true,
+    ["closure_expression"] = true,
+    -- TypeScript / JavaScript
+    ["arrow_function"] = true,
+    ["method_definition"] = true,
+    ["class_declaration"] = true,
+    -- Python
+    ["with_statement"] = true,
+    ["try_statement"] = true,
+    ["match_statement"] = true,
+    -- Lua
+    ["do_statement"] = true,
+    -- Shared
+    ["type_declaration"] = true,
 }
 local ns_scope_line = vim.api.nvim_create_namespace("scope_line")
 local function char_at(row, col)
