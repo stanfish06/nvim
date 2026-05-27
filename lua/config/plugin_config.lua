@@ -40,8 +40,17 @@ end
 
 -- sneaks — intentionally remaps s/S to 2-char forward/backward seek motion
 -- git clone --depth 1 https://github.com/justinmk/vim-sneak ~/.config/nvim/pack/plugins/start/vim-sneak
-vim.g["sneak#label"] = 1       -- label mode: shows jump targets (EasyMotion-style)
-vim.g["sneak#use_ic_scs"] = 1  -- respect smartcase
+local sneaks_ok, _ = pcall(require, "sneak")
+if sneaks_ok then
+    vim.g["sneak#label"] = 1 -- label mode: shows jump targets (EasyMotion-style)
+    vim.g["sneak#use_ic_scs"] = 1 -- respect smartcase (so type P will specifically match P)
+    -- these have match highlight
+    vim.keymap.set({ "n", "x", "o" }, "f", "<Plug>Sneak_fp")
+    vim.keymap.set({ "n", "x", "o" }, "F", "<Plug>Sneak_F")
+    -- t means stop 1 char before match
+    vim.keymap.set({ "n", "x", "o" }, "t", "<Plug>Sneak_t")
+    vim.keymap.set({ "n", "x", "o" }, "T", "<Plug>Sneak_T")
+end
 
 -- lsp
 -- git clone https://github.com/neovim/nvim-lspconfig ~/.config/nvim/pack/nvim/start/nvim-lspconfig
@@ -159,11 +168,11 @@ if fff_ok then
         },
     }
     if not is_vscode then
-        vim.keymap.set("n", "ff", function()
+        vim.keymap.set("n", "<leader>ff", function()
             require("fff").find_files()
         end, { desc = "fff files" })
         -- you can toggle between grep, fuzzy grep, regex grep with shift+tab after launching fff grep
-        vim.keymap.set("n", "fg", function()
+        vim.keymap.set("n", "<leader>fg", function()
             require("fff").live_grep()
         end, { desc = "fff grep" })
     end

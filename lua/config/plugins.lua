@@ -5,7 +5,7 @@ local package_list = {
     { name = "fzf-lua", src = "https://github.com/ibhagwan/fzf-lua.git" },
     { name = "fff.nvim", src = "https://github.com/dmtrKovalenko/fff.nvim", lazy = true },
     { name = "nvim-lspconfig", src = "https://github.com/neovim/nvim-lspconfig" },
-    { name = "sneaks.vim", src = "https://github.com/justinmk/vim-sneak" }, -- remaps s/S intentionally; configured in plugin_config.lua
+    { name = "sneaks.vim", src = "https://github.com/justinmk/vim-sneak" }, -- remaps s/S intentionally
     { name = "fugitive.vim", src = "https://tpope.io/vim/fugitive.git" },
     { name = "nvim-treesitter", src = "https://github.com/nvim-treesitter/nvim-treesitter.git" },
     { name = "nvim-treesitter-textobjects", src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git" },
