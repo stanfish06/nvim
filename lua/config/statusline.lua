@@ -46,6 +46,35 @@ end
 
 local lsp_progress = {}
 local lsp_spinners = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+local lsp_progress_timer = nil
+
+local function statusline_escape(text)
+    if not text or text == "" then
+        return ""
+    end
+    return text:gsub("%%", "%%%%")
+end
+
+local function ensure_lsp_progress_timer()
+    if lsp_progress_timer then
+        return
+    end
+    lsp_progress_timer = vim.uv.new_timer()
+    if not lsp_progress_timer then
+        return
+    end
+    lsp_progress_timer:start(0, 100, vim.schedule_wrap(function()
+        if vim.tbl_isempty(lsp_progress) then
+            if lsp_progress_timer then
+                lsp_progress_timer:stop()
+                lsp_progress_timer:close()
+                lsp_progress_timer = nil
+            end
+            return
+        end
+        vim.cmd("redrawstatus")
+    end))
+end
 
 vim.api.nvim_create_autocmd("LspProgress", {
     callback = function(ev)
@@ -60,10 +89,30 @@ vim.api.nvim_create_autocmd("LspProgress", {
             return
         end
 
+        local token = data.params.token
+        if token == nil then
+            token = "__default"
+        end
+        lsp_progress[client_id] = lsp_progress[client_id] or {}
+
         if val.kind == "end" then
-            lsp_progress[client_id] = nil
+            lsp_progress[client_id][token] = nil
+            if vim.tbl_isempty(lsp_progress[client_id]) then
+                lsp_progress[client_id] = nil
+            end
         else
-            lsp_progress[client_id] = val.title or val.message or "…"
+            local prev = lsp_progress[client_id][token] or {}
+            local title = val.title or prev.title
+            local message = val.message or prev.message
+            lsp_progress[client_id][token] = {
+                title = title,
+                message = message,
+                percentage = val.percentage or prev.percentage,
+            }
+        end
+
+        if not vim.tbl_isempty(lsp_progress) then
+            ensure_lsp_progress_timer()
         end
 
         vim.cmd("redrawstatus")
@@ -98,9 +147,31 @@ local function current_lsp_progress()
 
     local frame = math.floor(vim.uv.hrtime() / 1e8) % #lsp_spinners
     local msgs = {}
-    for _, title in pairs(lsp_progress) do
-        if title and title ~= "" then
-            table.insert(msgs, title)
+    local clients = vim.lsp.get_clients({ bufnr = 0 })
+    local clients_by_id = {}
+    for _, client in ipairs(clients) do
+        clients_by_id[client.id] = true
+    end
+
+    for client_id, tokens in pairs(lsp_progress) do
+        if clients_by_id[client_id] then
+            for _, item in pairs(tokens) do
+                local parts = {}
+                if item.title and item.title ~= "" then
+                    table.insert(parts, item.title)
+                end
+                if item.message and item.message ~= "" then
+                    table.insert(parts, item.message)
+                end
+                local text = table.concat(parts, ": ")
+                if text == "" then
+                    text = "…"
+                end
+                if item.percentage ~= nil then
+                    text = text .. string.format(" (%d%%%%)", item.percentage)
+                end
+                table.insert(msgs, statusline_escape(text))
+            end
         end
     end
 
