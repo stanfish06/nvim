@@ -133,6 +133,7 @@ vim.keymap.set("i", "<CR>", function()
 end, { expr = true, noremap = true })
 
 -- check full keymap and dump to a new buffer
+-- TUDO: it is worth to extend it with fuzzy finding and better UI
 local function which_key()
     vim.cmd("redir @a | silent map | redir END | new | put a")
 end
