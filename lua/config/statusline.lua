@@ -1,4 +1,4 @@
--- note for potential retard agents: do not fucking delete nerd font symbols 
+-- note for potential retard agents: do not fucking delete nerd font symbols
 -- status
 -- callback that runs every time after colorscheme changes to make sure statusline stay the same
 vim.api.nvim_create_autocmd("ColorScheme", {
@@ -26,9 +26,13 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 -- git sign
 local function current_git_branch()
     local ok, gs = pcall(require, "gitsigns")
-    if not ok then return "" end
+    if not ok then
+        return ""
+    end
     local branch = vim.b.gitsigns_head
-    if not branch or branch == "" then return "" end
+    if not branch or branch == "" then
+        return ""
+    end
     return " %#Git#  " .. branch .. " " .. "%*"
 end
 
@@ -43,7 +47,6 @@ local function current_buf_flags()
     return flags
 end
 
-
 local lsp_progress = {}
 local lsp_spinners = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
 local lsp_progress_timer = nil
@@ -52,7 +55,7 @@ local function statusline_escape(text)
     if not text or text == "" then
         return ""
     end
-    return text:gsub("%%", "%%%%")
+    return (text:gsub("%%", "%%%%"))
 end
 
 local function ensure_lsp_progress_timer()
@@ -63,17 +66,21 @@ local function ensure_lsp_progress_timer()
     if not lsp_progress_timer then
         return
     end
-    lsp_progress_timer:start(0, 100, vim.schedule_wrap(function()
-        if vim.tbl_isempty(lsp_progress) then
-            if lsp_progress_timer then
-                lsp_progress_timer:stop()
-                lsp_progress_timer:close()
-                lsp_progress_timer = nil
+    lsp_progress_timer:start(
+        0,
+        100,
+        vim.schedule_wrap(function()
+            if vim.tbl_isempty(lsp_progress) then
+                if lsp_progress_timer then
+                    lsp_progress_timer:stop()
+                    lsp_progress_timer:close()
+                    lsp_progress_timer = nil
+                end
+                return
             end
-            return
-        end
-        vim.cmd("redrawstatus")
-    end))
+            vim.cmd("redrawstatus")
+        end)
+    )
 end
 
 vim.api.nvim_create_autocmd("LspProgress", {
@@ -138,8 +145,6 @@ local function current_lsp_clients()
     return " %#LspClients# [" .. table.concat(names, ", ") .. "] %*"
 end
 
-
-
 local function current_lsp_progress()
     if vim.tbl_isempty(lsp_progress) then
         return ""
@@ -167,8 +172,11 @@ local function current_lsp_progress()
                 if text == "" then
                     text = "…"
                 end
+                if #text > 20 then
+                    text = text:sub(1, 20) .. "..."
+                end
                 if item.percentage ~= nil then
-                    text = text .. string.format(" (%d%%%%)", item.percentage)
+                    text = text .. string.format(" (%d%%)", item.percentage)
                 end
                 table.insert(msgs, statusline_escape(text))
             end
@@ -179,7 +187,7 @@ local function current_lsp_progress()
         return ""
     end
 
-    return " %#LspClients# " .. lsp_spinners[frame + 1] .. " " .. table.concat(msgs, ", ") .. " %*"
+    return "%#LspClients# " .. lsp_spinners[frame + 1] .. " " .. table.concat(msgs, ", ") .. " %*"
 end
 -- cursor
 local function set_cursor_color()

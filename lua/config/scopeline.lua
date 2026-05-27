@@ -12,6 +12,10 @@ local valid_scopes = {
     ["impl_item"] = true,
     ["match_expression"] = true,
     ["closure_expression"] = true,
+    ["if_expression"] = true,
+    ["for_expression"] = true,
+    ["while_expression"] = true,
+    ["loop_expression"] = true,
     -- TypeScript / JavaScript
     ["arrow_function"] = true,
     ["method_definition"] = true,

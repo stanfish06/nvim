@@ -61,6 +61,15 @@ if not is_vscode then
     -- brew install lua-language-server
     vim.lsp.enable("luals")
     -- uv tool install pyright
+    vim.lsp.config("pyright", {
+        settings = {
+            python = {
+                analysis = {
+                    diagnosticMode = "workspace",
+                },
+            },
+        },
+    })
     vim.lsp.enable("pyright")
     -- install via uv: uv tool install pyrefly, then pyrefly init inside project folder (will transfer configs from pyright if available)
     -- pyrefly seems capable of showing more type issues as far as I can tell
