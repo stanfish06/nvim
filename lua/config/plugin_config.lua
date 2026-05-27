@@ -38,8 +38,10 @@ if ok and not is_vscode then
     vim.keymap.set("n", "<leader>gs", fzf.git_status, { desc = "Git status" })
 end
 
--- sneaks
+-- sneaks — intentionally remaps s/S to 2-char forward/backward seek motion
 -- git clone --depth 1 https://github.com/justinmk/vim-sneak ~/.config/nvim/pack/plugins/start/vim-sneak
+vim.g["sneak#label"] = 1       -- label mode: shows jump targets (EasyMotion-style)
+vim.g["sneak#use_ic_scs"] = 1  -- respect smartcase
 
 -- lsp
 -- git clone https://github.com/neovim/nvim-lspconfig ~/.config/nvim/pack/nvim/start/nvim-lspconfig
