@@ -45,7 +45,7 @@ if sneaks_ok then
     vim.g["sneak#label"] = 1 -- label mode: shows jump targets (EasyMotion-style)
     vim.g["sneak#use_ic_scs"] = 1 -- respect smartcase (so type P will specifically match P)
     -- these have match highlight
-    vim.keymap.set({ "n", "x", "o" }, "f", "<Plug>Sneak_fp")
+    vim.keymap.set({ "n", "x", "o" }, "f", "<Plug>Sneak_f")
     vim.keymap.set({ "n", "x", "o" }, "F", "<Plug>Sneak_F")
     -- t means stop 1 char before match
     vim.keymap.set({ "n", "x", "o" }, "t", "<Plug>Sneak_t")
