@@ -43,6 +43,81 @@ local function current_buf_flags()
     return flags
 end
 
+
+local lsp_progress = {}
+local lsp_spinners = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+local lsp_progress_timer = nil
+
+local function statusline_escape(text)
+    if not text or text == "" then
+        return ""
+    end
+    return text:gsub("%%", "%%%%")
+end
+
+local function ensure_lsp_progress_timer()
+    if lsp_progress_timer then
+        return
+    end
+    lsp_progress_timer = vim.uv.new_timer()
+    if not lsp_progress_timer then
+        return
+    end
+    lsp_progress_timer:start(0, 100, vim.schedule_wrap(function()
+        if vim.tbl_isempty(lsp_progress) then
+            if lsp_progress_timer then
+                lsp_progress_timer:stop()
+                lsp_progress_timer:close()
+                lsp_progress_timer = nil
+            end
+            return
+        end
+        vim.cmd("redrawstatus")
+    end))
+end
+
+vim.api.nvim_create_autocmd("LspProgress", {
+    callback = function(ev)
+        local data = ev.data
+        if not data or not data.params or not data.params.value then
+            return
+        end
+
+        local val = data.params.value
+        local client_id = data.client_id
+        if not client_id then
+            return
+        end
+
+        local token = data.params.token
+        if token == nil then
+            token = "__default"
+        end
+        lsp_progress[client_id] = lsp_progress[client_id] or {}
+
+        if val.kind == "end" then
+            lsp_progress[client_id][token] = nil
+            if vim.tbl_isempty(lsp_progress[client_id]) then
+                lsp_progress[client_id] = nil
+            end
+        else
+            local prev = lsp_progress[client_id][token] or {}
+            local title = val.title or prev.title
+            local message = val.message or prev.message
+            lsp_progress[client_id][token] = {
+                title = title,
+                message = message,
+                percentage = val.percentage or prev.percentage,
+            }
+        end
+
+        if not vim.tbl_isempty(lsp_progress) then
+            ensure_lsp_progress_timer()
+        end
+
+        vim.cmd("redrawstatus")
+    end,
+})
 local function current_lsp_clients()
     if not vim.lsp or not vim.lsp.get_clients then
         return ""
@@ -63,6 +138,49 @@ local function current_lsp_clients()
     return " %#LspClients# [" .. table.concat(names, ", ") .. "] %*"
 end
 
+
+
+local function current_lsp_progress()
+    if vim.tbl_isempty(lsp_progress) then
+        return ""
+    end
+
+    local frame = math.floor(vim.uv.hrtime() / 1e8) % #lsp_spinners
+    local msgs = {}
+    local clients = vim.lsp.get_clients({ bufnr = 0 })
+    local clients_by_id = {}
+    for _, client in ipairs(clients) do
+        clients_by_id[client.id] = true
+    end
+
+    for client_id, tokens in pairs(lsp_progress) do
+        if clients_by_id[client_id] then
+            for _, item in pairs(tokens) do
+                local parts = {}
+                if item.title and item.title ~= "" then
+                    table.insert(parts, item.title)
+                end
+                if item.message and item.message ~= "" then
+                    table.insert(parts, item.message)
+                end
+                local text = table.concat(parts, ": ")
+                if text == "" then
+                    text = "…"
+                end
+                if item.percentage ~= nil then
+                    text = text .. string.format(" (%d%%%%)", item.percentage)
+                end
+                table.insert(msgs, statusline_escape(text))
+            end
+        end
+    end
+
+    if #msgs == 0 then
+        return ""
+    end
+
+    return " %#LspClients# " .. lsp_spinners[frame + 1] .. " " .. table.concat(msgs, ", ") .. " %*"
+end
 -- cursor
 local function set_cursor_color()
     vim.api.nvim_set_hl(0, "myCursor", { fg = "#FFA500", bg = "#FFA500" })
@@ -209,6 +327,7 @@ function StatusLine()
         .. current_buf_flags()
         .. current_git_branch()
         .. current_lsp_clients()
+        .. current_lsp_progress()
         .. current_filetype()
         .. current_diagnostics()
         .. current_cursor_info()
