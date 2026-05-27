@@ -106,7 +106,9 @@ if conform_ok and not is_vscode then
             lua = { "stylua" },
             python = { "ruff_format" },
             javascript = { "prettier" },
+            javascriptreact = { "prettier" },
             typescript = { "prettier" },
+            typescriptreact = { "prettier" },
         },
     })
     vim.keymap.set("n", "<leader>lf", function()
