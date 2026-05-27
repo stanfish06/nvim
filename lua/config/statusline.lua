@@ -43,6 +43,32 @@ local function current_buf_flags()
     return flags
 end
 
+
+local lsp_progress = {}
+local lsp_spinners = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+
+vim.api.nvim_create_autocmd("LspProgress", {
+    callback = function(ev)
+        local data = ev.data
+        if not data or not data.params or not data.params.value then
+            return
+        end
+
+        local val = data.params.value
+        local client_id = data.client_id
+        if not client_id then
+            return
+        end
+
+        if val.kind == "end" then
+            lsp_progress[client_id] = nil
+        else
+            lsp_progress[client_id] = val.title or val.message or "…"
+        end
+
+        vim.cmd("redrawstatus")
+    end,
+})
 local function current_lsp_clients()
     if not vim.lsp or not vim.lsp.get_clients then
         return ""
@@ -63,6 +89,27 @@ local function current_lsp_clients()
     return " %#LspClients# [" .. table.concat(names, ", ") .. "] %*"
 end
 
+
+
+local function current_lsp_progress()
+    if vim.tbl_isempty(lsp_progress) then
+        return ""
+    end
+
+    local frame = math.floor(vim.uv.hrtime() / 1e8) % #lsp_spinners
+    local msgs = {}
+    for _, title in pairs(lsp_progress) do
+        if title and title ~= "" then
+            table.insert(msgs, title)
+        end
+    end
+
+    if #msgs == 0 then
+        return ""
+    end
+
+    return " %#LspClients# " .. lsp_spinners[frame + 1] .. " " .. table.concat(msgs, ", ") .. " %*"
+end
 -- cursor
 local function set_cursor_color()
     vim.api.nvim_set_hl(0, "myCursor", { fg = "#FFA500", bg = "#FFA500" })
@@ -209,6 +256,7 @@ function StatusLine()
         .. current_buf_flags()
         .. current_git_branch()
         .. current_lsp_clients()
+        .. current_lsp_progress()
         .. current_filetype()
         .. current_diagnostics()
         .. current_cursor_info()
