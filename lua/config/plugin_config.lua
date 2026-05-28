@@ -40,7 +40,9 @@ end
 
 -- sneaks — intentionally remaps s/S to 2-char forward/backward seek motion
 -- git clone --depth 1 https://github.com/justinmk/vim-sneak ~/.config/nvim/pack/plugins/start/vim-sneak
-local sneaks_ok, _ = pcall(require, "sneak")
+-- vim-sneak is a Vimscript plugin: it has no Lua module, so require("sneak") always fails.
+-- Check for its autoload entry point instead.
+local sneaks_ok = vim.fn.exists("*sneak#wrap") == 1
 if sneaks_ok then
     vim.g["sneak#label"] = 1 -- label mode: shows jump targets (EasyMotion-style)
     vim.g["sneak#use_ic_scs"] = 1 -- respect smartcase (so type P will specifically match P)
