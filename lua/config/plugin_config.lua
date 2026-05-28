@@ -111,7 +111,6 @@ if not is_vscode then
             end
             local opts = { buffer = ev.buf }
             vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-            vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
         end,
     })
 end
