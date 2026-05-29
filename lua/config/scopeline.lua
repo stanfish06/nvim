@@ -43,7 +43,7 @@ local function draw_scope_lines()
     while ts_node do
         if valid_scopes[ts_node:type()] then
             local start_row, start_col, end_row, end_col = ts_node:range()
-            for i = start_row + 1, end_row - 1 do
+            for i = start_row + 1, end_row do
                 local char = char_at(i + 1, start_col + 1) -- treesitter is 0 based
                 if char == " " then
                     pcall(
