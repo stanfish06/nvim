@@ -29,7 +29,7 @@
       "src": "https://github.com/lewis6991/gitsigns.nvim.git"
     },
     "nvim-lspconfig": {
-      "rev": "6f76a3eeadc2ee235d74cd7d5319e95a261084af",
+      "rev": "9573948c38bfabeec353ae7dd7d3ffec4c506a6b",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
@@ -41,7 +41,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
     },
     "obsidian.nvim": {
-      "rev": "8820505daa28eff1391019e4590d9c4e5fb1d908",
+      "rev": "f2d39f6f7218b5833359d288aeb78323f8b4c03b",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim.git"
     },
     "plenary.nvim": {
