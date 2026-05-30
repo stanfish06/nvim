@@ -11,7 +11,7 @@ local package_list = {
     { name = "nvim-treesitter-textobjects", src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git" },
     { name = "conform.nvim", src = "https://github.com/stevearc/conform.nvim.git" },
     { name = "gitsigns.nvim", src = "https://github.com/lewis6991/gitsigns.nvim.git" },
-    { name = "obsidian.nvim", src = "https://github.com/obsidian-nvim/obsidian.nvim.git" },
+    { name = "obsidian.nvim", src = "https://github.com/obsidian-nvim/obsidian.nvim.git", skip_old_nvim = true },
     { name = "plenary.nvim", src = "https://github.com/nvim-lua/plenary.nvim.git" },
     { name = "dark-theme", src = "https://github.com/stanfish06/dark-theme.git" },
     { name = "rose-pine", src = "https://github.com/rose-pine/neovim.git" },
@@ -59,6 +59,7 @@ local function sync_packages()
                 local jobs = {}
                 for _, entry in ipairs(package_list) do
                     local pkg_name = entry.name
+                    local pkg_skip = entry.skip_old_nvim
                     local pkg_url = entry.src
                     local sub_dir = entry.lazy and "opt/" or "start/"
                     local pkg_root = vim.fn.stdpath("config") .. "/pack/plugins/" .. sub_dir
@@ -70,16 +71,20 @@ local function sync_packages()
                         else
                             print("Install: " .. pkg_name .. "...")
                         end
-                        vim.system({
-                            "git",
-                            "clone",
-                            "--depth",
-                            "1",
-                            "--quiet",
-                            pkg_url,
-                            full_path,
-                        }):wait()
-                        print("Synced: " .. pkg_name)
+                        if pkg_skip then
+                            print("Package skiped manually. Likely due to incompatibility.")
+                        else
+                            vim.system({
+                                "git",
+                                "clone",
+                                "--depth",
+                                "1",
+                                "--quiet",
+                                pkg_url,
+                                full_path,
+                            }):wait()
+                            print("Synced: " .. pkg_name)
+                        end
                     end)
                     table.insert(jobs, job)
                 end
