@@ -102,6 +102,14 @@ vim.o.foldtext = ""
 
 -- editing
 vim.o.formatoptions = "rqnl1j"
+-- ftplugins use :setlocal to override formatoptions, wiping the global value.
+-- This autocmd re-applies the desired flags after every filetype plugin runs.
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "*",
+    callback = function()
+        vim.opt_local.formatoptions = "rqnl1j"
+    end,
+})
 vim.o.infercase = true
 vim.o.spelloptions = "camel"
 vim.o.virtualedit = "block"
