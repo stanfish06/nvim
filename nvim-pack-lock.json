@@ -13,7 +13,7 @@
       "src": "https://github.com/eldritch-theme/eldritch.nvim.git"
     },
     "fff.nvim": {
-      "rev": "030a583b37802416ce9108295b209d2e6b9d0079",
+      "rev": "5e53b6e8cf83913d51a63b54f606b07d6e4de4bc",
       "src": "https://github.com/dmtrKovalenko/fff.nvim"
     },
     "fugitive.vim": {
@@ -21,7 +21,7 @@
       "src": "https://tpope.io/vim/fugitive.git"
     },
     "fzf-lua": {
-      "rev": "fea9eedc6894c44d44cbb772a5cd11c93b82d7a1",
+      "rev": "e3a71496027f2e3c4a60340170c04d66053d5c4c",
       "src": "https://github.com/ibhagwan/fzf-lua.git"
     },
     "gitsigns.nvim": {
@@ -41,7 +41,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
     },
     "obsidian.nvim": {
-      "rev": "f2d39f6f7218b5833359d288aeb78323f8b4c03b",
+      "rev": "d2349fdeb2c1e30cc2126fc6c7712f5103de8d15",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim.git"
     },
     "plenary.nvim": {

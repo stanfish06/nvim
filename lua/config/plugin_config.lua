@@ -248,6 +248,10 @@ if obsidian_ok then
                 name = "notes",
                 path = "~/Git/notes",
             },
+            {
+                name = "home", -- this is just a fallback in case none of the other workspaces exist (the plugin will complain)
+                path = "~",
+            },
         },
         daily_notes = {
             folder = "journal",
