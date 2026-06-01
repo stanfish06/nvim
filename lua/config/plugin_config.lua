@@ -36,6 +36,9 @@ if ok and not is_vscode then
     vim.keymap.set("n", "<leader>gb", fzf.git_bcommits, { desc = "Git commits (buffer)" })
     vim.keymap.set("n", "<leader>gB", fzf.git_branches, { desc = "Git branches" })
     vim.keymap.set("n", "<leader>gs", fzf.git_status, { desc = "Git status" })
+    vim.keymap.set("n", "<leader>lr", fzf.lsp_references, { desc = "LSP references (fzf)" })
+    vim.keymap.set("n", "<leader>ls", fzf.lsp_document_symbols, { desc = "LSP document symbols" })
+    vim.keymap.set("n", "<leader>lS", fzf.lsp_live_workspace_symbols, { desc = "LSP workspace symbols" })
 end
 
 -- sneaks — intentionally remaps s/S to 2-char forward/backward seek motion
