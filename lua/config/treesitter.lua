@@ -158,7 +158,10 @@ local function ts_highlight()
         ts_highlight_active[bufnr] = true
     end
 end
+
+local treesitter_aug = vim.api.nvim_create_augroup("Treesitter", { clear = true })
 vim.api.nvim_create_autocmd({ "BufDelete", "BufWipeout" }, {
+    group = treesitter_aug,
     callback = function(ev) ts_highlight_active[ev.buf] = nil end,
 })
 
@@ -181,6 +184,7 @@ vim.api.nvim_create_user_command("TSBufToggle", ts_highlight, {})
 -- TSSync latest will pull and build latest parsers (but sitll use nvim-treesitter's query files)
 vim.api.nvim_create_user_command("TSSync", ts_update, { nargs = "?" })
 vim.api.nvim_create_autocmd("FileType", {
+    group = treesitter_aug,
     pattern = { "*" },
     callback = function()
         local bufnr = vim.api.nvim_get_current_buf()
