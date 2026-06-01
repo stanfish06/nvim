@@ -253,9 +253,12 @@ local function current_filetype()
 end
 
 local function current_file()
-    local root_path = vim.uv.cwd() or ""
+    -- local root_path = vim.uv.cwd() or ""
+    -- this reflects lcd change cwd
+    local root_path = vim.fn.getcwd(0, 0)
     local root_dir = root_path:match("[^/]+$") or ""
     local home_path = vim.fn.expand("%:~")
+    -- BUG: this sometimes break (e.g. .config/nvim/lua/config will have two matches, so need better handling for these cases)
     local overlap, _ = home_path:find(root_dir)
     local color = "%#File# "
     local color_alt = "%#FileAlt#"
