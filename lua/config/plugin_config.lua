@@ -147,7 +147,8 @@ end
 
 -- fff
 local fff_ok, _ = pcall(function()
-    vim.api.nvim_create_autocmd("PackChanged", {
+    vim.api.nvim_create_autocmd("User", {
+        pattern = "PackChanged",
         callback = function(ev)
             local name, kind = ev.data.spec.name, ev.data.kind
             if name == "fff.nvim" and (kind == "install" or kind == "update") then
