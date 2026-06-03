@@ -109,7 +109,7 @@ if not is_vscode then
                     vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
                 end)
             end
-            local opts = { buffer = ev.buf }
+            local opts = { buf = ev.buf }
             vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
         end,
     })
