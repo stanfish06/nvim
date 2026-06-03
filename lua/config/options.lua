@@ -1,4 +1,5 @@
 -- note: opt is a "smarter" version of o. In simple assignments, they are inter-changeable
+-- see :help options for more information about available options
 -- line number
 vim.o.number = true
 vim.o.relativenumber = true
@@ -97,6 +98,7 @@ vim.o.listchars = "extends:…,nbsp:␣,precedes:…,tab:> "
 -- folding
 vim.o.foldlevel = 10
 vim.o.foldmethod = "indent"
+vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.o.foldnestmax = 10
 vim.o.foldtext = ""
 

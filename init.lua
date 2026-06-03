@@ -41,6 +41,11 @@ pcall(vim.cmd.colorscheme, "dark")
     -- use terminal
         -- :te to open terminal
         -- tabe | te program open terminal and launch program in a new tab (preferred way)
+    -- code fold
+        -- zo/zO to open (recursively) the folds
+        -- zc/zC to close (recursively) the folds
+        -- za toggles fold
+        -- zR/zM open/close all
     -- useful vim motions:
         -- textobjects:
             -- inside
