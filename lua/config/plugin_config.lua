@@ -112,7 +112,7 @@ if not is_vscode then
                     vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
                 end)
             end
-            local opts = { buffer = ev.buf }
+            local opts = vim.fn.has('nvim-0.12') == 1 and { buf = ev.buf } or { buffer = ev.buf }
             vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
         end,
     })
