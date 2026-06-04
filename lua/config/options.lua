@@ -97,7 +97,7 @@ vim.o.listchars = "extends:…,nbsp:␣,precedes:…,tab:> "
 
 -- folding
 vim.o.foldlevel = 10
-vim.o.foldmethod = "indent"
+vim.o.foldmethod = "expr"
 vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.o.foldnestmax = 10
 vim.o.foldtext = ""
