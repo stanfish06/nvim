@@ -5,7 +5,7 @@
       "src": "https://github.com/stevearc/conform.nvim.git"
     },
     "dark-theme": {
-      "rev": "b47efa872d99c070f3ed285a75bd8dba2077f544",
+      "rev": "3361945ca8713f044eb31a9cc7e39a9b37e80065",
       "src": "https://github.com/stanfish06/dark-theme.git"
     },
     "eldritch": {
@@ -13,7 +13,7 @@
       "src": "https://github.com/eldritch-theme/eldritch.nvim.git"
     },
     "fff.nvim": {
-      "rev": "0ee4ada5129132be4421865ae0d1ad8e0d55c0f8",
+      "rev": "1e055f9d7b94f33a7f393ac95e779bed72650d56",
       "src": "https://github.com/dmtrKovalenko/fff.nvim"
     },
     "fugitive.vim": {
