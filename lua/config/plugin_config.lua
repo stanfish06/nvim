@@ -119,6 +119,7 @@ if not is_vscode then
     vim.api.nvim_create_user_command("LspToggle", function(opts)
         local name = opts.args
         for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0, name = name })) do
+            -- TODO: replace with Client:stop() after current api deprecate
             vim.lsp.stop_client(client.id)
             return
         end
