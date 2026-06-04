@@ -116,6 +116,20 @@ if not is_vscode then
             vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
         end,
     })
+    vim.api.nvim_create_user_command("LspToggle", function(opts)
+        local name = opts.args
+        for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0, name = name })) do
+            vim.lsp.stop_client(client.id)
+            return
+        end
+        vim.lsp.enable(name)
+    end, {
+        nargs = 1,
+        complete = function()
+            return vim.tbl_map(function(c) return c.name end, vim.lsp.get_clients({ bufnr = 0 }))
+        end,
+        desc = "Stop or re-enable a named LSP client for the current buffer",
+    })
 end
 
 -- conform (formatting)
