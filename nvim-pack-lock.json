@@ -13,8 +13,9 @@
       "src": "https://github.com/eldritch-theme/eldritch.nvim.git"
     },
     "fff.nvim": {
-      "rev": "1e055f9d7b94f33a7f393ac95e779bed72650d56",
-      "src": "https://github.com/dmtrKovalenko/fff.nvim"
+      "rev": "a0a93f20934048e2451e2feaad28dfda1af55b5a",
+      "src": "https://github.com/dmtrKovalenko/fff.nvim",
+      "version": "0.9.0 - 0.9.0"
     },
     "fugitive.vim": {
       "rev": "3b753cf8c6a4dcde6edee8827d464ba9b8c4a6f0",
