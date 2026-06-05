@@ -142,6 +142,7 @@ end
 vim.api.nvim_create_user_command("DescribeKey", which_key, {})
 
 -- experimental options
+-- BUG: restart drops ui2
 if not vim.g.vscode then
     local ok, ui2 = pcall(require, "vim._core.ui2")
     if ok then
