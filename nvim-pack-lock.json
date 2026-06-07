@@ -8,6 +8,10 @@
       "rev": "3361945ca8713f044eb31a9cc7e39a9b37e80065",
       "src": "https://github.com/stanfish06/dark-theme.git"
     },
+    "diffview.nvim": {
+      "rev": "4516612fe98ff56ae0415a259ff6361a89419b0a",
+      "src": "https://github.com/sindrets/diffview.nvim.git"
+    },
     "eldritch": {
       "rev": "c9131a5a11f00a2f428f563a4eb2c4aeb680d963",
       "src": "https://github.com/eldritch-theme/eldritch.nvim.git"
