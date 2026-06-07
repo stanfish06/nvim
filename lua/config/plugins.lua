@@ -12,6 +12,7 @@ local package_list = {
     { name = "nvim-lspconfig", src = "https://github.com/neovim/nvim-lspconfig" },
     { name = "sneaks.vim", src = "https://github.com/justinmk/vim-sneak" }, -- remaps s/S intentionally
     { name = "fugitive.vim", src = "https://tpope.io/vim/fugitive.git" },
+    { name = "diffview.nvim", src = "https://github.com/sindrets/diffview.nvim.git" },
     { name = "nvim-treesitter", src = "https://github.com/nvim-treesitter/nvim-treesitter.git" },
     {
         name = "nvim-treesitter-textobjects",
