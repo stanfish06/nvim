@@ -42,7 +42,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
     },
     "obsidian.nvim": {
-      "rev": "95c2c7b1d6b51dc09960d63f7d4dcf33bd378fb1",
+      "rev": "76545ae41a3af898e607c03224309e15dabb4a26",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim.git"
     },
     "plenary.nvim": {
