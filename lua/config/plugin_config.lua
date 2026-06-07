@@ -3,6 +3,8 @@ local is_vscode = vim.g.vscode
 -- git clone --depth 1 https://github.com/ibhagwan/fzf-lua.git ~/.config/nvim/pack/plugins/start/fzf-lua
 local ok, fzf = pcall(require, "fzf-lua")
 if ok and not is_vscode then
+    -- fzf picker for vim.ui.select
+    fzf.register_ui_select()
     fzf.setup({
         files = {
             rg_opts = [[--color=never --hidden --files -g "!.git" -g "!.jj"]],
@@ -113,6 +115,7 @@ if not is_vscode then
                 end)
             end
             vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = ev.buf })
+            vim.keymap.set("n", "la", vim.lsp.buf.code_action, { desc = "LSP code action" })
         end,
     })
     vim.api.nvim_create_user_command("LspToggle", function(opts)
