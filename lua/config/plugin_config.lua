@@ -201,6 +201,16 @@ if fff_ok then
     end
 end
 
+-- diffview
+local diffview_ok, diffview = pcall(require, "diffview")
+if diffview_ok and not is_vscode then
+    diffview.setup({
+        use_icons = false,
+    })
+    vim.keymap.set("n", "<leader>gd", "<cmd>DiffviewOpen<CR>", { desc = "Git diff (working tree)" })
+    vim.keymap.set("n", "<leader>gh", "<cmd>DiffviewFileHistory %<CR>", { desc = "Git file history" })
+end
+
 -- gitsigns
 local gitsigns_ok, gitsigns = pcall(require, "gitsigns")
 if gitsigns_ok and not is_vscode then
