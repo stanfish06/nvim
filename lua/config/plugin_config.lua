@@ -115,7 +115,7 @@ if not is_vscode then
                 end)
             end
             vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = ev.buf })
-            vim.keymap.set("n", "la", vim.lsp.buf.code_action, { desc = "LSP code action" })
+            vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, { desc = "LSP code action" })
         end,
     })
     vim.api.nvim_create_user_command("LspToggle", function(opts)
