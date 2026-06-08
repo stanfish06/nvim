@@ -122,11 +122,7 @@ if not is_vscode then
     vim.api.nvim_create_user_command("LspToggle", function(opts)
         local name = opts.args
         for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0, name = name })) do
-            if vim.fn.has('nvim-0.12') == 1 then
-                client:stop()
-            else
-                vim.lsp.stop_client(client.id)
-            end
+            client:stop()
             return
         end
         vim.lsp.enable(name)
@@ -171,7 +167,8 @@ end
 
 -- fff
 local fff_ok, _ = pcall(function()
-    vim.api.nvim_create_autocmd("PackChanged", {
+    vim.api.nvim_create_autocmd("User", {
+        pattern = "PackChanged",
         callback = function(ev)
             local name, kind = ev.data.spec.name, ev.data.kind
             if name == "fff.nvim" and (kind == "install" or kind == "update") then
