@@ -1,4 +1,5 @@
 local buf, win, nvim_servers
+-- TODO: implement function to rename current server and save in nvim_servers (this would make server searching easier)
 
 local function close_hover()
     if win and vim.api.nvim_win_is_valid(win) then

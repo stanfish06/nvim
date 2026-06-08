@@ -33,6 +33,7 @@ if ok and not is_vscode then
     vim.keymap.set("n", "<leader>/", fzf.live_grep)
     vim.keymap.set("n", "<leader>sl", fzf.lines)
     vim.keymap.set("n", "<leader>sb", fzf.buffers)
+    vim.keymap.set("n", "<leader>st", fzf.tabs)
     vim.keymap.set("n", "<leader>sm", fzf.marks)
     vim.keymap.set("n", "<leader>gc", fzf.git_commits, { desc = "Git commits (repo)" })
     vim.keymap.set("n", "<leader>gb", fzf.git_bcommits, { desc = "Git commits (buffer)" })
