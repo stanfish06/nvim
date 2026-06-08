@@ -52,7 +52,7 @@ local function draw_scope_lines()
                         ns_scope_line,
                         i,
                         start_col,
-                        { virt_text = { { "|", "NonText" } }, virt_text_pos = "overlay" }
+                        { virt_text = { { "|", "ScopeLine" } }, virt_text_pos = "overlay" } -- color group ScopeLine is defined in statusline.lua
                     )
                 end
             end

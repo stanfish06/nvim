@@ -19,6 +19,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
         vim.api.nvim_set_hl(0, "FileType", { fg = "black", bg = "#3E8FB0" })
         vim.api.nvim_set_hl(0, "FileTypeAlt", { fg = "#3E8FB0" })
         vim.api.nvim_set_hl(0, "StatusLineDiag", { bg = "#7E85A5", fg = "black" })
+        vim.api.nvim_set_hl(0, "ScopeLine", { fg = "#9CCFD8" })
         vim.cmd("redrawstatus")
     end,
 })
