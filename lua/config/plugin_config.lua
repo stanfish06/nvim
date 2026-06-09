@@ -61,7 +61,7 @@ end
 -- after v12, neovim will have built-in package manager
 -- lua
 if not is_vscode then
-    vim.lsp.config["luals"] = {
+    vim.lsp.config("luals", {
         cmd = { "lua-language-server" },
         filetypes = { "lua" },
         root_markers = { ".luarc.json", ".luarc.jsonc", ".git" },
@@ -72,7 +72,7 @@ if not is_vscode then
                 },
             },
         },
-    }
+    })
     -- brew install lua-language-server
     vim.lsp.enable("luals")
     -- uv tool install pyright
@@ -98,11 +98,11 @@ if not is_vscode then
     -- go
     vim.lsp.enable("gopls")
     -- swift
-    vim.lsp.config["sourcekit"] = {
+    vim.lsp.config("sourcekit", {
         cmd = { "sourcekit-lsp" },
         filetypes = { "swift", "objective-c", "objective-cpp" },
         root_markers = { "Package.swift", "compile_commands.json", ".git" },
-    }
+    })
     vim.lsp.enable("sourcekit")
     vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(ev)
