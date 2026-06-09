@@ -60,8 +60,10 @@ local function sync_packages()
         print("Done clean-up!")
         print("Install all packages...")
         vim.pack.add(package_list)
-        vim.pack.update()
         print("All packages installed!")
+        -- update() normally opens a confirmation buffer (:write applies it); in headless
+        -- mode (README setup command) that buffer would just be discarded, so apply directly
+        vim.pack.update(nil, { force = #vim.api.nvim_list_uis() == 0 })
     else
         mod_async
             .new(function()
@@ -82,7 +84,7 @@ local function sync_packages()
                             print("Install: " .. pkg_name .. "...")
                         end
                         if pkg_skip then
-                            print("Package skiped manually. Likely due to incompatibility.")
+                            print("Package skipped manually. Likely due to incompatibility.")
                         else
                             vim.system({
                                 "git",
