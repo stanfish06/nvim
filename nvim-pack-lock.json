@@ -33,6 +33,10 @@
       "rev": "25050e4ed39e628282831d4cbecb1850454ce915",
       "src": "https://github.com/lewis6991/gitsigns.nvim.git"
     },
+    "guh.nvim": {
+      "rev": "790ca68c64eae69df7aa1e1b445e38c3ee9ac052",
+      "src": "https://github.com/justinmk/guh.nvim"
+    },
     "nvim-lspconfig": {
       "rev": "ed19590a3a9792901553c388d1aadafce012f80d",
       "src": "https://github.com/neovim/nvim-lspconfig"
