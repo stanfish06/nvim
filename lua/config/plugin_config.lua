@@ -116,7 +116,7 @@ if not is_vscode then
                 end)
             end
             vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = ev.buf })
-            vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, { desc = "LSP code action" })
+            vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, { buffer = ev.buf, desc = "LSP code action" })
         end,
     })
     vim.api.nvim_create_user_command("LspToggle", function(opts)
@@ -155,51 +155,47 @@ if conform_ok and not is_vscode then
             typescriptreact = { "prettier" },
         },
     })
-    vim.keymap.set("n", "<leader>lf", function()
+    -- conform derives the range from the live selection in visual mode;
+    -- the '< '> marks are stale until visual mode is left, so don't use them here
+    vim.keymap.set({ "n", "v" }, "<leader>lf", function()
         conform.format()
-    end, { desc = "Format buffer" })
-    vim.keymap.set("v", "<leader>lf", function()
-        conform.format({
-            lsp_format = "fallback",
-            range = {
-                start = vim.api.nvim_buf_get_mark(0, "<"),
-                ["end"] = vim.api.nvim_buf_get_mark(0, ">"),
-            },
-        })
-    end, { desc = "Format selection" })
+    end, { desc = "Format buffer or selection" })
 end
 
 -- fff
-local fff_ok, _ = pcall(function()
-    vim.api.nvim_create_autocmd("PackChanged", {
-        callback = function(ev)
-            local name, kind = ev.data.spec.name, ev.data.kind
-            if name == "fff.nvim" and (kind == "install" or kind == "update") then
-                if not ev.data.active then
-                    vim.cmd.packadd("fff.nvim")
-                end
-                require("fff.download").download_or_build_binary()
+-- rebuild the rust binary whenever vim.pack installs/updates fff.nvim
+vim.api.nvim_create_autocmd("PackChanged", {
+    callback = function(ev)
+        local name, kind = ev.data.spec.name, ev.data.kind
+        if name == "fff.nvim" and (kind == "install" or kind == "update") then
+            if not ev.data.active then
+                vim.cmd.packadd("fff.nvim")
             end
-        end,
-    })
-end)
-if fff_ok then
-    vim.g.fff = {
-        lazy_sync = true,
-        debug = {
-            enabled = true,
-            show_scores = true,
-        },
-    }
-    if not is_vscode then
-        vim.keymap.set("n", "<leader>ff", function()
-            require("fff").find_files()
-        end, { desc = "fff files" })
-        -- you can toggle between grep, fuzzy grep, regex grep with shift+tab after launching fff grep
-        vim.keymap.set("n", "<leader>fg", function()
-            require("fff").live_grep()
-        end, { desc = "fff grep" })
+            require("fff.download").download_or_build_binary()
+        end
+    end,
+})
+vim.g.fff = {
+    lazy_sync = true,
+    debug = {
+        enabled = true,
+        show_scores = true,
+    },
+}
+if not is_vscode then
+    local function fff_call(fn)
+        return function()
+            local fff_ok, fff = pcall(require, "fff")
+            if not fff_ok then
+                vim.notify("fff.nvim is not installed (run :SyncPkgs)", vim.log.levels.WARN)
+                return
+            end
+            fff[fn]()
+        end
     end
+    vim.keymap.set("n", "<leader>ff", fff_call("find_files"), { desc = "fff files" })
+    -- you can toggle between grep, fuzzy grep, regex grep with shift+tab after launching fff grep
+    vim.keymap.set("n", "<leader>fg", fff_call("live_grep"), { desc = "fff grep" })
 end
 
 -- diffview
@@ -277,6 +273,7 @@ end
 local obsidian_ok, obsidian = pcall(require, "obsidian")
 if obsidian_ok then
     obsidian.setup({
+        legacy_commands = false, -- use :Obsidian <subcommand>; legacy :Obsidian* commands warn at startup
         workspaces = {
             {
                 name = "notes",

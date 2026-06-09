@@ -24,6 +24,13 @@ vim.api.nvim_create_autocmd("ColorScheme", {
     end,
 })
 
+local function statusline_escape(text)
+    if not text or text == "" then
+        return ""
+    end
+    return (text:gsub("%%", "%%%%"))
+end
+
 -- git sign
 local function current_git_branch()
     local ok, gs = pcall(require, "gitsigns")
@@ -34,7 +41,7 @@ local function current_git_branch()
     if not branch or branch == "" then
         return ""
     end
-    return " %#Git#  " .. branch .. " " .. "%*"
+    return " %#Git#  " .. statusline_escape(branch) .. " " .. "%*"
 end
 
 local function current_buf_flags()
@@ -52,11 +59,14 @@ local lsp_progress = {}
 local lsp_spinners = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
 local lsp_progress_timer = nil
 
-local function statusline_escape(text)
-    if not text or text == "" then
-        return ""
+-- a client that exits with a token in flight never sends kind == "end",
+-- which would keep lsp_progress non-empty and the redraw timer alive forever
+local function prune_dead_lsp_progress()
+    for client_id in pairs(lsp_progress) do
+        if not vim.lsp.get_client_by_id(client_id) then
+            lsp_progress[client_id] = nil
+        end
     end
-    return (text:gsub("%%", "%%%%"))
 end
 
 local function ensure_lsp_progress_timer()
@@ -71,6 +81,7 @@ local function ensure_lsp_progress_timer()
         0,
         100,
         vim.schedule_wrap(function()
+            prune_dead_lsp_progress()
             if vim.tbl_isempty(lsp_progress) then
                 if lsp_progress_timer then
                     lsp_progress_timer:stop()
@@ -219,7 +230,7 @@ local function current_mode()
         c = { text = "[C]", hl = "StatusLineModeNormal", hl_alt = "StatusLineModeNormalAlt" },
         t = { text = "[T]", hl = "StatusLineModeInsert", hl_alt = "StatusLineModeInsertAlt" },
     }
-    local mode_info = mode_map[m] or { text = "[?]", hl = "StatusLineModeNormal" }
+    local mode_info = mode_map[m] or { text = "[?]", hl = "StatusLineModeNormal", hl_alt = "StatusLineModeNormalAlt" }
     return string.format("%%#%s#%s%%*", mode_info.hl_alt, SOLID_LEFT_ARROW_PART)
         .. string.format("%%#%s#%s%%*", mode_info.hl, mode_info.text)
         .. string.format("%%#%s#%s%%*", mode_info.hl_alt, SOLID_RIGHT_ARROW)
@@ -254,22 +265,22 @@ local function current_filetype()
 end
 
 local function current_file()
-    -- local root_path = vim.uv.cwd() or ""
     -- this reflects lcd change cwd
     local root_path = vim.fn.getcwd(0, 0)
     local root_dir = root_path:match("[^/]+$") or ""
-    local home_path = vim.fn.expand("%:~")
-    -- BUG: this sometimes break (e.g. .config/nvim/lua/config will have two matches, so need better handling for these cases)
-    local overlap, _ = home_path:find(root_dir)
+    local full_path = vim.api.nvim_buf_get_name(0)
     local color = "%#File# "
     local color_alt = "%#FileAlt#"
-    if home_path == "" then
-        return color .. root_path:gsub(vim.env.HOME, "~") .. " %*" .. color_alt .. SOLID_RIGHT_ARROW .. "%*"
-    elseif overlap then
-        return color .. home_path:sub(overlap) .. " %*" .. color_alt .. SOLID_RIGHT_ARROW .. "%*"
+    local name
+    if full_path == "" then
+        name = vim.fn.fnamemodify(root_path, ":~")
+    elseif full_path:sub(1, #root_path + 1) == root_path .. "/" then
+        -- file inside cwd: show its cwd-relative path prefixed with the cwd's basename
+        name = root_dir .. full_path:sub(#root_path + 1)
     else
-        return color .. home_path .. " %*" .. color_alt .. SOLID_RIGHT_ARROW .. "%*"
+        name = vim.fn.fnamemodify(full_path, ":~")
     end
+    return color .. statusline_escape(name) .. " %*" .. color_alt .. SOLID_RIGHT_ARROW .. "%*"
 end
 
 local function current_cursor_info()
@@ -348,5 +359,8 @@ end
 if vim.g.vscode then
     vim.opt.statusline = ""
 else
+    -- %! is evaluated in the focused window's context, so per-split statuslines
+    -- would all show the focused buffer's info; use a single global statusline
+    vim.o.laststatus = 3
     vim.opt.statusline = "%!v:lua.StatusLine()"
 end
