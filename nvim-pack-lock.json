@@ -34,7 +34,7 @@
       "src": "https://github.com/lewis6991/gitsigns.nvim.git"
     },
     "guh.nvim": {
-      "rev": "790ca68c64eae69df7aa1e1b445e38c3ee9ac052",
+      "rev": "94b08ae09c44a0354e1b542867bdb751fd60ed20",
       "src": "https://github.com/justinmk/guh.nvim"
     },
     "nvim-lspconfig": {
