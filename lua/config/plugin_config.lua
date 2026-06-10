@@ -177,10 +177,6 @@ vim.api.nvim_create_autocmd("PackChanged", {
 })
 vim.g.fff = {
     lazy_sync = true,
-    debug = {
-        enabled = true,
-        show_scores = true,
-    },
 }
 if not is_vscode then
     local function fff_call(fn)
