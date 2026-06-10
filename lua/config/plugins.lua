@@ -7,7 +7,7 @@ local package_list = {
         name = "fff.nvim",
         src = "https://github.com/dmtrKovalenko/fff.nvim",
         lazy = true,
-        version = vim.version.range("0.9.0"),
+        version = vim.version.range("0.9.4"),
     }, -- this package breaks frequently, specify version
     { name = "nvim-lspconfig", src = "https://github.com/neovim/nvim-lspconfig" },
     { name = "sneaks.vim", src = "https://github.com/justinmk/vim-sneak" }, -- remaps s/S intentionally
