@@ -56,7 +56,7 @@ vim.diagnostic.config({
 })
 
 -- misc settings
-vim.o.showmode = true
+vim.o.showmode = false -- custom statusline shows mode; built-in "-- INSERT --" is redundant
 vim.o.autoread = true
 vim.o.ignorecase = true
 vim.o.expandtab = true
