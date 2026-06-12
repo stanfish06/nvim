@@ -31,6 +31,16 @@ vim.keymap.set("n", "<leader>f", ":find **/*")
 vim.cmd.cnoreabbrev("vimgrep", "vimgrep /pattern/gj **/*")
 vim.keymap.set("n", "<leader>co", "<cmd>copen<CR>", { desc = "[O]pen quickfix list" })
 vim.keymap.set("n", "<leader>cc", "<cmd>cclose<CR>", { desc = "[C]lose quickfix list" })
+vim.keymap.set("n", "<leader>yp", function()
+    local path = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":.")
+    vim.fn.setreg("+", path)
+    vim.notify("Copied: " .. path, vim.log.levels.INFO)
+end, { desc = "Yank file path (relative)" })
+vim.keymap.set("n", "<leader>yP", function()
+    local path = vim.api.nvim_buf_get_name(0)
+    vim.fn.setreg("+", path)
+    vim.notify("Copied: " .. path, vim.log.levels.INFO)
+end, { desc = "Yank file path (absolute)" })
 -- completion
 -- c-n for keyword completion
 -- c-e to cancel completion
