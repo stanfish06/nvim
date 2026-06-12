@@ -275,10 +275,11 @@ if obsidian_ok then
                 name = "notes",
                 path = "~/Git/notes",
             },
-            {
-                name = "home", -- this is just a fallback in case none of the other workspaces exist (the plugin will complain)
-                path = "~",
-            },
+            -- NOTE: do not add a "~" catch-all workspace. obsidian.nvim roots its
+            -- ripgrep backlink/reference scans at the matched vault, so a home-dir
+            -- vault makes rg crawl all of ~/Library/Containers on macOS, spamming
+            -- EINTR (os error 4) errors. Markdown outside a vault falls back to the
+            -- first workspace (notes) instead.
         },
         daily_notes = {
             folder = "journal",
