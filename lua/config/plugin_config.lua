@@ -293,7 +293,18 @@ local snacks_ok, snacks = pcall(require, "snacks")
 if snacks_ok and not is_vscode then
     snacks.setup({
         scroll = { enabled = true },
-        indent = { enabled = true },
+        indent = {
+            enabled = true,
+            scope = {
+                enabled = true,
+            },
+            chunk = {
+                enabled = true, -- scope as chunk
+                char = {
+                    arrow = "🢒"
+                }
+            },
+        },
         notifier = {
             enabled = true,
             timeout = 3000,
