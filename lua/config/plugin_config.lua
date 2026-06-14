@@ -290,7 +290,7 @@ end
 
 -- snacks
 local snacks_ok, snacks = pcall(require, "snacks")
-if snacks_ok then
+if snacks_ok and not is_vscode then
     snacks.setup({
         scroll = { enabled = true },
         indent = { enabled = true },
@@ -303,7 +303,7 @@ end
 
 -- noice (better ui)
 local noice_ok, noice = pcall(require, "noice")
-if noice_ok then
+if noice_ok and not is_vscode then
     noice.setup({
         presets = {
             bottom_search = true, -- use a classic bottom cmdline for search
