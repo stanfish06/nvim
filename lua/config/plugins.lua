@@ -28,6 +28,9 @@ local package_list = {
     { name = "tokyonight", src = "https://github.com/folke/tokyonight.nvim.git" },
     { name = "eldritch", src = "https://github.com/eldritch-theme/eldritch.nvim.git" },
     { name = "solarized-osaka.nvim", src = "https://github.com/craftzdog/solarized-osaka.nvim.git" },
+    { name = "snacks.nvim", src = "https://github.com/folke/snacks.nvim.git" },
+    { name = "noice.nvim", src = "https://github.com/folke/noice.nvim.git" },
+    { name = "nui.nvim", src = "https://github.com/MunifTanjim/nui.nvim.git" },
 }
 local vim_pack_ok, _ = pcall(require, "vim.pack")
 local function sync_packages()

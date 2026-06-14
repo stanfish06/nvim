@@ -46,8 +46,7 @@ end
 
 -- sneaks — intentionally remaps s/S to 2-char forward/backward seek motion
 -- git clone --depth 1 https://github.com/justinmk/vim-sneak ~/.config/nvim/pack/plugins/start/vim-sneak
--- vim-sneak is a Vimscript plugin: plugin/sneak.vim sets g:loaded_sneak_plugin at startup.
-local sneaks_ok = vim.g.loaded_sneak_plugin ~= nil
+-- vim-sneak is a Vimscript plugin: plugin/sneak.vim sets g:loaded_sneak_plugin at startup. local sneaks_ok = vim.g.loaded_sneak_plugin ~= nil
 if sneaks_ok then
     vim.g["sneak#label"] = 1 -- label mode: shows jump targets (EasyMotion-style)
     vim.g["sneak#use_ic_scs"] = 1 -- respect smartcase (so type P will specifically match P)
@@ -122,7 +121,7 @@ if not is_vscode then
     vim.api.nvim_create_user_command("LspToggle", function(opts)
         local name = opts.args
         for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0, name = name })) do
-            if vim.fn.has('nvim-0.12') == 1 then
+            if vim.fn.has("nvim-0.12") == 1 then
                 client:stop()
             else
                 vim.lsp.stop_client(client.id)
@@ -133,7 +132,9 @@ if not is_vscode then
     end, {
         nargs = 1,
         complete = function()
-            return vim.tbl_map(function(c) return c.name end, vim.lsp.get_clients({ bufnr = 0 }))
+            return vim.tbl_map(function(c)
+                return c.name
+            end, vim.lsp.get_clients({ bufnr = 0 }))
         end,
         desc = "Stop or re-enable a named LSP client for the current buffer",
     })
@@ -283,6 +284,31 @@ if obsidian_ok then
         },
         daily_notes = {
             folder = "journal",
+        },
+    })
+end
+
+-- snacks
+local snacks_ok, snacks = pcall(require, "snacks")
+if snacks_ok then
+    snacks.setup({
+        scroll = { enabled = true },
+        indent = { enabled = true },
+        notifier = {
+            enabled = true,
+            timeout = 3000,
+        },
+    })
+end
+
+-- noice (better ui)
+local noice_ok, noice = pcall(require, "noice")
+if noice_ok then
+    noice.setup({
+        presets = {
+            bottom_search = true, -- use a classic bottom cmdline for search
+            command_palette = true, -- position the cmdline and popupmenu together
+            lsp_doc_border = false, -- add a border to hover docs and signature help
         },
     })
 end
