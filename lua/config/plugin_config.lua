@@ -46,7 +46,8 @@ end
 
 -- sneaks — intentionally remaps s/S to 2-char forward/backward seek motion
 -- git clone --depth 1 https://github.com/justinmk/vim-sneak ~/.config/nvim/pack/plugins/start/vim-sneak
--- vim-sneak is a Vimscript plugin: plugin/sneak.vim sets g:loaded_sneak_plugin at startup. local sneaks_ok = vim.g.loaded_sneak_plugin ~= nil
+-- vim-sneak is a Vimscript plugin: plugin/sneak.vim sets g:loaded_sneak_plugin at startup.
+local sneaks_ok = vim.g.loaded_sneak_plugin ~= nil
 if sneaks_ok then
     vim.g["sneak#label"] = 1 -- label mode: shows jump targets (EasyMotion-style)
     vim.g["sneak#use_ic_scs"] = 1 -- respect smartcase (so type P will specifically match P)
@@ -301,7 +302,7 @@ if snacks_ok and not is_vscode then
             chunk = {
                 enabled = true, -- scope as chunk
                 char = {
-                    arrow = "🢒"
+                    arrow = "🤒"
                 }
             },
         },
