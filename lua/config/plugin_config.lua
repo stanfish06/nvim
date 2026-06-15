@@ -301,7 +301,7 @@ if snacks_ok and not is_vscode then
             chunk = {
                 enabled = true, -- scope as chunk
                 char = {
-                    arrow = "🢒",
+                    arrow = "➤",
                 },
             },
         },
