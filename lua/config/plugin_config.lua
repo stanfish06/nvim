@@ -366,6 +366,7 @@ if noice_ok and not is_vscode then
             },
             popupmenu = {
                 relative = "editor",
+                enter = false,
                 position = {
                     row = 8,
                     col = "50%",
