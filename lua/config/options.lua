@@ -151,19 +151,6 @@ local function which_key()
 end
 vim.api.nvim_create_user_command("DescribeKey", which_key, {})
 
--- experimental options
--- BUG: restart drops ui2
-if not vim.g.vscode then
-    local ok, ui2 = pcall(require, "vim._core.ui2")
-    if ok then
-        -- {} required: calling enable() without args is a documented Neovim bug (neovim/neovim#38594)
-        pcall(ui2.enable, {})
-        vim.notify("ui2 enabled", vim.log.levels.INFO)
-    else
-        vim.notify("ui2 disabled (could be old nvim or api shift, check options.lua)", vim.log.levels.WARN)
-    end
-end
-
 -- make the project and open quick fix list
 -- files are jumpable if they exist, compilation logs are not
 -- this trys to mirror emacs's compile, output can be saved in quickfix list

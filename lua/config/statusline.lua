@@ -22,6 +22,10 @@ vim.api.nvim_create_autocmd("ColorScheme", {
         vim.api.nvim_set_hl(0, "ScopeLine", { fg = "#9CCFD8" })
         vim.api.nvim_set_hl(0, "SnacksIndent", { fg = "#382818" })
         vim.api.nvim_set_hl(0, "SnacksIndentScope", { fg = "#77DD77" })
+        vim.api.nvim_set_hl(0, "NoicePopupmenu",       { bg = "#1E1E2E", fg = "#CDD6F4" })
+        vim.api.nvim_set_hl(0, "NoicePopupmenuBorder",       { fg = "#94ffb8" })
+        vim.api.nvim_set_hl(0, "NoiceCmdlinePopup",       { bg = "#1E1E2E", fg = "#CDD6F4" })
+        vim.api.nvim_set_hl(0, "NoiceCmdlinePopupBorder", { fg = "#89B4FA" })
         vim.cmd("redrawstatus")
     end,
 })

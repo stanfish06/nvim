@@ -301,8 +301,8 @@ if snacks_ok and not is_vscode then
             chunk = {
                 enabled = true, -- scope as chunk
                 char = {
-                    arrow = "🢒"
-                }
+                    arrow = "🢒",
+                },
             },
         },
         notifier = {
@@ -314,12 +314,70 @@ end
 
 -- noice (better ui)
 local noice_ok, noice = pcall(require, "noice")
+-- experimental options
+-- BUG: restart drops ui2
+-- noice does not work well with neovim ui2 2026-06-15
+-- this file got loaded after options.lua so this should disable ui2
+if not vim.g.vscode then
+    local ui2_ok, ui2 = pcall(require, "vim._core.ui2")
+    if not noice_ok then
+        if ui2_ok then
+            -- {} required: calling enable() without args is a documented Neovim bug (neovim/neovim#38594)
+            pcall(ui2.enable, {})
+            vim.notify("nvim ui2 enabled", vim.log.levels.INFO)
+        else
+            vim.notify("nvim ui2 disabled (could be old nvim or api shift, check options.lua)", vim.log.levels.WARN)
+        end
+    else
+        vim.notify("use noice/nui ui layer", vim.log.levels.INFO)
+    end
+end
 if noice_ok and not is_vscode then
     noice.setup({
         presets = {
             bottom_search = true, -- use a classic bottom cmdline for search
-            command_palette = true, -- position the cmdline and popupmenu together
             lsp_doc_border = false, -- add a border to hover docs and signature help
+        },
+        cmdline = {
+            enabled = true,
+            view = "cmdline_popup",
+            format = {
+                cmdline = { title = "  " },
+            },
+        },
+        popupmenu = {
+            enabled = true,
+            backend = "nui",
+            view = "popupmenu",
+        },
+        views = {
+            cmdline_popup = {
+                position = {
+                    row = 5,
+                    col = "50%",
+                },
+                size = {
+                    width = 30,
+                    height = "auto",
+                },
+                border = {
+                    style = "single",
+                },
+            },
+            popupmenu = {
+                relative = "editor",
+                position = {
+                    row = 8,
+                    col = "50%",
+                },
+                size = {
+                    width = 30,
+                    height = 5,
+                },
+                border = {
+                    style = "single",
+                },
+            },
         },
     })
 end
