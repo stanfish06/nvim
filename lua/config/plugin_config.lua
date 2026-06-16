@@ -164,7 +164,7 @@ if conform_ok and not is_vscode then
 end
 
 -- nvim-lint (async linting: ruff for Python, luacheck for Lua, shellcheck for Shell)
-local lint_ok, lint = pcall(require, "nvim-lint")
+local lint_ok, lint = pcall(require, "lint")
 if lint_ok and not is_vscode then
     lint.linters_by_ft = {
         python = { "ruff" },
@@ -172,7 +172,7 @@ if lint_ok and not is_vscode then
         sh = { "shellcheck" },
         bash = { "shellcheck" },
     }
-    vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave" }, {
+    vim.api.nvim_create_autocmd({ "BufEnter", "BufReadPost", "BufWritePost", "InsertLeave" }, {
         callback = function()
             lint.try_lint()
         end,
