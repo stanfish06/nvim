@@ -20,6 +20,7 @@ local package_list = {
         src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git",
     },
     { name = "conform.nvim", src = "https://github.com/stevearc/conform.nvim.git" },
+    { name = "nvim-lint", src = "https://github.com/mfussenegger/nvim-lint.git" },
     { name = "gitsigns.nvim", src = "https://github.com/lewis6991/gitsigns.nvim.git" },
     { name = "obsidian.nvim", src = "https://github.com/obsidian-nvim/obsidian.nvim.git", skip_old_nvim = true },
     { name = "plenary.nvim", src = "https://github.com/nvim-lua/plenary.nvim.git" },

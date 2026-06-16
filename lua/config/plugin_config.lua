@@ -163,6 +163,22 @@ if conform_ok and not is_vscode then
     end, { desc = "Format buffer or selection" })
 end
 
+-- nvim-lint (async linting: ruff for Python, luacheck for Lua, shellcheck for Shell)
+local lint_ok, lint = pcall(require, "nvim-lint")
+if lint_ok and not is_vscode then
+    lint.linters_by_ft = {
+        python = { "ruff" },
+        lua = { "luacheck" },
+        sh = { "shellcheck" },
+        bash = { "shellcheck" },
+    }
+    vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave" }, {
+        callback = function()
+            lint.try_lint()
+        end,
+    })
+end
+
 -- fff
 -- rebuild the rust binary whenever vim.pack installs/updates fff.nvim
 vim.api.nvim_create_autocmd("PackChanged", {
