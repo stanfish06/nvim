@@ -34,7 +34,7 @@
       "src": "https://github.com/lewis6991/gitsigns.nvim.git"
     },
     "guh.nvim": {
-      "rev": "582b6db9393a0788b55737b87f013f724b6574d7",
+      "rev": "18a907f811297bfa72d27f0ef04881eaa62ea530",
       "src": "https://github.com/justinmk/guh.nvim"
     },
     "noice.nvim": {
@@ -62,7 +62,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
     },
     "obsidian.nvim": {
-      "rev": "ef7f5ee28f857431235c0cb847b9dd70c3714a47",
+      "rev": "e3f170b8ed4cf3cea49537dd8a2a4dfb9fb8bb30",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim.git"
     },
     "plenary.nvim": {
