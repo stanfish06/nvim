@@ -157,11 +157,26 @@ if conform_ok and not is_vscode then
             typescriptreact = { "prettier" },
         },
     })
+    local auto_format = false
+
+    vim.api.nvim_create_autocmd("BufWritePre", {
+        callback = function(ev)
+            if auto_format then
+                conform.format({ bufnr = ev.buf })
+            end
+        end,
+    })
+
     -- conform derives the range from the live selection in visual mode;
     -- the '< '> marks are stale until visual mode is left, so don't use them here
     vim.keymap.set({ "n", "v" }, "<leader>lf", function()
         conform.format()
     end, { desc = "Format buffer or selection" })
+
+    vim.keymap.set("n", "<leader>lF", function()
+        auto_format = not auto_format
+        vim.notify("Auto-format: " .. (auto_format and "ON" or "OFF"), vim.log.levels.INFO)
+    end, { desc = "Toggle auto-format on save" })
 end
 
 -- nvim-lint (async linting: ruff for Python, luacheck for Lua, shellcheck for Shell)
