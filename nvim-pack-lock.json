@@ -34,7 +34,7 @@
       "src": "https://github.com/lewis6991/gitsigns.nvim.git"
     },
     "guh.nvim": {
-      "rev": "18a907f811297bfa72d27f0ef04881eaa62ea530",
+      "rev": "b86ff878830cf718623f958c977a3ab028ddb68c",
       "src": "https://github.com/justinmk/guh.nvim"
     },
     "noice.nvim": {
@@ -46,7 +46,7 @@
       "src": "https://github.com/MunifTanjim/nui.nvim.git"
     },
     "nvim-lint": {
-      "rev": "99cbc3ca8a76845fca50e496be7212bebf907dd3",
+      "rev": "1ba49820a3c29ba6ab1b2dd441a63b3822c4e39b",
       "src": "https://github.com/mfussenegger/nvim-lint.git"
     },
     "nvim-lspconfig": {
