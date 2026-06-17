@@ -305,6 +305,12 @@ if obsidian_ok then
     })
 end
 
+-- quicker (improve quickfix ui)
+local quicker_ok, quicker = pcall(require, "quicker")
+if quicker_ok then
+    quicker.setup()
+end
+
 -- snacks
 local snacks_ok, snacks = pcall(require, "snacks")
 if snacks_ok and not is_vscode then
