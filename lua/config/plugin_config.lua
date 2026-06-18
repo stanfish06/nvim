@@ -195,7 +195,7 @@ local lint_ok, lint = pcall(require, "lint")
 if lint_ok and not is_vscode then
     lint.linters_by_ft = {
         python = { "ruff" },
-        lua = { "luacheck" },
+        -- lua = { "luacheck" }, luacheck looks pretty old
         sh = { "shellcheck" },
         bash = { "shellcheck" },
     }
