@@ -61,7 +61,7 @@ end
 
 -- cmp
 local blink_ok, blink = pcall(require, "blink.cmp")
-if blink_ok then
+if blink_ok and not is_vscode then
     blink.setup({
         keymap = { preset = "default" },
         sources = {
