@@ -10,6 +10,8 @@ local package_list = {
         version = vim.version.range("0.9.4"),
     }, -- this package breaks frequently, specify version
     { name = "nvim-lspconfig", src = "https://github.com/neovim/nvim-lspconfig" },
+    { name = "blink.lib", src = "https://github.com/saghen/blink.lib.git" },
+    { name = "blink.cmp", src = "https://github.com/saghen/blink.cmp.git" },
     { name = "sneaks.vim", src = "https://github.com/justinmk/vim-sneak" }, -- remaps s/S intentionally
     { name = "guh.nvim", src = "https://github.com/justinmk/guh.nvim" }, -- gh wrapper in nvim
     { name = "fugitive.vim", src = "https://tpope.io/vim/fugitive.git" },

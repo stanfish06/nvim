@@ -1,5 +1,13 @@
 {
   "plugins": {
+    "blink.cmp": {
+      "rev": "26ec6f0a1a8101eb134f8b8568d6099be015fe70",
+      "src": "https://github.com/saghen/blink.cmp.git"
+    },
+    "blink.lib": {
+      "rev": "bf67998a314236cfba50fe311d60ef03d15d9426",
+      "src": "https://github.com/saghen/blink.lib.git"
+    },
     "conform.nvim": {
       "rev": "619363c30309d29ffa631e67c8183f2a72caa373",
       "src": "https://github.com/stevearc/conform.nvim.git"
@@ -90,7 +98,7 @@
       "src": "https://github.com/craftzdog/solarized-osaka.nvim.git"
     },
     "tinted-vim": {
-      "rev": "c086276f0227f41d17b68b1fe2e378b3b113401d",
+      "rev": "e89c8ca390bbbb21f875b457b1f2e6d5d1950ca2",
       "src": "https://github.com/tinted-theming/tinted-vim.git"
     },
     "tokyonight": {

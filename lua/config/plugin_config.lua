@@ -59,6 +59,17 @@ if sneaks_ok then
     vim.keymap.set({ "n", "x", "o" }, "T", "<Plug>Sneak_T")
 end
 
+-- cmp
+local blink_ok, blink = pcall(require, "blink.cmp")
+if blink_ok then
+    blink.setup({
+        keymap = { preset = "default" },
+        sources = {
+            default = { "lsp", "path", "snippets", "buffer" },
+        },
+    })
+end
+
 -- lsp
 -- git clone https://github.com/neovim/nvim-lspconfig ~/.config/nvim/pack/nvim/start/nvim-lspconfig
 -- after v12, neovim will have built-in package manager
