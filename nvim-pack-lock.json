@@ -5,7 +5,7 @@
       "src": "https://github.com/saghen/blink.cmp.git"
     },
     "blink.lib": {
-      "rev": "bf67998a314236cfba50fe311d60ef03d15d9426",
+      "rev": "5876dd95deeb70aadbe9f1c0b7117a135061cdac",
       "src": "https://github.com/saghen/blink.lib.git"
     },
     "conform.nvim": {
@@ -42,7 +42,7 @@
       "src": "https://github.com/lewis6991/gitsigns.nvim.git"
     },
     "guh.nvim": {
-      "rev": "f4b91da40a5eb52640d4a686cec5295577bdc019",
+      "rev": "f16d3242679762f69bd0d0072af3ca68627e43d8",
       "src": "https://github.com/justinmk/guh.nvim"
     },
     "noice.nvim": {
@@ -58,7 +58,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint.git"
     },
     "nvim-lspconfig": {
-      "rev": "96f363ce07d46c1804532ca2d1eb3a157d11ee29",
+      "rev": "fef8b117ad5fb73943913f444f22065c4b834a60",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
