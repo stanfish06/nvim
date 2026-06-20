@@ -1,7 +1,7 @@
 {
   "plugins": {
     "blink.cmp": {
-      "rev": "26ec6f0a1a8101eb134f8b8568d6099be015fe70",
+      "rev": "50c696b5c3ca359305f8e241e9458b0d2d787540",
       "src": "https://github.com/saghen/blink.cmp.git"
     },
     "blink.lib": {
@@ -42,7 +42,7 @@
       "src": "https://github.com/lewis6991/gitsigns.nvim.git"
     },
     "guh.nvim": {
-      "rev": "f16d3242679762f69bd0d0072af3ca68627e43d8",
+      "rev": "9ca80a6b2b21e2ebb239866b83765caa687966f7",
       "src": "https://github.com/justinmk/guh.nvim"
     },
     "noice.nvim": {
@@ -54,11 +54,11 @@
       "src": "https://github.com/MunifTanjim/nui.nvim.git"
     },
     "nvim-lint": {
-      "rev": "4b7957daf4b81eb578114bd6fcf20b6f5a2b59e8",
+      "rev": "01c9842c089069ab497430159312b2c8868a4590",
       "src": "https://github.com/mfussenegger/nvim-lint.git"
     },
     "nvim-lspconfig": {
-      "rev": "fef8b117ad5fb73943913f444f22065c4b834a60",
+      "rev": "bfcc0171a43f22afa61d927ffe9fcb6cb85dc99e",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
@@ -70,7 +70,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
     },
     "obsidian.nvim": {
-      "rev": "a0abc4f89d7228ee72091fcb31b46955e7d89a4c",
+      "rev": "b99370b8e6fcfdf02383479753ff36437b550f54",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim.git"
     },
     "plenary.nvim": {
@@ -98,7 +98,7 @@
       "src": "https://github.com/craftzdog/solarized-osaka.nvim.git"
     },
     "tinted-vim": {
-      "rev": "e89c8ca390bbbb21f875b457b1f2e6d5d1950ca2",
+      "rev": "028ab85732f5503f906013403bcfcbd92bc21bc7",
       "src": "https://github.com/tinted-theming/tinted-vim.git"
     },
     "tokyonight": {
