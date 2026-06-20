@@ -1,7 +1,7 @@
 {
   "plugins": {
     "blink.cmp": {
-      "rev": "50c696b5c3ca359305f8e241e9458b0d2d787540",
+      "rev": "bda905a4bf1b3edfa708b0be193b8c63d8620c96",
       "src": "https://github.com/saghen/blink.cmp.git"
     },
     "blink.lib": {
@@ -42,7 +42,7 @@
       "src": "https://github.com/lewis6991/gitsigns.nvim.git"
     },
     "guh.nvim": {
-      "rev": "9ca80a6b2b21e2ebb239866b83765caa687966f7",
+      "rev": "5d14a175029fd98c8bc3644d1b16b1223999b6be",
       "src": "https://github.com/justinmk/guh.nvim"
     },
     "noice.nvim": {
