@@ -42,7 +42,7 @@
       "src": "https://github.com/lewis6991/gitsigns.nvim.git"
     },
     "guh.nvim": {
-      "rev": "5d14a175029fd98c8bc3644d1b16b1223999b6be",
+      "rev": "b52a9e4983aa172092c2eb813a924ca222a67c6a",
       "src": "https://github.com/justinmk/guh.nvim"
     },
     "noice.nvim": {
