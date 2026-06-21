@@ -70,7 +70,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
     },
     "obsidian.nvim": {
-      "rev": "b99370b8e6fcfdf02383479753ff36437b550f54",
+      "rev": "b38f334678673747178dd6663e04856f841a078e",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim.git"
     },
     "plenary.nvim": {
@@ -98,7 +98,7 @@
       "src": "https://github.com/craftzdog/solarized-osaka.nvim.git"
     },
     "tinted-vim": {
-      "rev": "028ab85732f5503f906013403bcfcbd92bc21bc7",
+      "rev": "65a386074124f211536dc04f7427cbcbd80ee183",
       "src": "https://github.com/tinted-theming/tinted-vim.git"
     },
     "tokyonight": {
