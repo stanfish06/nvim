@@ -254,6 +254,22 @@ if gitsigns_ok and not is_vscode then
     gitsigns.setup()
 end
 
+-- tiny-inline-diagnostic (compact inline diagnostics)
+local tiny_diag_ok, tiny_diag = pcall(require, "tiny-inline-diagnostic")
+if tiny_diag_ok and not is_vscode then
+    tiny_diag.setup({
+        preset = "modern",
+        options = {
+            multilines = true,
+            show_source = {
+                enabled = true,
+                if_many = true,
+            },
+        },
+    })
+    vim.diagnostic.config({ virtual_text = false })
+end
+
 -- git change navigation (]g / [g)
 -- use native diff/hunk jump in diff view
 -- use gitsigns diff/hunk jump in regular view
@@ -272,6 +288,33 @@ if not is_vscode then
             gitsigns.nav_hunk("prev")
         end
     end, { desc = "Prev git change (hunk / diff)" })
+end
+
+-- refactoring.nvim (treesitter-driven extract/inline helpers)
+local refactoring_ok, refactoring = pcall(require, "refactoring")
+if refactoring_ok and not is_vscode then
+    refactoring.setup({})
+    vim.keymap.set("x", "<leader>re", function()
+        refactoring.refactor("Extract Function")
+    end, { desc = "Refactor extract function" })
+    vim.keymap.set("x", "<leader>rf", function()
+        refactoring.refactor("Extract Function To File")
+    end, { desc = "Refactor extract function to file" })
+    vim.keymap.set("x", "<leader>rv", function()
+        refactoring.refactor("Extract Variable")
+    end, { desc = "Refactor extract variable" })
+    vim.keymap.set({ "n", "x" }, "<leader>ri", function()
+        refactoring.refactor("Inline Variable")
+    end, { desc = "Refactor inline variable" })
+    vim.keymap.set("n", "<leader>rI", function()
+        refactoring.refactor("Inline Function")
+    end, { desc = "Refactor inline function" })
+    vim.keymap.set("n", "<leader>rb", function()
+        refactoring.refactor("Extract Block")
+    end, { desc = "Refactor extract block" })
+    vim.keymap.set("n", "<leader>rB", function()
+        refactoring.refactor("Extract Block To File")
+    end, { desc = "Refactor extract block to file" })
 end
 
 -- treesitter textobjects (move keymaps for function/class navigation)
@@ -307,6 +350,16 @@ if tso_ok and not is_vscode then
     vim.keymap.set({ "n", "x", "o" }, "[C", function()
         move.goto_previous_end("@class.outer", "textobjects")
     end, { desc = "Prev class end" })
+end
+
+-- render-markdown (in-buffer markdown rendering)
+local render_markdown_ok, render_markdown = pcall(require, "render-markdown")
+if render_markdown_ok and not is_vscode then
+    render_markdown.setup({
+        file_types = { "markdown" },
+        completions = { lsp = { enabled = true } },
+    })
+    vim.keymap.set("n", "<leader>mr", "<cmd>RenderMarkdown toggle<CR>", { desc = "Toggle markdown rendering" })
 end
 
 -- obsidian
