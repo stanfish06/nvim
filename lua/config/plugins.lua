@@ -21,10 +21,14 @@ local package_list = {
         name = "nvim-treesitter-textobjects",
         src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git",
     },
+    { name = "async.nvim", src = "https://github.com/lewis6991/async.nvim.git" },
+    { name = "refactoring.nvim", src = "https://github.com/ThePrimeagen/refactoring.nvim.git" },
     { name = "conform.nvim", src = "https://github.com/stevearc/conform.nvim.git" },
     { name = "nvim-lint", src = "https://github.com/mfussenegger/nvim-lint.git" },
     { name = "gitsigns.nvim", src = "https://github.com/lewis6991/gitsigns.nvim.git" },
+    { name = "tiny-inline-diagnostic.nvim", src = "https://github.com/rachartier/tiny-inline-diagnostic.nvim.git" },
     { name = "obsidian.nvim", src = "https://github.com/obsidian-nvim/obsidian.nvim.git", skip_old_nvim = true },
+    { name = "render-markdown.nvim", src = "https://github.com/MeanderingProgrammer/render-markdown.nvim.git" },
     { name = "plenary.nvim", src = "https://github.com/nvim-lua/plenary.nvim.git" },
     { name = "dark-theme", src = "https://github.com/stanfish06/dark-theme.git" },
     { name = "rose-pine", src = "https://github.com/rose-pine/neovim.git" },
@@ -34,7 +38,7 @@ local package_list = {
     { name = "tinted-vim", src = "https://github.com/tinted-theming/tinted-vim.git" },
     { name = "snacks.nvim", src = "https://github.com/folke/snacks.nvim.git" },
     { name = "noice.nvim", src = "https://github.com/folke/noice.nvim.git" },
-    { name = "quicker.nvim", src = "https://github.com/stevearc/quicker.nvim.git"},
+    { name = "quicker.nvim", src = "https://github.com/stevearc/quicker.nvim.git" },
     { name = "nui.nvim", src = "https://github.com/MunifTanjim/nui.nvim.git" },
 }
 local vim_pack_ok, _ = pcall(require, "vim.pack")
