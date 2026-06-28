@@ -30,7 +30,7 @@ local valid_scopes = {
     ["type_declaration"] = true,
 }
 local ns_scope_line = vim.api.nvim_create_namespace("scope_line")
-local function char_at(row, col)
+function char_at(row, col)
     -- row is 1-based, col is 1-based
     local line = vim.api.nvim_buf_get_lines(0, row - 1, row, false)[1] or ""
     return string.sub(line, col, col)
@@ -45,7 +45,7 @@ local function draw_scope_lines()
             local start_row, start_col, end_row, end_col = ts_node:range()
             for i = start_row + 1, end_row do
                 local char = char_at(i + 1, start_col + 1) -- treesitter is 0 based
-                if char == " " then
+                if char == " " or char == "" then
                     local scope_char = "│"
                     if i == start_row + 1 and (end_row - start_row) > 1 then
                         scope_char = "┌"
@@ -58,8 +58,8 @@ local function draw_scope_lines()
                         buf,
                         ns_scope_line,
                         i,
-                        start_col,
-                        { virt_text = { { scope_char, "ScopeLine" } }, virt_text_pos = "overlay" } -- color group ScopeLine is defined in statusline.lua
+                        0,
+                        { virt_text = { { scope_char, "ScopeLine" } }, virt_text_pos = "overlay", virt_text_win_col = start_col } -- color group ScopeLine is defined in statusline.lua
                     )
                 end
             end
