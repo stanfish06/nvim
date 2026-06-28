@@ -73,6 +73,10 @@
       "rev": "851e865342e5a4cb1ae23d31caf6e991e1c99f1e",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
     },
+    "nvim-web-devicons": {
+      "rev": "dfbfaa967a6f7ec50789bead7ef87e336c1fa63c",
+      "src": "https://github.com/nvim-tree/nvim-web-devicons.git"
+    },
     "obsidian.nvim": {
       "rev": "092e51064a526554c22dd71129d84714d14557df",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim.git"
