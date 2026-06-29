@@ -166,6 +166,7 @@ if conform_ok and not is_vscode then
             javascriptreact = { "prettier" },
             typescript = { "prettier" },
             typescriptreact = { "prettier" },
+            go = { "gofmt" },
         },
     })
     local auto_format = false
