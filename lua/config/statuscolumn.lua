@@ -18,12 +18,18 @@ function Directory()
         icon_color = "Directory"
     else
         -- use your favorite icon provider.
-        local extension = vim.fs.ext(name)
-        local devicons = require("nvim-web-devicons")
-        icon, icon_color = devicons.get_icon(name, extension)
-        if not icon then
-            icon, icon_color = devicons.get_icon_by_filetype(vim.bo[0].filetype, { default = true })
+        local devicons_ok, devicons = pcall(require, "nvim-web-devicons")
+        if devicons_ok then
+            local extension = vim.fs.ext(name)
+            icon, icon_color = devicons.get_icon(name, extension)
+            if not icon then
+                icon, icon_color = devicons.get_icon_by_filetype(vim.bo[0].filetype, { default = true })
+            end
         end
+    end
+
+    if not icon then
+        return double_space
     end
 
     return table.concat({
