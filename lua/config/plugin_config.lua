@@ -428,12 +428,7 @@ if not vim.g.vscode then
         if ui2_ok then
             -- {} required: calling enable() without args is a documented Neovim bug (neovim/neovim#38594)
             pcall(ui2.enable, {})
-            vim.notify("nvim ui2 enabled", vim.log.levels.INFO)
-        else
-            vim.notify("nvim ui2 disabled (could be old nvim or api shift, check options.lua)", vim.log.levels.WARN)
         end
-    else
-        vim.notify("use noice/nui ui layer", vim.log.levels.INFO)
     end
 end
 if noice_ok and not is_vscode then
