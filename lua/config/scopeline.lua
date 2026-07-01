@@ -30,7 +30,7 @@ local valid_scopes = {
     ["type_declaration"] = true,
 }
 local ns_scope_line = vim.api.nvim_create_namespace("scope_line")
-function char_at(row, col)
+local function char_at(row, col)
     -- row is 1-based, col is 1-based
     local line = vim.api.nvim_buf_get_lines(0, row - 1, row, false)[1] or ""
     return string.sub(line, col, col)
@@ -46,12 +46,12 @@ local function draw_scope_lines()
             for i = start_row + 1, end_row do
                 local char = char_at(i + 1, start_col + 1) -- treesitter is 0 based
                 if char == " " or char == "" then
-                    local scope_char = "│"
+                    local scope_char = "\u{2502}"
                     if i == start_row + 1 and (end_row - start_row) > 1 then
-                        scope_char = "┌"
+                        scope_char = "\u{250C}"
                     end
                     if i == end_row and (end_row - start_row) > 1 then
-                        scope_char = "└"
+                        scope_char = "\u{2514}"
                     end
                     pcall(
                         vim.api.nvim_buf_set_extmark,
