@@ -46,12 +46,12 @@ local function draw_scope_lines()
             for i = start_row + 1, end_row do
                 local char = char_at(i + 1, start_col + 1) -- treesitter is 0 based
                 if char == " " or char == "" then
-                    local scope_char = "\u{2502}"
+                    local scope_char = "│"
                     if i == start_row + 1 and (end_row - start_row) > 1 then
-                        scope_char = "\u{250C}"
+                        scope_char = "┌"
                     end
                     if i == end_row and (end_row - start_row) > 1 then
-                        scope_char = "\u{2514}"
+                        scope_char = "└"
                     end
                     pcall(
                         vim.api.nvim_buf_set_extmark,
