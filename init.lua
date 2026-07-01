@@ -5,6 +5,7 @@ require("config.statuscolumn")
 require("config.plugin_config")
 require("config.treesitter")
 require("config.scopeline")
+require("config.filetree")
 require("config.image")
 require("config.server")
 
