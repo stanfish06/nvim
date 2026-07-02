@@ -78,7 +78,7 @@
       "src": "https://github.com/nvim-tree/nvim-web-devicons.git"
     },
     "obsidian.nvim": {
-      "rev": "0db04cc639488a3a034016213df839b2d0f528a4",
+      "rev": "e61a4f6bcac3703dbcc46f7a83334ce106663aa4",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim.git"
     },
     "plenary.nvim": {
