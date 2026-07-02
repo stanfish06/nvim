@@ -366,6 +366,11 @@ end
 -- obsidian
 local obsidian_ok, obsidian = pcall(require, "obsidian")
 if obsidian_ok then
+    -- obsidian.nvim needs at least one existing vault; create the notes folder if missing
+    local notes_path = vim.fn.expand("~/Git/notes")
+    if vim.fn.isdirectory(notes_path) == 0 then
+        vim.fn.mkdir(notes_path, "p")
+    end
     obsidian.setup({
         legacy_commands = false, -- use :Obsidian <subcommand>; legacy :Obsidian* commands warn at startup
         workspaces = {
