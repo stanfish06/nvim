@@ -5,7 +5,7 @@
       "src": "https://github.com/lewis6991/async.nvim.git"
     },
     "blink.cmp": {
-      "rev": "bda905a4bf1b3edfa708b0be193b8c63d8620c96",
+      "rev": "67c9c3f9e3121df32d0eee406a76087a9f0a62eb",
       "src": "https://github.com/saghen/blink.cmp.git"
     },
     "blink.lib": {
@@ -38,7 +38,7 @@
       "src": "https://tpope.io/vim/fugitive.git"
     },
     "fzf-lua": {
-      "rev": "39da6060d53659acf3ec118200bc48721b29b8fd",
+      "rev": "09880d502bc76f1e025fdbdcaeff44650f7ea78a",
       "src": "https://github.com/ibhagwan/fzf-lua.git"
     },
     "gitsigns.nvim": {
