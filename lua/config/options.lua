@@ -99,7 +99,7 @@ vim.o.linebreak = true
 -- ui
 vim.o.colorcolumn = "+1"
 vim.o.list = true
-vim.o.pumheight = 10 -- height limit for completion pop-up, useful for long list
+vim.o.pumheight = 10       -- height limit for completion pop-up, useful for long list
 vim.o.splitkeep = "screen"
 vim.o.winborder = "single" -- makes hover window like lsp fancier with a border
 vim.o.fillchars = "eob: ,fold:╌"
@@ -167,15 +167,66 @@ end
 vim.api.nvim_create_user_command("Compile", compile, { nargs = "?" })
 
 -- tab title (format pid:program)
+-- for terminals, show the live foreground process (e.g. claude launched inside
+-- the shell) instead of the command baked into the buffer name at :te time.
+-- /proc/<pid>/stat field 8 (after the comm) is tpgid = foreground process group
+local function term_fg_process(buf)
+    local pid = vim.b[buf].terminal_job_pid
+    if not pid then
+        return nil
+    end
+    local stat = io.open(string.format('/proc/%d/stat', pid), 'r')
+    if not stat then
+        return nil
+    end
+    local line = stat:read('*l') or ''
+    stat:close()
+    -- comm may contain spaces/parens, so split only what follows the last ')'
+    local after_comm = line:match('.*%)%s+(.*)$') or ''
+    local tpgid = tonumber(vim.split(after_comm, '%s+')[6])
+    if not tpgid or tpgid <= 0 then
+        return nil
+    end
+    local comm = io.open(string.format('/proc/%d/comm', tpgid), 'r')
+    if not comm then
+        return nil
+    end
+    local name = (comm:read('*l') or ''):gsub('%s+$', '')
+    comm:close()
+    if name == '' then
+        return nil
+    end
+    return string.format('%d:%s', tpgid, name)
+end
+
 function _G.TabLineCustom()
     local s = ''
     for i = 1, vim.fn.tabpagenr('$') do
         local hl = i == vim.fn.tabpagenr() and '%#TabLineSel#' or '%#TabLine#'
         local buflist = vim.fn.tabpagebuflist(i)
-        local bufname = vim.fn.bufname(buflist[vim.fn.tabpagewinnr(i)])
-        local name = vim.fn.fnamemodify(bufname, ':t')
+        local buf = buflist[vim.fn.tabpagewinnr(i)]
+        local name
+        if vim.bo[buf].buftype == 'terminal' then
+            name = term_fg_process(buf)
+        end
+        if not name then
+            name = vim.fn.fnamemodify(vim.fn.bufname(buf), ':t')
+        end
         s = s .. hl .. '%' .. i .. 'T ' .. (name == '' and '[No Name]' or name) .. ' '
     end
     return s .. '%#TabLineFill#%T'
 end
+
 vim.o.tabline = '%!v:lua.TabLineCustom()'
+
+-- the tabline only redraws on events, so poll while any terminal exists to
+-- pick up foreground process changes
+local tabline_timer = vim.uv.new_timer()
+tabline_timer:start(2000, 2000, vim.schedule_wrap(function()
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+        if vim.bo[buf].buftype == 'terminal' then
+            vim.cmd.redrawtabline()
+            return
+        end
+    end
+end))

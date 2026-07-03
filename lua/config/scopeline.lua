@@ -43,6 +43,10 @@ local function draw_scope_lines()
     while ts_node do
         if valid_scopes[ts_node:type()] then
             local start_row, start_col, end_row, end_col = ts_node:range()
+            -- inline scopes (e.g. function() passed as an argument) start mid-line,
+            -- so clamp to the start line's indent to keep the line out of the text
+            local first_line = vim.api.nvim_buf_get_lines(0, start_row, start_row + 1, false)[1] or ""
+            start_col = math.min(start_col, (first_line:find("%S") or 1) - 1)
             for i = start_row + 1, end_row do
                 local char = char_at(i + 1, start_col + 1) -- treesitter is 0 based
                 if char == " " or char == "" then
