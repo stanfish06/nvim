@@ -5,7 +5,7 @@
       "src": "https://github.com/lewis6991/async.nvim.git"
     },
     "blink.cmp": {
-      "rev": "67c9c3f9e3121df32d0eee406a76087a9f0a62eb",
+      "rev": "9dcb1f3a9164f10c8950a790aace576f2e89dc78",
       "src": "https://github.com/saghen/blink.cmp.git"
     },
     "blink.lib": {
@@ -38,7 +38,7 @@
       "src": "https://tpope.io/vim/fugitive.git"
     },
     "fzf-lua": {
-      "rev": "09880d502bc76f1e025fdbdcaeff44650f7ea78a",
+      "rev": "237b7e7f2bd07becc83144933b6058cc15bef2dc",
       "src": "https://github.com/ibhagwan/fzf-lua.git"
     },
     "gitsigns.nvim": {
@@ -62,7 +62,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint.git"
     },
     "nvim-lspconfig": {
-      "rev": "292f44408498103c47996ff5c18fd366293840d8",
+      "rev": "d224a1920728ba129880efc700d4a0180ac4ecbb",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
@@ -78,7 +78,7 @@
       "src": "https://github.com/nvim-tree/nvim-web-devicons.git"
     },
     "obsidian.nvim": {
-      "rev": "e61a4f6bcac3703dbcc46f7a83334ce106663aa4",
+      "rev": "1052c0c8359c550d5379296f896a778284dc5a78",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim.git"
     },
     "plenary.nvim": {
@@ -90,7 +90,7 @@
       "src": "https://github.com/stevearc/quicker.nvim.git"
     },
     "refactoring.nvim": {
-      "rev": "7eaa150061ea18fdbe18fbb924d236e3ddccc57d",
+      "rev": "64e10d782ae5b9653558482910213b8946651456",
       "src": "https://github.com/ThePrimeagen/refactoring.nvim.git"
     },
     "render-markdown.nvim": {
@@ -118,7 +118,7 @@
       "src": "https://github.com/tinted-theming/tinted-vim.git"
     },
     "tiny-inline-diagnostic.nvim": {
-      "rev": "e930d0a46031645040d5492595b46cdf6ab3514f",
+      "rev": "18c5bcfd4e3cd55946830016780641e3901fecb2",
       "src": "https://github.com/rachartier/tiny-inline-diagnostic.nvim.git"
     },
     "tokyonight": {
