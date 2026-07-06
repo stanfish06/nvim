@@ -147,7 +147,9 @@ end, { expr = true, noremap = true })
 -- check full keymap and dump to a new buffer
 -- TUDO: it is worth to extend it with fuzzy finding and better UI
 local function which_key()
-    vim.cmd("redir @a | silent map | redir END | new | put a")
+    local output = vim.fn.execute("map")
+    vim.cmd("new")
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(output, "\n"))
 end
 vim.api.nvim_create_user_command("DescribeKey", which_key, {})
 
