@@ -99,10 +99,13 @@ if not is_vscode then
             },
         },
     })
-    vim.lsp.enable("pyright")
     -- install via uv: uv tool install pyrefly, then pyrefly init inside project folder (will transfer configs from pyright if available)
-    -- pyrefly seems capable of showing more type issues as far as I can tell
-    vim.lsp.enable("pyrefly")
+    -- pyrefly seems capable of showing more type issues; prefer it when installed, fall back to pyright
+    if vim.fn.executable("pyrefly") == 1 then
+        vim.lsp.enable("pyrefly")
+    else
+        vim.lsp.enable("pyright")
+    end
     -- install using system package manager
     vim.lsp.enable("clangd")
     -- npm instal -g typescript-language-server
