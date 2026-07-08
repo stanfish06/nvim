@@ -40,7 +40,7 @@ local package_list = {
     { name = "noice.nvim", src = "https://github.com/folke/noice.nvim.git" },
     { name = "quicker.nvim", src = "https://github.com/stevearc/quicker.nvim.git" },
     { name = "nui.nvim", src = "https://github.com/MunifTanjim/nui.nvim.git" },
-    { name = "nvim-web-devicons", src = "https://github.com/nvim-tree/nvim-web-devicons.git" }
+    { name = "mini.nvim", src = "https://github.com/echasnovski/mini.nvim.git" }
 }
 local vim_pack_ok, _ = pcall(require, "vim.pack")
 local function sync_packages()

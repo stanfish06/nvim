@@ -1,4 +1,20 @@
 local is_vscode = vim.g.vscode
+
+-- mini.icons (icon provider; mocks nvim-web-devicons so filetree.lua/statuscolumn.lua
+-- keep working against the devicons API without changes)
+local mini_icons_ok, mini_icons = pcall(require, "mini.icons")
+if mini_icons_ok then
+    mini_icons.setup()
+    mini_icons.mock_nvim_web_devicons()
+end
+
+-- mini.pairs (auto-close brackets/quotes; complements the <CR> auto-indent
+-- keymap in options.lua which handles the reactive side of bracket editing)
+local mini_pairs_ok, mini_pairs = pcall(require, "mini.pairs")
+if mini_pairs_ok and not is_vscode then
+    mini_pairs.setup()
+end
+
 -- fzf
 -- git clone --depth 1 https://github.com/ibhagwan/fzf-lua.git ~/.config/nvim/pack/plugins/start/fzf-lua
 local ok, fzf = pcall(require, "fzf-lua")
