@@ -35,6 +35,7 @@ local parser_repos = {
         url = "https://github.com/tree-sitter-grammars/tree-sitter-markdown",
         location = "tree-sitter-markdown-inline",
     },
+    { lang = "latex", url = "https://github.com/latex-lsp/tree-sitter-latex" },
 }
 
 -- this function needs to be updated occasionally, as of 260130, glibc should be at least 2.30
@@ -95,6 +96,7 @@ local function ts_install()
             "tsx",
             "markdown",
             "markdown_inline",
+            "latex",
         })
     end
 end

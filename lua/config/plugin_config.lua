@@ -375,6 +375,13 @@ if render_markdown_ok and not is_vscode then
     render_markdown.setup({
         file_types = { "markdown" },
         completions = { lsp = { enabled = true } },
+        latex = {
+            enabled = true,
+            converter = { "utftex", "latex2text" },
+            inline = true,
+            block = true,
+            position = "center",
+        },
     })
     vim.keymap.set("n", "<leader>mr", "<cmd>RenderMarkdown toggle<CR>", { desc = "Toggle markdown rendering" })
 end
@@ -389,6 +396,7 @@ if obsidian_ok then
     end
     obsidian.setup({
         legacy_commands = false, -- use :Obsidian <subcommand>; legacy :Obsidian* commands warn at startup
+        ui = { enable = false },
         workspaces = {
             {
                 name = "notes",
