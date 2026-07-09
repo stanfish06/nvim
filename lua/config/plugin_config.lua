@@ -75,9 +75,22 @@ if sneaks_ok then
     vim.keymap.set({ "n", "x", "o" }, "T", "<Plug>Sneak_T")
 end
 
--- cmp
+-- cmp (blink.cmp v2: native fuzzy matcher via build/download; see :h blink-cmp-installation)
 local blink_ok, blink = pcall(require, "blink.cmp")
 if blink_ok and not is_vscode then
+    -- Build once when the rust lib is missing (no-op once target/lib is present).
+    -- Prefer cargo build for unreleased main; download needs a release tag.
+    if not blink.library_available() then
+        local build_ok, build_err = pcall(function()
+            blink.build():pwait()
+        end)
+        if not build_ok then
+            vim.notify(
+                "blink.cmp: failed to build fuzzy matcher (install rustc/cargo?): " .. tostring(build_err),
+                vim.log.levels.WARN
+            )
+        end
+    end
     blink.setup({
         keymap = { preset = "default" },
         sources = {
@@ -223,16 +236,29 @@ if lint_ok and not is_vscode then
     })
 end
 
--- fff
--- rebuild the rust binary whenever vim.pack installs/updates fff.nvim
+-- rebuild native binaries whenever vim.pack installs/updates rust-backed plugins
 vim.api.nvim_create_autocmd("PackChanged", {
     callback = function(ev)
         local name, kind = ev.data.spec.name, ev.data.kind
-        if name == "fff.nvim" and (kind == "install" or kind == "update") then
+        if kind ~= "install" and kind ~= "update" then
+            return
+        end
+        if name == "fff.nvim" then
             if not ev.data.active then
                 vim.cmd.packadd("fff.nvim")
             end
             require("fff.download").download_or_build_binary()
+        elseif name == "blink.cmp" then
+            if not ev.data.active then
+                vim.cmd.packadd("blink.cmp")
+            end
+            -- force rebuild on update so the fuzzy lib matches the new revision
+            local ok, err = pcall(function()
+                require("blink.cmp").build({ force = kind == "update" }):pwait()
+            end)
+            if not ok then
+                vim.notify("blink.cmp: native build failed: " .. tostring(err), vim.log.levels.WARN)
+            end
         end
     end,
 })
