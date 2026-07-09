@@ -137,7 +137,7 @@ if not is_vscode then
     vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(ev)
             local client = vim.lsp.get_client_by_id(ev.data.client_id)
-            if client and client:supports_method("textDocument/completion") then
+            if not blink_ok and client and client:supports_method("textDocument/completion") then
                 pcall(function()
                     vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
                 end)
@@ -149,11 +149,7 @@ if not is_vscode then
     vim.api.nvim_create_user_command("LspToggle", function(opts)
         local name = opts.args
         for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0, name = name })) do
-            if vim.fn.has("nvim-0.11") == 1 then
-                client:stop()
-            else
-                vim.lsp.stop_client(client.id)
-            end
+            client:stop()
             return
         end
         vim.lsp.enable(name)
