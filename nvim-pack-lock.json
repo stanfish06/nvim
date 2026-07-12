@@ -5,7 +5,7 @@
       "src": "https://github.com/lewis6991/async.nvim.git"
     },
     "blink.cmp": {
-      "rev": "71dc7545c1f399c7f76eeef80efa1d8bda0ff471",
+      "rev": "cfe100ccac24b0a622d7b9f04aa8c9f3e7624a16",
       "src": "https://github.com/saghen/blink.cmp.git"
     },
     "blink.lib": {
@@ -50,7 +50,7 @@
       "src": "https://github.com/justinmk/guh.nvim"
     },
     "mini.nvim": {
-      "rev": "4171fba613b64ade9a28e198bd5b4fea5ba45e22",
+      "rev": "db41c4076105a63caec12612d11228348f55a109",
       "src": "https://github.com/echasnovski/mini.nvim.git"
     },
     "noice.nvim": {
@@ -66,7 +66,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint.git"
     },
     "nvim-lspconfig": {
-      "rev": "5955a100ae7155962330643924e21a798b9bdc91",
+      "rev": "2c227d59589957fa4404b7de5f61d72c0a78a62d",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
@@ -78,11 +78,11 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
     },
     "nvim-web-devicons": {
-      "rev": "dad71387de386a946b123079d0e53f23028f3abd",
+      "rev": "09d1324e264c6950262dbe02a9bce2933a6800db",
       "src": "https://github.com/nvim-tree/nvim-web-devicons.git"
     },
     "obsidian.nvim": {
-      "rev": "c87a43286bc19dca5362be39c5fb5c8e7c59aed1",
+      "rev": "bf1616d46e72477ad978051363fdb5c839c1cce5",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim.git"
     },
     "plenary.nvim": {
