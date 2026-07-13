@@ -40,15 +40,14 @@ local parser_repos = {
 
 -- this function needs to be updated occasionally, as of 260130, glibc should be at least 2.30
 local function get_glibc_version()
-    local result = vim.fn.system("ldd --version 2>&1 | head -n1")
-    if vim.v.shell_error ~= 0 then
+    local result = vim.system({ "ldd", "--version" }, { text = true }):wait()
+    if result.code ~= 0 then
         return nil
     end
-    local version = result:match("(%d+%.%d+)%s*$") or result:match("GLIBC (%d+%.%d+)")
-    if version then
-        return tonumber(version)
-    end
-    return nil
+    local output = result.stdout ~= "" and result.stdout or result.stderr
+    local first_line = output:match("^([^\n]*)")
+    local version = first_line:match("GLIBC (%d+%.%d+)") or first_line:match("(%d+%.%d+)%s*$")
+    return version and tonumber(version) or nil
 end
 
 local function has_tree_sitter_cli()
