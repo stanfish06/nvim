@@ -5,8 +5,9 @@
       "src": "https://github.com/lewis6991/async.nvim.git"
     },
     "blink.cmp": {
-      "rev": "db8ea0b7c7ab8c8f8faa3912833c1671381e6304",
-      "src": "https://github.com/saghen/blink.cmp.git"
+      "rev": "539053d87740e357a96fb304c9a4da2ef27b3576",
+      "src": "https://github.com/saghen/blink.cmp.git",
+      "version": "1.10.0 - 1.10.0"
     },
     "blink.lib": {
       "rev": "5876dd95deeb70aadbe9f1c0b7117a135061cdac",

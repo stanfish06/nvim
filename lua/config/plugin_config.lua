@@ -80,7 +80,9 @@ local blink_ok, blink = pcall(require, "blink.cmp")
 if blink_ok and not is_vscode then
     -- Build once when the rust lib is missing (no-op once target/lib is present).
     -- Prefer cargo build for unreleased main; download needs a release tag.
-    if not blink.library_available() then
+    -- library_available/build only exist on v2 (main); v1.x release tags
+    -- download the prebuilt fuzzy binary automatically
+    if blink.library_available and not blink.library_available() then
         local build_ok, build_err = pcall(function()
             blink.build():pwait()
         end)
@@ -249,11 +251,15 @@ vim.api.nvim_create_autocmd("PackChanged", {
                 vim.cmd.packadd("blink.cmp")
             end
             -- force rebuild on update so the fuzzy lib matches the new revision
-            local ok, err = pcall(function()
-                require("blink.cmp").build({ force = kind == "update" }):pwait()
-            end)
-            if not ok then
-                vim.notify("blink.cmp: native build failed: " .. tostring(err), vim.log.levels.WARN)
+            -- (v2/main only; v1.x release tags download the prebuilt binary themselves)
+            local blink = require("blink.cmp")
+            if blink.build then
+                local ok, err = pcall(function()
+                    blink.build({ force = kind == "update" }):pwait()
+                end)
+                if not ok then
+                    vim.notify("blink.cmp: native build failed: " .. tostring(err), vim.log.levels.WARN)
+                end
             end
         end
     end,
