@@ -74,6 +74,17 @@ local function sync_packages()
         print("Install all packages...")
         vim.pack.add(package_list)
         print("All packages installed!")
+        -- packages removed from package_list are left on disk by vim.pack (never
+        -- deleted automatically) and stay "inactive"; update() below would otherwise
+        -- keep re-adding their stale lock file entry on every sync, see nvim-web-devicons
+        local inactive = vim.iter(vim.pack.get())
+            :filter(function(pkg) return not pkg.active end)
+            :map(function(pkg) return pkg.spec.name end)
+            :totable()
+        if #inactive > 0 then
+            print("Prune orphaned: " .. table.concat(inactive, ", "))
+            vim.pack.del(inactive)
+        end
         -- update() normally opens a confirmation buffer (:write applies it); in headless
         -- mode (README setup command) that buffer would just be discarded, so apply directly
         vim.pack.update(nil, { force = #vim.api.nvim_list_uis() == 0 })
