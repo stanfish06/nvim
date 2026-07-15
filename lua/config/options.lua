@@ -68,6 +68,13 @@ vim.diagnostic.config({
 -- misc settings
 vim.o.showmode = true
 vim.o.autoread = true
+-- autoread alone only reloads a changed-on-disk buffer on a handful of
+-- vim-internal triggers (:e, some shell-outs); it does not poll, so external
+-- changes (git checkout, another instance saving) are silently missed until
+-- one of those triggers happens to fire. checktime forces the check.
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
+    command = "checktime",
+})
 vim.o.ignorecase = true
 vim.o.expandtab = true
 vim.o.smartcase = true
