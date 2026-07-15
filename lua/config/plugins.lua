@@ -12,6 +12,7 @@ local package_list = {
     { name = "nvim-lspconfig", src = "https://github.com/neovim/nvim-lspconfig" },
     { name = "blink.lib", src = "https://github.com/saghen/blink.lib.git" },
     {
+        -- in case auto-build failed, go into .local/share/nvim and rebuild manually
         name = "blink.cmp",
         src = "https://github.com/saghen/blink.cmp.git",
         -- main migrated to the new vim.pos.cursor(target) API (0.13-dev after
