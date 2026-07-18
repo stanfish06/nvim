@@ -8,10 +8,10 @@
 --   :NvimRemote {host}    spawn a plain nvim server on {host} (at ssh landing
 --                         dir) and connect to it through a forwarded socket
 --
--- Hopping away from an empty "dummy" instance (the one created just by
--- launching nvim) auto-quits it once its UI detaches, so hops don't leave
--- orphan servers behind. Launching nvim with no args pops the hop picker
--- when other servers exist (disable with vim.g.nvim_server_autopick = false).
+-- Hopping away from the start instance auto-quits it once its UI detaches (
+-- e.g. launch nvim without path input). Launching nvim with no args pops the 
+-- hop picker when other servers exist.
+-- disable with vim.g.nvim_server_autopick = false
 --
 -- Remote servers need key/agent auth (ssh runs with BatchMode=yes). All ssh
 -- calls share a ControlMaster connection (persists 10 min), so the first
@@ -173,8 +173,10 @@ local function is_disposable()
                 if vim.api.nvim_buf_get_name(b) ~= "" or vim.bo[b].modified then
                     return false
                 end
-                if vim.api.nvim_buf_line_count(b) > 1
-                    or (vim.api.nvim_buf_get_lines(b, 0, 1, false)[1] or "") ~= "" then
+                if
+                    vim.api.nvim_buf_line_count(b) > 1
+                    or (vim.api.nvim_buf_get_lines(b, 0, 1, false)[1] or "") ~= ""
+                then
                     return false
                 end
             end
@@ -250,11 +252,7 @@ end
 
 local function kill_entry(server, on_done)
     local target = server_display_name(server)
-    local choice = vim.fn.confirm(
-        "Close " .. target .. "?\nUnsaved changes will be lost.",
-        "&Yes\n&No",
-        2
-    )
+    local choice = vim.fn.confirm("Close " .. target .. "?\nUnsaved changes will be lost.", "&Yes\n&No", 2)
     if choice ~= 1 then
         return
     end
@@ -351,10 +349,14 @@ end
 local function ssh_cmd()
     return {
         "ssh",
-        "-o", "BatchMode=yes",
-        "-o", "ControlMaster=auto",
-        "-o", "ControlPath=" .. vim.fn.expand("~/.ssh") .. "/nvim-hop-%C",
-        "-o", "ControlPersist=600",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ControlMaster=auto",
+        "-o",
+        "ControlPath=" .. vim.fn.expand("~/.ssh") .. "/nvim-hop-%C",
+        "-o",
+        "ControlPersist=600",
     }
 end
 
@@ -429,7 +431,9 @@ local function spawn_local_server(dir)
     if vim.fn.executable("zoxide") == 1 then
         pcall(vim.system, { "zoxide", "add", dir })
     end
-    if not vim.wait(5000, function() return vim.fn.getftype(sock) == "socket" end, 50) then
+    if not vim.wait(5000, function()
+        return vim.fn.getftype(sock) == "socket"
+    end, 50) then
         vim.notify("Server at " .. dir .. " did not start", vim.log.levels.ERROR)
         return nil
     end
@@ -461,9 +465,12 @@ local function forward_remote(host, remote_sock)
     os.remove(localsock)
     local cmd = vim.list_extend(ssh_cmd(), {
         "-N",
-        "-o", "ExitOnForwardFailure=yes",
-        "-o", "StreamLocalBindUnlink=yes",
-        "-L", localsock .. ":" .. remote_sock,
+        "-o",
+        "ExitOnForwardFailure=yes",
+        "-o",
+        "StreamLocalBindUnlink=yes",
+        "-L",
+        localsock .. ":" .. remote_sock,
         host,
     })
     local job = vim.fn.jobstart(cmd, { detach = true })
@@ -471,16 +478,21 @@ local function forward_remote(host, remote_sock)
         vim.notify("Failed to start ssh forward to " .. host, vim.log.levels.ERROR)
         return nil
     end
-    if not vim.wait(10000, function() return vim.fn.getftype(localsock) == "socket" end, 100) then
+    if not vim.wait(10000, function()
+        return vim.fn.getftype(localsock) == "socket"
+    end, 100) then
         pcall(vim.fn.jobstop, job)
         vim.notify("ssh forward to " .. host .. " did not come up", vim.log.levels.ERROR)
         return nil
     end
-    vim.fn.writefile({ vim.json.encode({
-        host = host,
-        remote_sock = remote_sock,
-        fwd_pid = vim.fn.jobpid(job),
-    }) }, localsock .. ".meta")
+    vim.fn.writefile(
+        { vim.json.encode({
+            host = host,
+            remote_sock = remote_sock,
+            fwd_pid = vim.fn.jobpid(job),
+        }) },
+        localsock .. ".meta"
+    )
     return localsock
 end
 
