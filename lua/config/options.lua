@@ -230,7 +230,16 @@ vim.o.tabline = '%!v:lua.TabLineCustom()'
 
 -- the tabline only redraws on events, so poll while any terminal exists to
 -- pick up foreground process changes
+--
+-- :source % re-runs this whole chunk with fresh locals, so a plain `local
+-- tabline_timer` would orphan the previous handle (its callback closure keeps
+-- it alive forever). Stash it on _G so a re-source can find and stop it.
+if _G.__tabline_timer and not _G.__tabline_timer:is_closing() then
+    _G.__tabline_timer:stop()
+    _G.__tabline_timer:close()
+end
 local tabline_timer = vim.uv.new_timer()
+_G.__tabline_timer = tabline_timer
 tabline_timer:start(2000, 2000, vim.schedule_wrap(function()
     for _, buf in ipairs(vim.api.nvim_list_bufs()) do
         if vim.bo[buf].buftype == 'terminal' then
