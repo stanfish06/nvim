@@ -188,8 +188,22 @@ local function is_disposable()
     return true
 end
 
+local function ui_is_cross_machine()
+    if not vim.tbl_contains(vim.v.argv, "--headless") then
+        return false
+    end
+    return vim.env.SSH_CONNECTION ~= nil or vim.env.SSH_CLIENT ~= nil or vim.env.SSH_TTY ~= nil
+end
+
 local function connect_to(path)
     if not path or path == "" or path == vim.v.servername then
+        return
+    end
+    if ui_is_cross_machine() then
+        vim.notify(
+            "Can't hop again from inside a remote session. Disconnect back to your local instance first.",
+            vim.log.levels.WARN
+        )
         return
     end
     -- if this instance is just an empty launch dummy, let it quit itself once
