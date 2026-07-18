@@ -193,12 +193,9 @@ local function is_disposable()
     return true
 end
 
--- true only inside a server we spawned on a remote host (tagged at spawn with
+-- true only inside a server spawned on a remote host (tagged at spawn with
 -- NVIM_HOP_REMOTE). :connect/:restart only work when the UI and server share a
--- machine, so re-hopping is blocked from remote sessions. Don't infer this from
--- --headless: a locally spawned server is headless too and inherits SSH_* from
--- an ssh shell, and neovim rewrites --headless→--embed in v:argv on restart, so
--- that signal both false-positives and flips over the session's lifetime.
+-- machine, so re-hopping is blocked from remote sessions. 
 local function ui_is_cross_machine()
     return vim.env.NVIM_HOP_REMOTE ~= nil
 end
