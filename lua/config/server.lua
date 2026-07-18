@@ -166,7 +166,10 @@ local function is_disposable()
     end
     for _, b in ipairs(vim.api.nvim_list_bufs()) do
         if vim.api.nvim_buf_is_loaded(b) then
-            if vim.bo[b].buftype == "terminal" then
+            -- fzf-lua (and similar pickers) leave their own finder behind as a
+            -- hidden, unlisted terminal buffer for window reuse; 
+            -- Conditions here ensure that a terminal that's actually visible or listed counts as "in use"
+            if vim.bo[b].buftype == "terminal" and (vim.bo[b].buflisted or #vim.fn.win_findbuf(b) > 0) then
                 return false
             end
             if vim.bo[b].buflisted then
