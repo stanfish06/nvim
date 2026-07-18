@@ -37,9 +37,14 @@ end
 --   macOS:  $TMPDIR/nvim.<user>/<rand>/nvim.<pid>.0
 local function run_root()
     local run = vim.fn.stdpath("run")
-    -- Without XDG_RUNTIME_DIR (e.g. macOS) stdpath("run") is this process's own
-    -- temp dir, so step up to the shared `nvim.<user>` dir that holds them all.
-    if not vim.fn.fnamemodify(run, ":t"):match("^nvim%.") then
+    -- With XDG_RUNTIME_DIR set (Linux) stdpath("run") is the shared, user-owned
+    -- runtime dir that already holds every nvim.<pid> socket (either bare, e.g.
+    -- /run/user/1000, or as .../nvim.<user>), so use it as-is. Stepping up here
+    -- would land in root-owned /run/user. Without XDG_RUNTIME_DIR (e.g. macOS)
+    -- stdpath("run") is this process's own temp dir, so step up to the shared
+    -- `nvim.<user>` dir that holds them all.
+    local xdg = vim.env.XDG_RUNTIME_DIR
+    if (xdg == nil or xdg == "") and not vim.fn.fnamemodify(run, ":t"):match("^nvim%.") then
         run = vim.fn.fnamemodify(run, ":h")
     end
     return run
