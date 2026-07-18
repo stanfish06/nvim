@@ -193,11 +193,14 @@ local function is_disposable()
     return true
 end
 
+-- true only inside a server we spawned on a remote host (tagged at spawn with
+-- NVIM_HOP_REMOTE). :connect/:restart only work when the UI and server share a
+-- machine, so re-hopping is blocked from remote sessions. Don't infer this from
+-- --headless: a locally spawned server is headless too and inherits SSH_* from
+-- an ssh shell, and neovim rewrites --headless→--embed in v:argv on restart, so
+-- that signal both false-positives and flips over the session's lifetime.
 local function ui_is_cross_machine()
-    if not vim.tbl_contains(vim.v.argv, "--headless") then
-        return false
-    end
-    return vim.env.SSH_CONNECTION ~= nil or vim.env.SSH_CLIENT ~= nil or vim.env.SSH_TTY ~= nil
+    return vim.env.NVIM_HOP_REMOTE ~= nil
 end
 
 local function connect_to(path)
@@ -472,7 +475,8 @@ local function remote_spawn_script(dir)
         "command -v nvim >/dev/null 2>&1 || exit 7",
         'd="${XDG_RUNTIME_DIR:-${TMPDIR:-/tmp}}"',
         's="$d/nvim.hop.$$.$(date +%s)"',
-        'NVIM_SERVER_KEEP=1 nohup nvim --headless --listen "$s" </dev/null >/dev/null 2>&1 &',
+        -- NVIM_HOP_REMOTE marks this as a genuine remote session (see ui_is_cross_machine)
+        'NVIM_HOP_REMOTE=1 NVIM_SERVER_KEEP=1 nohup nvim --headless --listen "$s" </dev/null >/dev/null 2>&1 &',
         'i=0; while [ $i -lt 50 ]; do [ -S "$s" ] && break; sleep 0.1; i=$((i+1)); done',
         '[ -S "$s" ] || exit 8',
         'echo "$s"',
