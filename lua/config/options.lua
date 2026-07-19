@@ -133,7 +133,7 @@ vim.o.iskeyword = "@,48-57,_,192-255,-"
 vim.o.formatlistpat = [[^\s*\(\d\+[.)]\|[-+*]\)\s\+]]
 
 -- clipboard
-if vim.env.NVIM_HOP_REMOTE then
+if vim.env.NVIM_HOP_REMOTE or vim.env.SSH_CONNECTION then
     vim.g.clipboard = "osc52"
 end
 
