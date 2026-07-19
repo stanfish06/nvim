@@ -133,6 +133,10 @@ vim.o.iskeyword = "@,48-57,_,192-255,-"
 vim.o.formatlistpat = [[^\s*\(\d\+[.)]\|[-+*]\)\s\+]]
 
 -- clipboard
+if vim.env.NVIM_HOP_REMOTE then
+    vim.g.clipboard = "osc52"
+end
+
 vim.schedule(function()
     vim.o.clipboard = "unnamedplus"
 end)
