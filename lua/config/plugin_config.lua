@@ -149,6 +149,69 @@ if not is_vscode then
         root_markers = { "Package.swift", "compile_commands.json", ".git" },
     })
     vim.lsp.enable("sourcekit")
+
+    local function lsp_on_list(what, tag)
+        vim.list.unique(what.items, function(item)
+            return ("%s\0%d\0%d\0%d\0%d"):format(
+                item.filename or "",
+                item.lnum or 0,
+                item.col or 0,
+                item.end_lnum or 0,
+                item.end_col or 0
+            )
+        end)
+
+        vim.fn.setqflist({}, " ", what)
+
+        local method = what.context and what.context.method
+        local jump_single = #what.items == 1
+            and method ~= "textDocument/implementation"
+            and method ~= "textDocument/references"
+
+        if jump_single then
+            if tag then
+                vim.fn.settagstack(tag.win, {
+                    items = { { tagname = tag.name, from = tag.from } },
+                }, "t")
+            end
+            vim.cmd("cfirst")
+        else
+            vim.cmd("botright copen")
+        end
+    end
+
+    ---@param method fun(opts?: vim.lsp.ListOpts)
+    local function lsp_jump(method)
+        local from = vim.fn.getpos(".")
+        from[1] = vim.api.nvim_get_current_buf()
+        local tag = {
+            name = vim.fn.expand("<cword>"),
+            from = from,
+            win = vim.api.nvim_get_current_win(),
+        }
+        method({
+            on_list = function(what)
+                lsp_on_list(what, tag)
+            end,
+        })
+    end
+
+    local function lsp_references()
+        vim.lsp.buf.references(nil, {
+            on_list = function(what)
+                lsp_on_list(what)
+            end,
+        })
+    end
+
+    vim.keymap.set("n", "grr", lsp_references, { desc = "vim.lsp.buf.references() (deduped)" })
+    vim.keymap.set("n", "gri", function()
+        lsp_jump(vim.lsp.buf.implementation)
+    end, { desc = "vim.lsp.buf.implementation() (deduped)" })
+    vim.keymap.set("n", "grt", function()
+        lsp_jump(vim.lsp.buf.type_definition)
+    end, { desc = "vim.lsp.buf.type_definition() (deduped)" })
+
     vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(ev)
             local client = vim.lsp.get_client_by_id(ev.data.client_id)
@@ -157,7 +220,9 @@ if not is_vscode then
                     vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
                 end)
             end
-            vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = ev.buf })
+            vim.keymap.set("n", "gd", function()
+                lsp_jump(vim.lsp.buf.definition)
+            end, { buffer = ev.buf, desc = "LSP definition (deduped)" })
             vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, { buffer = ev.buf, desc = "LSP code action" })
         end,
     })

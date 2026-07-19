@@ -47,8 +47,7 @@ end, { desc = "Yank file path (absolute)" })
 vim.keymap.set("i", "<c-space>", "<c-x><c-o>", { desc = "LSP completion" })
 vim.keymap.set("i", "<c-l>", "<c-x><c-l>", { desc = "Line completion" })
 vim.keymap.set("i", "<c-f>", "<c-x><c-f>", { desc = "File completion" })
--- lsp keymap: gd set buffer-local in plugin_config.lua via LspAttach
--- todo: it is a bit annoying to have repeated entries when multiple lsps exist, should either dedup or show sources
+-- lsp keymap: gd/grr/gri/grt use on_list dedupe in plugin_config.lua (multi-LSP)
 
 -- diagnostics: tag source so multiple LSPs are distinguishable
 vim.diagnostic.config({
