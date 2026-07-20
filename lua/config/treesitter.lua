@@ -102,8 +102,6 @@ local function ts_install()
 end
 ts_install()
 
--- this pulls and builds latest parsers since nvim-treesitter is no longer updated
--- TODO: query files might be incompatible overtime (I dont know how to write those for now but worth checking later)
 local function build_latest_parsers(parser_dir)
     if not can_auto_install_parsers() then
         return
