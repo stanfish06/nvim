@@ -9,7 +9,7 @@
 --                         dir) and connect to it through a forwarded socket
 --
 -- Hopping away from the start instance auto-quits it once its UI detaches (
--- e.g. launch nvim without path input). Launching nvim with no args pops the 
+-- e.g. launch nvim without path input). Launching nvim with no args pops the
 -- hop picker when other servers exist.
 -- disable with vim.g.nvim_server_autopick = false
 --
@@ -172,7 +172,7 @@ local function is_disposable()
     for _, b in ipairs(vim.api.nvim_list_bufs()) do
         if vim.api.nvim_buf_is_loaded(b) then
             -- fzf-lua (and similar pickers) leave their own finder behind as a
-            -- hidden, unlisted terminal buffer for window reuse; 
+            -- hidden, unlisted terminal buffer for window reuse;
             -- Conditions here ensure that a terminal that's actually visible or listed counts as "in use"
             if vim.bo[b].buftype == "terminal" and (vim.bo[b].buflisted or #vim.fn.win_findbuf(b) > 0) then
                 return false
@@ -195,7 +195,7 @@ end
 
 -- true only inside a server spawned on a remote host (tagged at spawn with
 -- NVIM_HOP_REMOTE). :connect/:restart only work when the UI and server share a
--- machine, so re-hopping is blocked from remote sessions. 
+-- machine, so re-hopping is blocked from remote sessions.
 local function ui_is_cross_machine()
     return vim.env.NVIM_HOP_REMOTE ~= nil
 end
@@ -585,6 +585,10 @@ local function hop_entries(host)
             local short = host and dir or vim.fn.fnamemodify(dir, ":~")
             add("+ " .. short, { kind = "dir", dir = dir, host = host })
         end
+    end
+    -- Always add home as a hop point
+    if not served["~"] then
+        add("⌂ ~", { kind = "dir", dir = "~", host = host })
     end
     return entries, lookup
 end
