@@ -1,3 +1,8 @@
+-- 'packlockfile' defaults to the literal "$XDG_CONFIG_HOME/nvim/nvim-pack-lock.json".
+-- XDG_CONFIG_HOME is unset on macOS, so that stays a relative path and vim.pack writes
+-- the lockfile into the cwd. Pin it to the config dir before the first vim.pack call.
+vim.o.packlockfile = vim.fs.joinpath(vim.fn.stdpath("config"), "nvim-pack-lock.json")
+
 local mod_async = require("lib.async")
 
 -- packages
