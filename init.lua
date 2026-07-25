@@ -9,6 +9,7 @@ require("config.orgview")
 require("config.filetree")
 require("config.image")
 require("config.server")
+require("config.agent_notify")
 
 -- color theme
 -- git clone --depth 1 https://github.com/stanfish06/dark-theme.git ~/.config/nvim/pack/plugins/start/dark-theme
