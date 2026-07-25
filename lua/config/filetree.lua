@@ -258,7 +258,7 @@ local function set_window_options(win)
 end
 
 local function set_keymaps(buf)
-    local opts = { buffer = buf, nowait = true, silent = true }
+    local opts = { buf = buf, nowait = true, silent = true }
     vim.keymap.set("n", "<CR>", function()
         M.open_entry()
     end, opts)

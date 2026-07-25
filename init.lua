@@ -50,6 +50,11 @@ pcall(vim.cmd.colorscheme, "dark")
         -- zc/zC to close (recursively) the folds
         -- za toggles fold
         -- zR/zM open/close all
+    -- lsp
+      -- :lsp restart [client_name]   " restart named client (or all attached to current buf)
+      -- :lsp stop    [client_name]   " stop
+      -- :lsp enable  [config_name]   " activate for current + future buffers
+      -- :lsp disable [config_name]   " disable and stop
     -- useful vim motions:
         -- textobjects:
             -- inside

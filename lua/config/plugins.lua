@@ -6,7 +6,6 @@ local package_list = {
     {
         name = "fff.nvim",
         src = "https://github.com/dmtrKovalenko/fff.nvim",
-        lazy = true,
         version = vim.version.range("0.9.4"),
     }, -- this package breaks frequently, specify version
     { name = "nvim-lspconfig", src = "https://github.com/neovim/nvim-lspconfig" },
@@ -35,7 +34,7 @@ local package_list = {
     { name = "nvim-lint", src = "https://github.com/mfussenegger/nvim-lint.git" },
     { name = "gitsigns.nvim", src = "https://github.com/lewis6991/gitsigns.nvim.git" },
     { name = "tiny-inline-diagnostic.nvim", src = "https://github.com/rachartier/tiny-inline-diagnostic.nvim.git" },
-    { name = "obsidian.nvim", src = "https://github.com/obsidian-nvim/obsidian.nvim.git", skip_old_nvim = true },
+    { name = "obsidian.nvim", src = "https://github.com/obsidian-nvim/obsidian.nvim.git" },
     { name = "render-markdown.nvim", src = "https://github.com/MeanderingProgrammer/render-markdown.nvim.git" },
     { name = "plenary.nvim", src = "https://github.com/nvim-lua/plenary.nvim.git" },
     { name = "dark-theme", src = "https://github.com/stanfish06/dark-theme.git" },
@@ -143,9 +142,45 @@ local function sync_packages()
     end
 end
 vim.api.nvim_create_user_command("SyncPkgs", sync_packages, {})
--- loading packages if available (vim pack does not install in start so you need to load them)
+-- rebuild native binaries whenever vim.pack installs/updates rust-backed plugins.
+-- Must be registered before the add() below: install events fire synchronously,
+-- so a hook registered later would be missed on a first install.
+vim.api.nvim_create_autocmd("PackChanged", {
+    callback = function(ev)
+        local name, kind = ev.data.spec.name, ev.data.kind
+        if kind ~= "install" and kind ~= "update" then
+            return
+        end
+        if name == "fff.nvim" then
+            if not ev.data.active then
+                vim.cmd.packadd("fff.nvim")
+            end
+            require("fff.download").download_or_build_binary()
+        elseif name == "blink.cmp" then
+            if not ev.data.active then
+                vim.cmd.packadd("blink.cmp")
+            end
+            -- force rebuild on update so the fuzzy lib matches the new revision
+            -- (v2/main only; v1.x release tags download the prebuilt binary themselves)
+            local blink = require("blink.cmp")
+            if blink.build then
+                local ok, err = pcall(function()
+                    blink.build({ force = kind == "update" }):pwait()
+                end)
+                if not ok then
+                    vim.notify("blink.cmp: native build failed: " .. tostring(err), vim.log.levels.WARN)
+                end
+            end
+        end
+    end,
+})
+
 if vim_pack_ok then
-    for _, pkg in ipairs(package_list) do
-        pcall(vim.cmd.packadd, pkg.name)
+    local ok, err = pcall(vim.pack.add, package_list, { load = true })
+    if not ok then
+        vim.notify("vim.pack.add failed, falling back to packadd: " .. tostring(err), vim.log.levels.WARN)
+        for _, pkg in ipairs(package_list) do
+            pcall(vim.cmd.packadd, pkg.name)
+        end
     end
 end

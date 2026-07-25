@@ -142,12 +142,6 @@ if not is_vscode then
     vim.lsp.enable("rust_analyzer")
     -- go
     vim.lsp.enable("gopls")
-    -- swift
-    vim.lsp.config("sourcekit", {
-        cmd = { "sourcekit-lsp" },
-        filetypes = { "swift", "objective-c", "objective-cpp" },
-        root_markers = { "Package.swift", "compile_commands.json", ".git" },
-    })
     vim.lsp.enable("sourcekit")
 
     local function lsp_on_list(what, tag)
@@ -222,25 +216,9 @@ if not is_vscode then
             end
             vim.keymap.set("n", "gd", function()
                 lsp_jump(vim.lsp.buf.definition)
-            end, { buffer = ev.buf, desc = "LSP definition (deduped)" })
-            vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, { buffer = ev.buf, desc = "LSP code action" })
+            end, { buf = ev.buf, desc = "LSP definition (deduped)" })
+            vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, { buf = ev.buf, desc = "LSP code action" })
         end,
-    })
-    vim.api.nvim_create_user_command("LspToggle", function(opts)
-        local name = opts.args
-        for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0, name = name })) do
-            client:stop()
-            return
-        end
-        vim.lsp.enable(name)
-    end, {
-        nargs = 1,
-        complete = function()
-            return vim.tbl_map(function(c)
-                return c.name
-            end, vim.lsp.get_clients({ bufnr = 0 }))
-        end,
-        desc = "Stop or re-enable a named LSP client for the current buffer",
     })
 end
 
@@ -299,36 +277,6 @@ if lint_ok and not is_vscode then
     })
 end
 
--- rebuild native binaries whenever vim.pack installs/updates rust-backed plugins
-vim.api.nvim_create_autocmd("PackChanged", {
-    callback = function(ev)
-        local name, kind = ev.data.spec.name, ev.data.kind
-        if kind ~= "install" and kind ~= "update" then
-            return
-        end
-        if name == "fff.nvim" then
-            if not ev.data.active then
-                vim.cmd.packadd("fff.nvim")
-            end
-            require("fff.download").download_or_build_binary()
-        elseif name == "blink.cmp" then
-            if not ev.data.active then
-                vim.cmd.packadd("blink.cmp")
-            end
-            -- force rebuild on update so the fuzzy lib matches the new revision
-            -- (v2/main only; v1.x release tags download the prebuilt binary themselves)
-            local blink = require("blink.cmp")
-            if blink.build then
-                local ok, err = pcall(function()
-                    blink.build({ force = kind == "update" }):pwait()
-                end)
-                if not ok then
-                    vim.notify("blink.cmp: native build failed: " .. tostring(err), vim.log.levels.WARN)
-                end
-            end
-        end
-    end,
-})
 vim.g.fff = {
     lazy_sync = true,
 }

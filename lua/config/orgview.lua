@@ -95,12 +95,15 @@ vim.api.nvim_create_autocmd("FileType", {
     pattern = "org",
     callback = function(ev)
         render(ev.buf)
-        vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI", "BufWinEnter" }, {
-            group = group,
-            buffer = ev.buf,
-            callback = function()
-                render(ev.buf)
-            end,
-        })
+    end,
+})
+-- registered once at module scope on purpose: nested inside the FileType
+-- handler these stacked another copy on every :e/:setf of an org buffer, so a
+-- re-edited buffer re-rendered N times per keystroke. render() no-ops on
+-- non-org buffers, so a global autocmd is equivalent and self-limiting.
+vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI", "BufWinEnter" }, {
+    group = group,
+    callback = function(ev)
+        render(ev.buf)
     end,
 })

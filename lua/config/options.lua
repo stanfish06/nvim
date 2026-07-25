@@ -51,6 +51,8 @@ vim.keymap.set("i", "<c-f>", "<c-x><c-f>", { desc = "File completion" })
 
 -- diagnostics: tag source so multiple LSPs are distinguishable
 vim.diagnostic.config({
+    -- only in effect when tiny-inline-diagnostic is missing: that plugin draws
+    -- its own inline text and turns this off again in plugin_config.lua
     virtual_text = {
         source = "if_many",
         prefix = "●",

@@ -355,7 +355,7 @@ local function open_hover()
     vim.wo[win].cursorline = true
     refresh_server_list()
 
-    local opts = { buffer = buf, nowait = true }
+    local opts = { buf = buf, nowait = true }
     vim.keymap.set("n", "<CR>", connect_server, opts)
     vim.keymap.set("n", "R", rename_server, opts)
     vim.keymap.set("n", "d", kill_server, opts)
@@ -580,15 +580,21 @@ local function hop_entries(host)
     if host then
         add("+ ~ (ssh landing)", { kind = "dir", host = host })
     end
+    local home = vim.fs.normalize("~")
+    local home_listed = false
     for _, dir in ipairs(zoxide_dirs(host)) do
         if not served[dir] then
             local short = host and dir or vim.fn.fnamemodify(dir, ":~")
             add("+ " .. short, { kind = "dir", dir = dir, host = host })
+            home_listed = home_listed or (not host and vim.fs.normalize(dir) == home)
         end
     end
-    -- Always add home as a hop point
-    if not served["~"] then
-        add("⌂ ~", { kind = "dir", dir = "~", host = host })
+    -- Always add home as a hop point. served is keyed by absolute cwd, so the
+    -- old served["~"] lookup could never match and this entry was unconditional:
+    -- it duplicated the zoxide "+ ~" row locally, and the "+ ~ (ssh landing)"
+    -- row above when connected to a host (add() only dedupes on display text).
+    if not host and not served[home] and not home_listed then
+        add("⌂ ~", { kind = "dir", dir = "~" })
     end
     return entries, lookup
 end
