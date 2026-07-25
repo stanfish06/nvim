@@ -1,7 +1,9 @@
 -- 'packlockfile' defaults to the literal "$XDG_CONFIG_HOME/nvim/nvim-pack-lock.json".
 -- XDG_CONFIG_HOME is unset on macOS, so that stays a relative path and vim.pack writes
 -- the lockfile into the cwd. Pin it to the config dir before the first vim.pack call.
-vim.o.packlockfile = vim.fs.joinpath(vim.fn.stdpath("config"), "nvim-pack-lock.json")
+if vim.fn.exists("+packlockfile") == 1 then
+    vim.o.packlockfile = vim.fs.joinpath(vim.fn.stdpath("config"), "nvim-pack-lock.json")
+end
 
 local mod_async = require("lib.async")
 
@@ -54,6 +56,21 @@ local package_list = {
     { name = "nui.nvim", src = "https://github.com/MunifTanjim/nui.nvim.git" },
     { name = "mini.nvim", src = "https://github.com/echasnovski/mini.nvim.git" }
 }
+
+-- Packages loaded in stable mode
+local STABLE_PKGS = {
+    ["nvim-treesitter"] = true,
+    ["nvim-lspconfig"] = true,
+    ["dark-theme"] = true,
+}
+
+local load_list = package_list
+if vim.g.stable_mode then
+    load_list = vim.tbl_filter(function(pkg)
+        return STABLE_PKGS[pkg.name] == true
+    end, package_list)
+end
+
 local vim_pack_ok, _ = pcall(require, "vim.pack")
 local function sync_packages()
     -- local old_package_dir = os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/"
@@ -84,7 +101,7 @@ local function sync_packages()
             :wait()
         print("Done clean-up!")
         print("Install all packages...")
-        vim.pack.add(package_list)
+        vim.pack.add(package_list, { load = not vim.g.stable_mode })
         print("All packages installed!")
         -- packages removed from package_list are left on disk by vim.pack (never
         -- deleted automatically) and stay "inactive"; update() below would otherwise
@@ -181,10 +198,11 @@ vim.api.nvim_create_autocmd("PackChanged", {
 })
 
 if vim_pack_ok then
-    local ok, err = pcall(vim.pack.add, package_list, { load = true })
+    -- load_list, not package_list: this is the one place stable mode narrows things.
+    local ok, err = pcall(vim.pack.add, load_list, { load = true })
     if not ok then
         vim.notify("vim.pack.add failed, falling back to packadd: " .. tostring(err), vim.log.levels.WARN)
-        for _, pkg in ipairs(package_list) do
+        for _, pkg in ipairs(load_list) do
             pcall(vim.cmd.packadd, pkg.name)
         end
     end

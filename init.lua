@@ -1,15 +1,80 @@
-require("config.plugins")
-require("config.options")
-require("config.statusline")
-require("config.statuscolumn")
-require("config.plugin_config")
-require("config.treesitter")
-require("config.scopeline")
-require("config.orgview")
-require("config.filetree")
-require("config.image")
-require("config.server")
-require("config.agent_notify")
+local STABLE = false
+vim.g.stable_mode = STABLE
+
+-- "core" will be installed in stable mode, "extra" does not.
+local modules = {
+    { "config.plugins",       tier = "core" },
+    { "config.options",       tier = "core" },
+    { "config.statusline",    tier = "extra" },
+    { "config.statuscolumn",  tier = "extra" },
+    { "config.plugin_config", tier = "extra" },
+    { "config.lsp",           tier = "core" },
+    { "config.treesitter",    tier = "core" },
+    { "config.scopeline",     tier = "extra" },
+    { "config.orgview",       tier = "extra" },
+    { "config.filetree",      tier = "extra" },
+    { "config.image",         tier = "extra", min = "0.13" },
+    { "config.server",        tier = "extra" },
+    { "config.agent_notify",  tier = "extra" },
+}
+
+local failures, skipped = {}, {}
+
+for _, mod in ipairs(modules) do
+    local name = mod[1]
+    if STABLE and mod.tier ~= "core" then
+        skipped[#skipped + 1] = { name = name, why = "stable mode" }
+    elseif mod.min and vim.fn.has("nvim-" .. mod.min) == 0 then
+        skipped[#skipped + 1] = { name = name, why = "needs nvim " .. mod.min }
+    else
+        local ok, err = pcall(require, name)
+        if not ok then
+            package.loaded[name] = nil
+            failures[#failures + 1] = { name = name, err = tostring(err) }
+        end
+    end
+end
+
+if #failures > 0 then
+    vim.schedule(function()
+        vim.notify(
+            ("config: %d module(s) failed to load - :ConfigHealth"):format(#failures),
+            vim.log.levels.ERROR
+        )
+    end)
+end
+
+vim.api.nvim_create_user_command("ConfigHealth", function()
+    local lines = {
+        "profile : " .. (STABLE and "STABLE (core tier only)" or "full"),
+        "nvim    : " .. tostring(vim.version()),
+        "modules : " .. (#modules - #failures - #skipped) .. " loaded, "
+            .. #failures .. " failed, " .. #skipped .. " skipped",
+        "",
+    }
+    if #failures == 0 then
+        lines[#lines + 1] = "failed  : none"
+    else
+        lines[#lines + 1] = "FAILED:"
+        for _, f in ipairs(failures) do
+            lines[#lines + 1] = "  " .. f.name
+            for _, l in ipairs(vim.split(f.err, "\n", { trimempty = true })) do
+                lines[#lines + 1] = "      " .. l
+            end
+        end
+    end
+    if #skipped > 0 then
+        lines[#lines + 1] = ""
+        lines[#lines + 1] = "skipped:"
+        for _, s in ipairs(skipped) do
+            lines[#lines + 1] = string.format("  %-24s %s", s.name, s.why)
+        end
+    end
+    vim.cmd("new")
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
+    vim.bo.buftype = "nofile"
+    vim.bo.modifiable = false
+end, { desc = "Config profile, load failures and skipped modules" })
 
 -- color theme
 -- git clone --depth 1 https://github.com/stanfish06/dark-theme.git ~/.config/nvim/pack/plugins/start/dark-theme
@@ -77,5 +142,5 @@ pcall(vim.cmd.colorscheme, "dark")
 -- by default, makeprg is make, so :make uses make, but you can set it to empty string that allows you to run anything and pop output in a buf
     -- you can now do ls, grep, make, etc (e.g. :make ls, :make grep, :make make)
 -- you can set anything you want, such as gmake, latex, etc
--- to check make output, you can use :copen 
+-- to check make output, you can use :copen
 vim.opt.makeprg = ""
