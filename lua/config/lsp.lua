@@ -150,5 +150,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
             lsp_jump(vim.lsp.buf.definition)
         end, { [BUF] = ev.buf, desc = "LSP definition (deduped)" })
         vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, { [BUF] = ev.buf, desc = "LSP code action" })
+        -- route the gq operator through the LSP formatter (conform is wired as lsp_format fallback)
+        vim.bo[ev.buf].formatexpr = "v:lua.vim.lsp.formatexpr()"
     end,
 })

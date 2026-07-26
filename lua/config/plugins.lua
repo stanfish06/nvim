@@ -54,7 +54,7 @@ local package_list = {
     { name = "noice.nvim", src = "https://github.com/folke/noice.nvim.git" },
     { name = "quicker.nvim", src = "https://github.com/stevearc/quicker.nvim.git" },
     { name = "nui.nvim", src = "https://github.com/MunifTanjim/nui.nvim.git" },
-    { name = "mini.nvim", src = "https://github.com/echasnovski/mini.nvim.git" }
+    { name = "mini.nvim", src = "https://github.com/nvim-mini/mini.nvim.git" }
 }
 
 -- Packages loaded in stable mode

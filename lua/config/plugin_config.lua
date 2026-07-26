@@ -269,12 +269,22 @@ if tso_ok and not is_vscode then
     vim.keymap.set({ "n", "x", "o" }, "[f", function()
         move.goto_previous_start("@function.outer", "textobjects")
     end, { desc = "Prev function start" })
+    -- ]c/[c are native diff-hunk motions. Defer to them in diff mode so vimdiff
+    -- navigation keeps working; normal! bypasses these maps so there's no recursion.
     vim.keymap.set({ "n", "x", "o" }, "]c", function()
+        if vim.wo.diff then
+            vim.cmd("normal! " .. vim.v.count1 .. "]c")
+            return
+        end
         move.goto_next_start("@class.outer", "textobjects")
-    end, { desc = "Next class start" })
+    end, { desc = "Next class start (diff hunk in diff mode)" })
     vim.keymap.set({ "n", "x", "o" }, "[c", function()
+        if vim.wo.diff then
+            vim.cmd("normal! " .. vim.v.count1 .. "[c")
+            return
+        end
         move.goto_previous_start("@class.outer", "textobjects")
-    end, { desc = "Prev class start" })
+    end, { desc = "Prev class start (diff hunk in diff mode)" })
     vim.keymap.set({ "n", "x", "o" }, "]F", function()
         move.goto_next_end("@function.outer", "textobjects")
     end, { desc = "Next function end" })
@@ -345,6 +355,9 @@ local snacks_ok, snacks = pcall(require, "snacks")
 if snacks_ok and not is_vscode then
     snacks.setup({
         scroll = { enabled = true },
+        -- treesitter is started on every FileType and foldexpr parses every buffer,
+        -- so oversized files otherwise have no guard against a parse/fold hang
+        bigfile = { enabled = true },
         indent = {
             enabled = true,
             scope = {
