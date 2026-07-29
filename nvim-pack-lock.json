@@ -10,7 +10,7 @@
       "version": "1.10.0 - 1.10.0"
     },
     "blink.lib": {
-      "rev": "5876dd95deeb70aadbe9f1c0b7117a135061cdac",
+      "rev": "2789206e10a0e4880f808c2aaf52bc57d876b481",
       "src": "https://github.com/saghen/blink.lib.git"
     },
     "conform.nvim": {
@@ -67,7 +67,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint.git"
     },
     "nvim-lspconfig": {
-      "rev": "7ab79bb1b57160a537f427ac8a6026102f12b701",
+      "rev": "b7b920947f21339ee41fbb38c79d6445e12900aa",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
@@ -79,7 +79,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
     },
     "obsidian.nvim": {
-      "rev": "b7bd374f23b309ca33eb95e00d7d1754b7a26748",
+      "rev": "ab59625e14922b04f90605a15da4f9e91504f780",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim.git"
     },
     "plenary.nvim": {
@@ -115,7 +115,7 @@
       "src": "https://github.com/craftzdog/solarized-osaka.nvim.git"
     },
     "tinted-vim": {
-      "rev": "0d72bce15f4392e79c019ab31debb686effbe1aa",
+      "rev": "368c02b3bc6b04f1d17ab0bd72c214df62a75d04",
       "src": "https://github.com/tinted-theming/tinted-vim.git"
     },
     "tiny-inline-diagnostic.nvim": {
