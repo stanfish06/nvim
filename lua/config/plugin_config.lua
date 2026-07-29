@@ -51,10 +51,12 @@ if ok and not is_vscode then
     vim.keymap.set("n", "<leader>sb", fzf.buffers)
     vim.keymap.set("n", "<leader>st", fzf.tabs)
     vim.keymap.set("n", "<leader>sm", fzf.marks)
-    vim.keymap.set("n", "<leader>gc", fzf.git_commits, { desc = "Git commits (repo)" })
-    vim.keymap.set("n", "<leader>gb", fzf.git_bcommits, { desc = "Git commits (buffer)" })
-    vim.keymap.set("n", "<leader>gB", fzf.git_branches, { desc = "Git branches" })
-    vim.keymap.set("n", "<leader>gs", fzf.git_status, { desc = "Git status" })
+    -- git pickers live under <leader>s* so <leader>g* stays free for
+    -- gitsigns/fugitive hunk staging
+    vim.keymap.set("n", "<leader>sc", fzf.git_commits, { desc = "Git commits (repo)" })
+    vim.keymap.set("n", "<leader>sC", fzf.git_bcommits, { desc = "Git commits (buffer)" })
+    vim.keymap.set("n", "<leader>sB", fzf.git_branches, { desc = "Git branches" })
+    vim.keymap.set("n", "<leader>sS", fzf.git_status, { desc = "Git status" })
     vim.keymap.set("n", "<leader>lr", fzf.lsp_references, { desc = "LSP references (fzf)" })
     vim.keymap.set("n", "<leader>ls", fzf.lsp_document_symbols, { desc = "LSP document symbols" })
     vim.keymap.set("n", "<leader>lS", fzf.lsp_live_workspace_symbols, { desc = "LSP workspace symbols" })
@@ -189,6 +191,36 @@ end
 local gitsigns_ok, gitsigns = pcall(require, "gitsigns")
 if gitsigns_ok and not is_vscode then
     gitsigns.setup()
+
+    -- current visual selection, as a line range for partial-hunk operations
+    local function vrange()
+        return { vim.fn.line("."), vim.fn.line("v") }
+    end
+
+    -- stage_hunk toggles: calling it on a staged sign unstages that hunk
+    vim.keymap.set("n", "<leader>gs", gitsigns.stage_hunk, { desc = "Stage hunk (toggle)" })
+    vim.keymap.set("x", "<leader>gs", function()
+        gitsigns.stage_hunk(vrange())
+    end, { desc = "Stage selected lines" })
+    vim.keymap.set("n", "<leader>gS", gitsigns.stage_buffer, { desc = "Stage buffer" })
+
+    vim.keymap.set("n", "<leader>gr", gitsigns.reset_hunk, { desc = "Reset hunk" })
+    vim.keymap.set("x", "<leader>gr", function()
+        gitsigns.reset_hunk(vrange())
+    end, { desc = "Reset selected lines" })
+    vim.keymap.set("n", "<leader>gR", gitsigns.reset_buffer, { desc = "Reset buffer" })
+
+    vim.keymap.set("n", "<leader>gp", gitsigns.preview_hunk_inline, { desc = "Preview hunk inline" })
+    vim.keymap.set("n", "<leader>gb", function()
+        gitsigns.blame_line({ full = true })
+    end, { desc = "Blame line" })
+    vim.keymap.set("n", "<leader>gB", gitsigns.blame, { desc = "Blame buffer" })
+end
+
+-- fugitive status buffer (magit-style: = inline diff, s/u stage/unstage hunk,
+-- visual-select lines then s for partial hunks, cc to commit)
+if not is_vscode then
+    vim.keymap.set("n", "<leader>gg", "<cmd>Git<CR>", { desc = "Git status (fugitive)" })
 end
 
 -- tiny-inline-diagnostic (compact inline diagnostics)
