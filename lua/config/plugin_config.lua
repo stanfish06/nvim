@@ -376,6 +376,35 @@ if snacks_ok and not is_vscode then
             timeout = 3000,
         },
     })
+
+    local function search_notifications()
+        vim.schedule(function()
+            local fzf_ok, fzf = pcall(require, "fzf-lua")
+            if not fzf_ok then
+                vim.notify("fzf-lua is not installed", vim.log.levels.WARN, {
+                    title = "Notifications",
+                })
+                return
+            end
+            fzf.blines({
+                prompt = "Notifications> ",
+                winopts = { zindex = 110 },
+            })
+        end)
+    end
+
+    vim.api.nvim_create_user_command("Notifications", function()
+        if vim.bo.filetype ~= "snacks_notif_history" then
+            snacks.notifier.show_history()
+        end
+
+        vim.keymap.set("n", "<leader>sl", search_notifications, {
+            buffer = true,
+            desc = "Fuzzy search notification history",
+        })
+    end, {
+        desc = "Open notification history",
+    })
 end
 
 -- noice (better ui)
