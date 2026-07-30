@@ -51,8 +51,8 @@
       "src": "https://github.com/justinmk/guh.nvim"
     },
     "mini.nvim": {
-      "rev": "946ae64e0ee807ae3c41f382f0114b4ed4915b2c",
-      "src": "https://github.com/echasnovski/mini.nvim.git"
+      "rev": "8bf5c57bc82dd590932faa41bfde9fd6d40a9433",
+      "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "noice.nvim": {
       "rev": "7bfd942445fb63089b59f97ca487d605e715f155",
@@ -71,7 +71,7 @@
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
-      "rev": "61df84986b4b4ec469ee745a182e433d49f8c27e",
+      "rev": "0f32dff7f19476629c77467f887b95e5e2d33509",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "nvim-treesitter-textobjects": {
@@ -79,7 +79,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
     },
     "obsidian.nvim": {
-      "rev": "ab59625e14922b04f90605a15da4f9e91504f780",
+      "rev": "5acd67bd55eaeeb28cd7167ca48ba2276655137d",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim.git"
     },
     "plenary.nvim": {
