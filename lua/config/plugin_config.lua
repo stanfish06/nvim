@@ -439,6 +439,36 @@ if snacks_ok and not is_vscode then
     })
 end
 
+local amux_monitor_cmd = { "amux", "monitor" }
+vim.api.nvim_create_user_command("AmuxMonitor", function()
+    if is_vscode then
+        vim.notify("AmuxMonitor is unavailable in VS Code", vim.log.levels.WARN)
+        return
+    end
+    if not snacks_ok then
+        vim.notify("AmuxMonitor requires snacks.nvim", vim.log.levels.ERROR)
+        return
+    end
+    if vim.fn.executable("amux") ~= 1 then
+        vim.notify("AmuxMonitor could not find amux on PATH", vim.log.levels.ERROR)
+        return
+    end
+
+    snacks.terminal.toggle(amux_monitor_cmd, {
+        count = 1,
+        cwd = vim.fn.stdpath("data"),
+        win = {
+            width = 0.9,
+            height = 0.9,
+            border = "rounded",
+            title = "amux monitor",
+            title_pos = "center",
+        },
+    })
+end, {
+    desc = "Toggle the amux monitor",
+})
+
 -- noice (better ui)
 local noice_ok, noice = pcall(require, "noice")
 -- experimental options
