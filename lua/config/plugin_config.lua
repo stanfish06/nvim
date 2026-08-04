@@ -458,9 +458,9 @@ vim.api.nvim_create_user_command("AmuxMonitor", function()
         count = 1,
         cwd = vim.fn.stdpath("data"),
         win = {
-            width = 0.9,
-            height = 0.9,
-            border = "rounded",
+            width = 0.99,
+            height = 0.99,
+            border = true,
             title = "amux monitor",
             title_pos = "center",
         },
@@ -538,3 +538,4 @@ if noice_ok and not is_vscode then
         },
     })
 end
+
