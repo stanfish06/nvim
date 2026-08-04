@@ -5,7 +5,7 @@ local function preview_image(path)
     -- mod_ui.Window.create_tmp_float_window()
     local id = vim.ui.img.set(
      vim.fn.readblob(path),
-     { row = 0, col = 0, width = 100, height = 50, zindex = 0 }
+     { row = 1, col = 1, width = 100, height = 50, zindex = 0 }
     )
     return id
 end
