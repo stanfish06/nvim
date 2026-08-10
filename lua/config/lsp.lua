@@ -1,25 +1,10 @@
 -- lsp
--- git clone https://github.com/neovim/nvim-lspconfig ~/.config/nvim/pack/nvim/start/nvim-lspconfig
--- after v12, neovim will have built-in package manager
---
--- Extracted out of plugin_config.lua so stable mode can bring up LSP without also
--- pulling in the ~20 other plugin setups living there. See the module table in
--- init.lua: this is "core" tier, plugin_config.lua is "extra".
 
 if vim.g.vscode then
     return
 end
 
--- Builtin completion is only wanted when blink.cmp is absent; the LspAttach handler
--- at the bottom keys off this. In stable mode blink is not installed at all, so the
--- probe fails and vim.lsp.completion takes over with autotrigger. require() is
--- cached, so probing costs nothing even when blink is present.
 local blink_ok = pcall(require, "blink.cmp")
-
--- vim.keymap.set renamed `buffer` -> `buf` in 0.13 (`buffer` is documented as
--- soft-deprecated but still honored). `buf` does not exist on 0.11, where it would
--- be forwarded to nvim_set_keymap as an unknown key, so keep the older spelling:
--- it is the only one valid across the whole 0.11 - 0.13 range this config targets.
 local BUF = "buffer"
 
 -- lua
@@ -150,7 +135,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
             lsp_jump(vim.lsp.buf.definition)
         end, { [BUF] = ev.buf, desc = "LSP definition (deduped)" })
         vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, { [BUF] = ev.buf, desc = "LSP code action" })
-        -- route the gq operator through the LSP formatter (conform is wired as lsp_format fallback)
         vim.bo[ev.buf].formatexpr = "v:lua.vim.lsp.formatexpr()"
     end,
 })

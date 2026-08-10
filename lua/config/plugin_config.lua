@@ -489,54 +489,111 @@ if not vim.g.vscode then
         vim.notify("use noice/nui ui layer", vim.log.levels.INFO)
     end
 end
-if noice_ok and not is_vscode then
-    noice.setup({
-        presets = {
-            bottom_search = true, -- use a classic bottom cmdline for search
-            lsp_doc_border = false, -- add a border to hover docs and signature help
+local noice_opts = {
+    presets = {
+        bottom_search = false, -- use a classic bottom cmdline for search
+        lsp_doc_border = false, -- add a border to hover docs and signature help
+    },
+    cmdline = {
+        enabled = true,
+        view = "cmdline_popup",
+        format = {
+            cmdline = { title = "  " },
         },
-        cmdline = {
-            enabled = true,
-            view = "cmdline_popup",
-            format = {
-                cmdline = { title = "  " },
+    },
+    popupmenu = {
+        enabled = true,
+        backend = "nui",
+        view = "popupmenu",
+    },
+    views = {
+        cmdline_popup = {
+            position = {
+                row = 5,
+                col = "50%",
+            },
+            size = {
+                width = 50,
+                height = "auto",
+            },
+            border = {
+                style = "single",
             },
         },
         popupmenu = {
-            enabled = true,
-            backend = "nui",
-            view = "popupmenu",
-        },
-        views = {
-            cmdline_popup = {
-                position = {
-                    row = 5,
-                    col = "50%",
-                },
-                size = {
-                    width = 30,
-                    height = "auto",
-                },
-                border = {
-                    style = "single",
-                },
+            relative = "editor",
+            position = {
+                row = 8,
+                col = "50%",
             },
-            popupmenu = {
-                relative = "editor",
-                position = {
-                    row = 8,
-                    col = "50%",
-                },
-                size = {
-                    width = 30,
-                    height = 5,
-                },
-                border = {
-                    style = "single",
-                },
+            size = {
+                width = 50,
+                height = 5,
+            },
+            border = {
+                style = "single",
             },
         },
+    },
+}
+
+if noice_ok and not is_vscode then
+    noice.setup(noice_opts)
+
+    local function close_noice_floats()
+        for _, win in ipairs(vim.api.nvim_list_wins()) do
+            local config_ok, win_config = pcall(vim.api.nvim_win_get_config, win)
+            if config_ok and win_config.relative ~= "" then
+                local buf = vim.api.nvim_win_get_buf(win)
+                if vim.bo[buf].filetype == "noice" then
+                    pcall(vim.api.nvim_win_close, win, true)
+                end
+            end
+        end
+    end
+
+    local function unload_ui_modules()
+        for name in pairs(package.loaded) do
+            if name == "noice" or name == "nui" or name:match("^noice%.") or name:match("^nui%.") then
+                package.loaded[name] = nil
+            end
+        end
+    end
+
+    vim.api.nvim_create_user_command("NoiceRestart", function(args)
+        pcall(function()
+            require("noice").cmd("dismiss")
+        end)
+        pcall(function()
+            require("noice").disable()
+        end)
+        close_noice_floats()
+
+        if args.bang then
+            unload_ui_modules()
+        end
+
+        local reload_ok, reloaded = pcall(require, "noice")
+        if not reload_ok then
+            vim.notify("NoiceRestart could not load noice: " .. tostring(reloaded), vim.log.levels.ERROR)
+            return
+        end
+
+        local restart_ok, err = pcall(function()
+            if args.bang then
+                reloaded.setup(noice_opts)
+            else
+                reloaded.enable()
+            end
+        end)
+        if not restart_ok then
+            vim.notify("NoiceRestart failed: " .. tostring(err), vim.log.levels.ERROR)
+            return
+        end
+
+        vim.notify("noice/nui ui layer restarted", vim.log.levels.INFO)
+    end, {
+        bang = true,
+        desc = "Restart the noice/nui ui layer (! also reloads the modules)",
     })
 end
-
-
