@@ -115,7 +115,7 @@
       "src": "https://github.com/craftzdog/solarized-osaka.nvim.git"
     },
     "tinted-vim": {
-      "rev": "368c02b3bc6b04f1d17ab0bd72c214df62a75d04",
+      "rev": "66829e04041ceba72a9006d1c6c9d0c818e2b3dd",
       "src": "https://github.com/tinted-theming/tinted-vim.git"
     },
     "tiny-inline-diagnostic.nvim": {
