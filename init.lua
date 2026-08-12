@@ -15,6 +15,7 @@ local modules = {
     { "config.filetree",      tier = "extra" },
     { "config.image",         tier = "extra", min = "0.13" },
     { "config.server",        tier = "extra" },
+    { "config.worktree",      tier = "extra" },
     { "config.agent_notify",  tier = "extra" },
 }
 
