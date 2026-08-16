@@ -537,8 +537,29 @@ local noice_opts = {
     },
 }
 
+-- nvim 0.13-dev broadcasts new UI events with no underscore in the name
+-- (restart/connect/detach, neovim/neovim#35149); noice's get_handler parses
+-- names as group_type and crashes on them. Each crash counts toward nvim's
+-- CB_MAX_ERROR (3), after which nvim silently removes noice's vim.ui_attach
+-- callback and the whole message/cmdline/popupmenu layer dies until restart.
+local function guard_noice_ui()
+    local ui_ok, noice_ui = pcall(require, "noice.ui")
+    if not ui_ok or noice_ui._unknown_event_guard then
+        return
+    end
+    noice_ui._unknown_event_guard = true
+    local get_handler = noice_ui.get_handler
+    noice_ui.get_handler = function(event, ...)
+        if type(event) ~= "string" or not event:find("_", 1, true) then
+            return nil
+        end
+        return get_handler(event, ...)
+    end
+end
+
 if noice_ok and not is_vscode then
     noice.setup(noice_opts)
+    guard_noice_ui()
 
     local function close_noice_floats()
         for _, win in ipairs(vim.api.nvim_list_wins()) do
@@ -590,6 +611,9 @@ if noice_ok and not is_vscode then
             vim.notify("NoiceRestart failed: " .. tostring(err), vim.log.levels.ERROR)
             return
         end
+
+        -- the bang path reloads noice.ui, dropping the wrapper installed at setup
+        guard_noice_ui()
 
         vim.notify("noice/nui ui layer restarted", vim.log.levels.INFO)
     end, {
