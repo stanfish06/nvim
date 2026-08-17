@@ -1,7 +1,7 @@
 {
   "plugins": {
     "async.nvim": {
-      "rev": "46adf61a022d5c923f981d527443f406e7d0f63e",
+      "rev": "99aed904ae1253c27fac60b862b6d73ef1380e54",
       "src": "https://github.com/lewis6991/async.nvim.git"
     },
     "blink.cmp": {
@@ -51,7 +51,7 @@
       "src": "https://github.com/justinmk/guh.nvim"
     },
     "mini.nvim": {
-      "rev": "f66a0ef2fd7cf7a018778d81066297b7f909aa4a",
+      "rev": "e58ad4b0c9e9376096b9704f98fc00d4c9448870",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "noice.nvim": {
@@ -59,7 +59,7 @@
       "src": "https://github.com/folke/noice.nvim.git"
     },
     "nui.nvim": {
-      "rev": "5959922693a785a0e1624b45c968c844822f1ca1",
+      "rev": "a25dd472316d806eb38a5dd667c2e40da5570c75",
       "src": "https://github.com/MunifTanjim/nui.nvim.git"
     },
     "nvim-lint": {
@@ -67,7 +67,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint.git"
     },
     "nvim-lspconfig": {
-      "rev": "51dbf5359da86721662c87ca10eb73add973737b",
+      "rev": "fbaef6156f9ad65790931ab543ab1dfec57bbec7",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
