@@ -62,7 +62,6 @@ local STABLE_PKGS = {
     ["nvim-treesitter"] = true,
     ["nvim-lspconfig"] = true,
     ["dark-theme"] = true,
-    ["fzf-lua"] = true,
 }
 
 local load_list = package_list
