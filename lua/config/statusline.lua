@@ -19,6 +19,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
         vim.api.nvim_set_hl(0, "FileType", { fg = "black", bg = "#3E8FB0" })
         vim.api.nvim_set_hl(0, "FileTypeAlt", { fg = "#3E8FB0" })
         vim.api.nvim_set_hl(0, "StatusLineDiag", { bg = "#7E85A5", fg = "black" })
+        vim.api.nvim_set_hl(0, "StatusLineShowCmd", { fg = "#FFA500", bold = true })
         vim.api.nvim_set_hl(0, "ScopeLine", { fg = "#9CCFD8" })
         vim.api.nvim_set_hl(0, "SnacksIndent", { fg = "#382818" })
         vim.api.nvim_set_hl(0, "SnacksIndentScope", { fg = "#77DD77" })
@@ -260,7 +261,7 @@ local function current_filetype()
     local color = "%#FileType# "
     local color_alt = "%#FileTypeAlt#"
     if not vim.g.have_nerd_font then
-        return "%=" .. color_alt .. SOLID_LEFT_ARROW .. "%*" .. color .. filetype .. "  " .. " "
+        return color_alt .. SOLID_LEFT_ARROW .. "%*" .. color .. filetype .. "  " .. " "
     else
         local icon = filetype_icons[filetype]
         if icon == nil then
@@ -268,7 +269,7 @@ local function current_filetype()
         else
             icon = " " .. icon
         end
-        return "%=" .. color_alt .. SOLID_LEFT_ARROW .. "%*" .. color .. filetype .. icon .. ""
+        return color_alt .. SOLID_LEFT_ARROW .. "%*" .. color .. filetype .. icon .. ""
     end
 end
 
@@ -309,6 +310,13 @@ local function current_cursor_info()
         .. string.format("%d:%d ", linenr, colnr)
         .. "%#CursorInfoAlt#"
         .. SOLID_RIGHT_ARROW_PART
+end
+
+-- pending command keys (count before a motion, operator, visual size);
+-- owns the single %= separator, so it leads the right-aligned cluster;
+-- fixed 5-char width so the segments after it don't shift while typing
+local function current_showcmd()
+    return "%=%#StatusLineShowCmd#%-5S %*"
 end
 
 local function current_diagnostics()
@@ -359,6 +367,7 @@ function StatusLine()
         .. current_git_branch()
         .. current_lsp_clients()
         .. current_lsp_progress()
+        .. current_showcmd()
         .. current_filetype()
         .. current_diagnostics()
         .. current_cursor_info()
@@ -370,5 +379,8 @@ else
     -- %! is evaluated in the focused window's context, so per-split statuslines
     -- would all show the focused buffer's info; use a single global statusline
     vim.o.laststatus = 3
+    -- route pending-command keys (e.g. the count before a motion) into the %S item
+    vim.o.showcmd = true
+    vim.o.showcmdloc = "statusline"
     vim.opt.statusline = "%!v:lua.StatusLine()"
 end
