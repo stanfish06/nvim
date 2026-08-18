@@ -173,6 +173,9 @@ vim.api.nvim_create_autocmd("PackChanged", {
         if kind ~= "install" and kind ~= "update" then
             return
         end
+        if not vim_pack_ok then
+            return
+        end
         if name == "fff.nvim" then
             if not ev.data.active then
                 vim.cmd.packadd("fff.nvim")
