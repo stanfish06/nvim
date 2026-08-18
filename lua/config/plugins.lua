@@ -54,7 +54,7 @@ local package_list = {
     { name = "noice.nvim", src = "https://github.com/folke/noice.nvim.git" },
     { name = "quicker.nvim", src = "https://github.com/stevearc/quicker.nvim.git" },
     { name = "nui.nvim", src = "https://github.com/MunifTanjim/nui.nvim.git" },
-    { name = "mini.nvim", src = "https://github.com/nvim-mini/mini.nvim.git" }
+    { name = "mini.nvim", src = "https://github.com/nvim-mini/mini.nvim.git" },
 }
 
 -- Packages loaded in stable mode
@@ -107,8 +107,12 @@ local function sync_packages()
         -- deleted automatically) and stay "inactive"; update() below would otherwise
         -- keep re-adding their stale lock file entry on every sync, see nvim-web-devicons
         local inactive = vim.iter(vim.pack.get())
-            :filter(function(pkg) return not pkg.active end)
-            :map(function(pkg) return pkg.spec.name end)
+            :filter(function(pkg)
+                return not pkg.active
+            end)
+            :map(function(pkg)
+                return pkg.spec.name
+            end)
             :totable()
         if #inactive > 0 then
             print("Prune orphaned: " .. table.concat(inactive, ", "))
@@ -209,12 +213,12 @@ if vim_pack_ok then
             pcall(vim.cmd.packadd, pkg.name)
         end
     end
-end
-
-if vim.g.stable_mode and not vim_pack_ok then
-  local cfg = vim.fn.stdpath("config")
-  vim.opt.packpath:remove(cfg)
-  for name in pairs(STABLE_PKGS) do
-      vim.opt.runtimepath:append(cfg .. "/pack/plugins/start/" .. name)
-  end
+else
+    if vim.g.stable_mode then
+        local cfg = vim.fn.stdpath("config")
+        vim.opt.packpath:remove(cfg)
+        for name in pairs(STABLE_PKGS) do
+            vim.opt.runtimepath:append(cfg .. "/pack/plugins/start/" .. name)
+        end
+    end
 end
