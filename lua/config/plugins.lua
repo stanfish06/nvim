@@ -207,3 +207,11 @@ if vim_pack_ok then
         end
     end
 end
+
+if vim.g.stable_mode and not vim_pack_ok then
+  local cfg = vim.fn.stdpath("config")
+  vim.opt.packpath:remove(cfg)
+  for name in pairs(STABLE_PKGS) do
+      vim.opt.runtimepath:append(cfg .. "/pack/plugins/start/" .. name)
+  end
+end
