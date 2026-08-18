@@ -171,38 +171,37 @@ vim.api.nvim_create_user_command("SyncPkgs", sync_packages, {})
 -- rebuild native binaries whenever vim.pack installs/updates rust-backed plugins.
 -- Must be registered before the add() below: install events fire synchronously,
 -- so a hook registered later would be missed on a first install.
-vim.api.nvim_create_autocmd("PackChanged", {
-    callback = function(ev)
-        local name, kind = ev.data.spec.name, ev.data.kind
-        if kind ~= "install" and kind ~= "update" then
-            return
-        end
-        if not vim_pack_ok then
-            return
-        end
-        if name == "fff.nvim" then
-            if not ev.data.active then
-                vim.cmd.packadd("fff.nvim")
+if vim_pack_ok then
+    vim.api.nvim_create_autocmd("PackChanged", {
+        callback = function(ev)
+            local name, kind = ev.data.spec.name, ev.data.kind
+            if kind ~= "install" and kind ~= "update" then
+                return
             end
-            require("fff.download").download_or_build_binary()
-        elseif name == "blink.cmp" then
-            if not ev.data.active then
-                vim.cmd.packadd("blink.cmp")
-            end
-            -- force rebuild on update so the fuzzy lib matches the new revision
-            -- (v2/main only; v1.x release tags download the prebuilt binary themselves)
-            local blink = require("blink.cmp")
-            if blink.build then
-                local ok, err = pcall(function()
-                    blink.build({ force = kind == "update" }):pwait()
-                end)
-                if not ok then
-                    vim.notify("blink.cmp: native build failed: " .. tostring(err), vim.log.levels.WARN)
+            if name == "fff.nvim" then
+                if not ev.data.active then
+                    vim.cmd.packadd("fff.nvim")
+                end
+                require("fff.download").download_or_build_binary()
+            elseif name == "blink.cmp" then
+                if not ev.data.active then
+                    vim.cmd.packadd("blink.cmp")
+                end
+                -- force rebuild on update so the fuzzy lib matches the new revision
+                -- (v2/main only; v1.x release tags download the prebuilt binary themselves)
+                local blink = require("blink.cmp")
+                if blink.build then
+                    local ok, err = pcall(function()
+                        blink.build({ force = kind == "update" }):pwait()
+                    end)
+                    if not ok then
+                        vim.notify("blink.cmp: native build failed: " .. tostring(err), vim.log.levels.WARN)
+                    end
                 end
             end
-        end
-    end,
-})
+        end,
+    })
+end
 
 if vim_pack_ok then
     -- load_list, not package_list: this is the one place stable mode narrows things.
