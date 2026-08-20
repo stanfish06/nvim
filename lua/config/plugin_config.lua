@@ -634,3 +634,10 @@ if noice_ok and not is_vscode then
         desc = "Restart the noice/nui ui layer (full module reload)",
     })
 end
+
+-- fx (inline coding agent; :Fx command comes from the plugin)
+local fx_ok = pcall(require, "fx")
+if fx_ok then
+    vim.keymap.set("n", "<leader>k", "<Cmd>Fx<CR>", { silent = true, desc = "fx: inline request" })
+    vim.keymap.set("x", "<leader>k", ":Fx<CR>", { silent = true, desc = "fx: inline request" })
+end
