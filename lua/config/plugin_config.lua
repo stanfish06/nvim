@@ -390,6 +390,7 @@ if snacks_ok and not is_vscode then
         -- treesitter is started on every FileType and foldexpr parses every buffer,
         -- so oversized files otherwise have no guard against a parse/fold hang
         bigfile = { enabled = true },
+        image = { enabled = true },
         indent = {
             enabled = true,
             scope = {
