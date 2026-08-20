@@ -39,7 +39,7 @@
       "src": "https://tpope.io/vim/fugitive.git"
     },
     "fx.nvim": {
-      "rev": "8f0d1054d404bd1bca1f53cfef3bf49d57aaf2b6",
+      "rev": "af4a326fea52a737abaf6d0a4ab2898c9a70b1cd",
       "src": "https://github.com/stanfish06/fx.nvim.git"
     },
     "fzf-lua": {
