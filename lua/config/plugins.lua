@@ -74,7 +74,6 @@ end
 
 local vim_pack_ok, _ = pcall(require, "vim.pack")
 local function sync_packages()
-    -- local old_package_dir = os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/"
     local old_package_dir = vim.fn.stdpath("config") .. "/pack/plugins/start/"
     if vim_pack_ok then
         print("Vim pack available!")
