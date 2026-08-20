@@ -69,7 +69,6 @@ local sneaks_ok = vim.g.loaded_sneak_plugin ~= nil
 if sneaks_ok then
     vim.g["sneak#label"] = 1 -- label mode: shows jump targets (EasyMotion-style)
     vim.g["sneak#use_ic_scs"] = 1 -- respect smartcase (so type P will specifically match P)
-    -- these have match highlight
     vim.keymap.set({ "n", "x", "o" }, "f", "<Plug>Sneak_f")
     vim.keymap.set({ "n", "x", "o" }, "F", "<Plug>Sneak_F")
     -- t means stop 1 char before match
@@ -147,7 +146,6 @@ local lint_ok, lint = pcall(require, "lint")
 if lint_ok and not is_vscode then
     lint.linters_by_ft = {
         python = { "ruff" },
-        -- lua = { "luacheck" }, luacheck looks pretty old
         sh = { "shellcheck" },
         bash = { "shellcheck" },
     }
@@ -173,7 +171,6 @@ if not is_vscode then
         end
     end
     vim.keymap.set("n", "<leader>ff", fff_call("find_files"), { desc = "fff files" })
-    -- you can toggle between grep, fuzzy grep, regex grep with shift+tab after launching fff grep
     vim.keymap.set("n", "<leader>fg", fff_call("live_grep"), { desc = "fff grep" })
 end
 
@@ -398,10 +395,6 @@ if snacks_ok and not is_vscode then
             },
             chunk = {
                 enabled = true, -- scope as chunk
-                -- solid arrow may cause overlap in some terminals
-                -- char = {
-                --     arrow = "➤",
-                -- },
             },
         },
         notifier = {
@@ -472,10 +465,6 @@ end, {
 
 -- noice (better ui)
 local noice_ok, noice = pcall(require, "noice")
--- experimental options
--- BUG: restart drops ui2
--- noice does not work well with neovim ui2 2026-06-15
--- this file got loaded after options.lua so this should disable ui2
 if not vim.g.vscode then
     local ui2_ok, ui2 = pcall(require, "vim._core.ui2")
     if not noice_ok then
@@ -484,7 +473,7 @@ if not vim.g.vscode then
             pcall(ui2.enable, {})
             vim.notify("nvim ui2 enabled", vim.log.levels.INFO)
         else
-            vim.notify("nvim ui2 disabled (could be old nvim or api shift, check options.lua)", vim.log.levels.WARN)
+            vim.notify("nvim ui2 disabled (could be old nvim or api shift)", vim.log.levels.WARN)
         end
     else
         vim.notify("use noice/nui ui layer", vim.log.levels.INFO)
