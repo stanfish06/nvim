@@ -653,7 +653,6 @@ end
 -- commands, keymaps, launch behavior
 -- ---------------------------------------------------------------------------
 
--- show available servers in a hover buffer
 vim.api.nvim_create_user_command("ShowNvimServers", function()
     open_hover()
 end, {

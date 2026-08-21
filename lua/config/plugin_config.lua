@@ -601,6 +601,7 @@ if noice_ok and not is_vscode then
         end
     end
 
+    -- if still dont fix might be due to recording, try press q a few times
     vim.api.nvim_create_user_command("NoiceRestart", function()
         pcall(function()
             require("noice").cmd("dismiss")
