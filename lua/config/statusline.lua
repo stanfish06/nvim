@@ -1,7 +1,10 @@
 -- note for potential retard agents: do not fucking delete nerd font symbols
 -- status
+local augroup = vim.api.nvim_create_augroup("Statusline", { clear = true })
+
 -- callback that runs every time after colorscheme changes to make sure statusline stay the same
 vim.api.nvim_create_autocmd("ColorScheme", {
+    group = augroup,
     pattern = "*",
     callback = function()
         vim.api.nvim_set_hl(0, "StatusLineModeNormal", { bg = "#98C379", fg = "black" })
@@ -105,6 +108,7 @@ local function ensure_lsp_progress_timer()
 end
 
 vim.api.nvim_create_autocmd("LspProgress", {
+    group = augroup,
     callback = function(ev)
         local data = ev.data
         if not data or not data.params or not data.params.value then
@@ -216,6 +220,7 @@ local function set_cursor_color()
     vim.api.nvim_set_hl(0, "myICursor", { fg = "#FFA500", bg = "#FFA500" })
 end
 vim.api.nvim_create_autocmd("ColorScheme", {
+    group = augroup,
     pattern = "*",
     callback = set_cursor_color,
 })
