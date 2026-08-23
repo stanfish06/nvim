@@ -107,7 +107,7 @@ vim.o.linebreak = true
 -- ui
 vim.o.colorcolumn = "+1"
 vim.o.list = true
-vim.o.pumheight = 10       -- height limit for completion pop-up, useful for long list
+vim.o.pumheight = 10 -- height limit for completion pop-up, useful for long list
 vim.o.splitkeep = "screen"
 vim.o.winborder = "single" -- makes hover window like lsp fancier with a border
 vim.o.fillchars = "eob: ,fold:╌"
@@ -134,8 +134,20 @@ vim.o.iskeyword = "@,48-57,_,192-255,-"
 vim.o.formatlistpat = [[^\s*\(\d\+[.)]\|[-+*]\)\s\+]]
 
 -- clipboard
+-- OSC 52 for copy only: paste would query the terminal, and tmux never
+-- answers, so nvim hangs ("Waiting for OSC 52 response..."). Paste instead
+-- reads the unnamed register; pasting from the local machine goes through
+-- the terminal's own bracketed paste, which works regardless.
 if vim.env.NVIM_HOP_REMOTE or vim.env.SSH_CONNECTION then
-    vim.g.clipboard = "osc52"
+    local osc52 = require("vim.ui.clipboard.osc52")
+    local function paste()
+        return { vim.split(vim.fn.getreg('"'), "\n"), vim.fn.getregtype('"') }
+    end
+    vim.g.clipboard = {
+        name = "OSC 52",
+        copy = { ["+"] = osc52.copy("+"), ["*"] = osc52.copy("*") },
+        paste = { ["+"] = paste, ["*"] = paste },
+    }
 end
 
 vim.schedule(function()
@@ -189,49 +201,49 @@ local function term_fg_process(buf)
     if not pid then
         return nil
     end
-    local stat = io.open(string.format('/proc/%d/stat', pid), 'r')
+    local stat = io.open(string.format("/proc/%d/stat", pid), "r")
     if not stat then
         return nil
     end
-    local line = stat:read('*l') or ''
+    local line = stat:read("*l") or ""
     stat:close()
     -- comm may contain spaces/parens, so split only what follows the last ')'
-    local after_comm = line:match('.*%)%s+(.*)$') or ''
-    local tpgid = tonumber(vim.split(after_comm, '%s+')[6])
+    local after_comm = line:match(".*%)%s+(.*)$") or ""
+    local tpgid = tonumber(vim.split(after_comm, "%s+")[6])
     if not tpgid or tpgid <= 0 then
         return nil
     end
-    local comm = io.open(string.format('/proc/%d/comm', tpgid), 'r')
+    local comm = io.open(string.format("/proc/%d/comm", tpgid), "r")
     if not comm then
         return nil
     end
-    local name = (comm:read('*l') or ''):gsub('%s+$', '')
+    local name = (comm:read("*l") or ""):gsub("%s+$", "")
     comm:close()
-    if name == '' then
+    if name == "" then
         return nil
     end
-    return string.format('%d:%s', tpgid, name)
+    return string.format("%d:%s", tpgid, name)
 end
 
 function _G.TabLineCustom()
-    local s = ''
-    for i = 1, vim.fn.tabpagenr('$') do
-        local hl = i == vim.fn.tabpagenr() and '%#TabLineSel#' or '%#TabLine#'
+    local s = ""
+    for i = 1, vim.fn.tabpagenr("$") do
+        local hl = i == vim.fn.tabpagenr() and "%#TabLineSel#" or "%#TabLine#"
         local buflist = vim.fn.tabpagebuflist(i)
         local buf = buflist[vim.fn.tabpagewinnr(i)]
         local name
-        if vim.bo[buf].buftype == 'terminal' then
+        if vim.bo[buf].buftype == "terminal" then
             name = term_fg_process(buf)
         end
         if not name then
-            name = vim.fn.fnamemodify(vim.fn.bufname(buf), ':t')
+            name = vim.fn.fnamemodify(vim.fn.bufname(buf), ":t")
         end
-        s = s .. hl .. '%' .. i .. 'T ' .. (name == '' and '[No Name]' or name) .. ' '
+        s = s .. hl .. "%" .. i .. "T " .. (name == "" and "[No Name]" or name) .. " "
     end
-    return s .. '%#TabLineFill#%T'
+    return s .. "%#TabLineFill#%T"
 end
 
-vim.o.tabline = '%!v:lua.TabLineCustom()'
+vim.o.tabline = "%!v:lua.TabLineCustom()"
 
 -- the tabline only redraws on events, so poll while any terminal exists to
 -- pick up foreground process changes
@@ -245,11 +257,15 @@ if _G.__tabline_timer and not _G.__tabline_timer:is_closing() then
 end
 local tabline_timer = vim.uv.new_timer()
 _G.__tabline_timer = tabline_timer
-tabline_timer:start(2000, 2000, vim.schedule_wrap(function()
-    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-        if vim.bo[buf].buftype == 'terminal' then
-            vim.cmd.redrawtabline()
-            return
+tabline_timer:start(
+    2000,
+    2000,
+    vim.schedule_wrap(function()
+        for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+            if vim.bo[buf].buftype == "terminal" then
+                vim.cmd.redrawtabline()
+                return
+            end
         end
-    end
-end))
+    end)
+)

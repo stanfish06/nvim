@@ -15,6 +15,68 @@ if mini_pairs_ok and not is_vscode then
     mini_pairs.setup()
 end
 
+-- extra mini.nvim utilities (all additive / no default-key clashes with the
+-- keymaps above: sneak owns s/S/f/F/t/T, snacks has indent+scroll)
+if not is_vscode then
+    -- mini.ai: a/i text objects (per-character delimiters, brackets, quotes...)
+    -- complements the treesitter @function/@class objects above
+    local mini_ai_ok, mini_ai = pcall(require, "mini.ai")
+    if mini_ai_ok then
+        mini_ai.setup()
+    end
+
+    -- mini.cursorword: underline the word under the cursor (no mapping)
+    local mini_cw_ok, mini_cw = pcall(require, "mini.cursorword")
+    if mini_cw_ok then
+        mini_cw.setup({ delay = 250 })
+    end
+
+    -- mini.move: move current line / visual selection with Alt+hjkl
+    local mini_move_ok, mini_move = pcall(require, "mini.move")
+    if mini_move_ok then
+        mini_move.setup()
+    end
+
+    -- mini.trailspace: show + strip trailing whitespace on save
+    local mini_trail_ok, mini_trail = pcall(require, "mini.trailspace")
+    if mini_trail_ok then
+        mini_trail.setup()
+        vim.api.nvim_create_autocmd("BufWritePre", {
+            callback = function(ev)
+                mini_trail.trim(ev.buf)
+            end,
+        })
+        vim.keymap.set("n", "<leader>mw", mini_trail.trim, { desc = "[M]ini trailspace trim" })
+    end
+
+    -- mini.surround: s/S belong to sneak, so namespace surround under a leader
+    -- (qa=add, qd=delete, qr=replace; drop the vim.keymaps banner keys entirely)
+    local mini_surround_ok, mini_surround = pcall(require, "mini.surround")
+    if mini_surround_ok then
+        mini_surround.setup({
+            mappings = {
+                add = "<leader>qa",
+                delete = "<leader>qd",
+                find = "<leader>qf",
+                find_left = "<leader>qF",
+                highlight = "<leader>qh",
+                replace = "<leader>qr",
+                update_n_lines = "<leader>qn",
+                suffix_last = "l",
+                suffix_next = "n",
+            },
+        })
+    end
+
+    -- mini.splitjoin: gS = split single line into multiple, gJ = join
+    local mini_splitjoin_ok, mini_splitjoin = pcall(require, "mini.splitjoin")
+    if mini_splitjoin_ok then
+        mini_splitjoin.setup()
+    end
+end
+
+
+
 -- fzf
 -- git clone --depth 1 https://github.com/ibhagwan/fzf-lua.git ~/.config/nvim/pack/plugins/start/fzf-lua
 local ok, fzf = pcall(require, "fzf-lua")
