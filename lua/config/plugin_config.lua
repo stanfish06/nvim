@@ -595,112 +595,15 @@ local noice_opts = {
     },
 }
 
-local function harden_noice_ui()
-    local ui_ok, noice_ui = pcall(require, "noice.ui")
-    if not ui_ok or noice_ui._hardened then
-        return
-    end
-    noice_ui._hardened = true
-
-    local get_handler = noice_ui.get_handler
-    noice_ui.get_handler = function(event, ...)
-        if type(event) ~= "string" or not event:find("_", 1, true) then
-            return nil
-        end
-        return get_handler(event, ...)
-    end
-
-    local function reset_upvalue(fn, name, value)
-        for i = 1, 60 do
-            local n = debug.getupvalue(fn, i)
-            if not n then
-                return
-            end
-            if n == name then
-                debug.setupvalue(fn, i, value)
-                return
-            end
-        end
-    end
-    local process_queue = noice_ui.process_queue
-    noice_ui.process_queue = function(...)
-        local ok, err = pcall(process_queue, ...)
-        if not ok then
-            reset_upvalue(process_queue, "processing", false)
-            reset_upvalue(noice_ui.ui_attach_cb, "stack_level", 0)
-            vim.schedule(function()
-                vim.api.nvim_echo(
-                    { { "noice: ui event error (pipeline kept alive): " .. tostring(err), "ErrorMsg" } },
-                    true,
-                    {}
-                )
-            end)
-        end
-    end
-end
-
 if noice_ok and not is_vscode then
+    -- if completion/animation stops working, press q a few times
     noice.setup(noice_opts)
-    harden_noice_ui()
-
-    local function close_noice_floats()
-        for _, win in ipairs(vim.api.nvim_list_wins()) do
-            local config_ok, win_config = pcall(vim.api.nvim_win_get_config, win)
-            if config_ok and win_config.relative ~= "" then
-                local buf = vim.api.nvim_win_get_buf(win)
-                if vim.bo[buf].filetype == "noice" then
-                    pcall(vim.api.nvim_win_close, win, true)
-                end
-            end
-        end
-    end
-
-    local function unload_ui_modules()
-        for name in pairs(package.loaded) do
-            if name == "noice" or name == "nui" or name:match("^noice%.") or name:match("^nui%.") then
-                package.loaded[name] = nil
-            end
-        end
-    end
-
-    -- if still dont fix might be due to recording, try press q a few times
-    vim.api.nvim_create_user_command("NoiceRestart", function()
-        pcall(function()
-            require("noice").cmd("dismiss")
-        end)
-        pcall(function()
-            require("noice").disable()
-        end)
-        pcall(vim.ui_detach, vim.api.nvim_create_namespace("noice"))
-        close_noice_floats()
-        unload_ui_modules()
-
-        local reload_ok, reloaded = pcall(require, "noice")
-        if not reload_ok then
-            vim.notify("NoiceRestart could not load noice: " .. tostring(reloaded), vim.log.levels.ERROR)
-            return
-        end
-
-        local restart_ok, err = pcall(function()
-            reloaded.setup(noice_opts)
-        end)
-        if not restart_ok then
-            vim.notify("NoiceRestart failed: " .. tostring(err), vim.log.levels.ERROR)
-            return
-        end
-
-        harden_noice_ui()
-
-        vim.notify("noice/nui ui layer restarted", vim.log.levels.INFO)
-    end, {
-        bang = true,
-        desc = "Restart the noice/nui ui layer (full module reload)",
-    })
 end
 
 -- fx (inline coding agent; :Fx command comes from the plugin)
 local fx_ok = pcall(require, "fx")
 if fx_ok then
     vim.keymap.set("n", "<leader>k", "<Cmd>Fx<CR>", { silent = true, desc = "fx: inline request" })
+    vim.keymap.set("n", "<leader>fr", "<Cmd>Fx rewind<CR>", { silent = true, desc = "fx: inline request" })
     vim.keymap.set("x", "<leader>k", ":Fx<CR>", { silent = true, desc = "fx: inline request" })
 end
