@@ -604,6 +604,6 @@ end
 local fx_ok = pcall(require, "fx")
 if fx_ok then
     vim.keymap.set("n", "<leader>k", "<Cmd>Fx<CR>", { silent = true, desc = "fx: inline request" })
-    vim.keymap.set("n", "<leader>fr", "<Cmd>Fx rewind<CR>", { silent = true, desc = "fx: inline request" })
+    vim.keymap.set("n", "<leader>fr", "<Cmd>Fx rewind<CR>", { silent = true, desc = "fx: rewind" })
     vim.keymap.set("x", "<leader>k", ":Fx<CR>", { silent = true, desc = "fx: inline request" })
 end
