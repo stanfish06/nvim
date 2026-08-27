@@ -26,10 +26,10 @@ if not is_vscode then
     end
 
     -- mini.cursorword: underline the word under the cursor (no mapping)
-    local mini_cw_ok, mini_cw = pcall(require, "mini.cursorword")
-    if mini_cw_ok then
-        mini_cw.setup({ delay = 250 })
-    end
+    -- local mini_cw_ok, mini_cw = pcall(require, "mini.cursorword")
+    -- if mini_cw_ok then
+    --     mini_cw.setup({ delay = 250 })
+    -- end
 
     -- mini.move: move current line / visual selection with Alt+hjkl
     local mini_move_ok, mini_move = pcall(require, "mini.move")
