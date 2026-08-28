@@ -600,9 +600,22 @@ if noice_ok and not is_vscode then
     noice.setup(noice_opts)
 end
 
--- fx (inline coding agent; :Fx command comes from the plugin)
+-- fx
 local fx_ok = pcall(require, "fx")
 if fx_ok then
     vim.keymap.set("n", "<leader>k", "<Cmd>Fx<CR>", { silent = true, desc = "fx: inline request" })
     vim.keymap.set("x", "<leader>k", ":Fx<CR>", { silent = true, desc = "fx: inline request" })
+    vim.keymap.set("n", "<leader>K", "<Cmd>Fx rewind<CR>", { silent = true, desc = "fx: rewind (last turn)" })
+
+    vim.api.nvim_create_autocmd("ColorScheme", {
+        group = vim.api.nvim_create_augroup("FxTheme", { clear = true }),
+        pattern = "*",
+        desc = "fx",
+        callback = function()
+            vim.api.nvim_set_hl(0, "FxSpinner", { fg = "#98C379" })
+            vim.api.nvim_set_hl(0, "FxNormal", { fg = "#D8D4CD", bg = "#1A2132" })
+            vim.api.nvim_set_hl(0, "FxBorder", { fg = "#3E8FB0" })
+            vim.api.nvim_set_hl(0, "FxTitle", { fg = "#E5C07B", bold = true })
+        end,
+    })
 end
