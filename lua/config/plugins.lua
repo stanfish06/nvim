@@ -72,6 +72,31 @@ if vim.g.stable_mode then
     end, package_list)
 end
 
+local LOCAL_PKGS = {
+    -- ["fx.nvim"] = vim.fn.expand("~/Git/fx.nvim"),
+}
+
+local from_disk = {}
+for name, path in pairs(LOCAL_PKGS) do
+    if not vim.g.stable_mode or STABLE_PKGS[name] == true then
+        if vim.fn.isdirectory(path) == 1 then
+            vim.opt.runtimepath:prepend(path)
+            from_disk[name] = true
+        else
+            vim.notify(
+                ("%s: %s is missing, falling back to the published package"):format(name, path),
+                vim.log.levels.WARN
+            )
+        end
+    end
+end
+-- drop them from both lists so install, prune and load all skip what is already on disk
+local function not_from_disk(pkg)
+    return not from_disk[pkg.name]
+end
+package_list = vim.tbl_filter(not_from_disk, package_list)
+load_list = vim.tbl_filter(not_from_disk, load_list)
+
 local vim_pack_ok, _ = pcall(require, "vim.pack")
 local function sync_packages()
     local old_package_dir = vim.fn.stdpath("config") .. "/pack/plugins/start/"
