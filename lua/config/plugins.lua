@@ -24,7 +24,11 @@ local package_list = {
         -- main migrated to the new vim.pos.cursor(target) API (0.13-dev after
         -- a952575c3b still has the old (buf, pos) signature -> "pos: expected
         -- table, got nil"); unpin once nvim is updated past that change
-        version = vim.version.range("1.10.0"),
+        --
+        -- upper bound keeps this off blink.cmp v2 once it ships: vim.version.range()
+        -- with a single arg is an open range (>= 1.10.0, no ceiling), so v2 would
+        -- otherwise install silently and break the setup({}) config structure (#271)
+        version = vim.version.range(">= 1.10.0, < 2.0.0"),
     },
     { name = "sneaks.vim", src = "https://github.com/justinmk/vim-sneak" }, -- remaps s/S intentionally
     { name = "guh.nvim", src = "https://github.com/justinmk/guh.nvim" }, -- gh wrapper in nvim
