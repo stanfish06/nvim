@@ -14,6 +14,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
         vim.api.nvim_set_hl(0, "CursorInfoAlt", { fg = "#B8C0E0", bg = "#3E8FB0" })
         vim.api.nvim_set_hl(0, "Git", { bg = "#3A3A3A", fg = "#E5C07B" })
         vim.api.nvim_set_hl(0, "LspClients", { bg = "#3A3A3A", fg = "#719E07" })
+        vim.api.nvim_set_hl(0, "FX", { bg = "#3A3A3A", fg = "#FFF244" })
         vim.api.nvim_set_hl(0, "File", { bg = "#3A3A3A", fg = "#ABEBE2" })
         vim.api.nvim_set_hl(0, "FileAlt", { fg = "#3A3A3A" })
         vim.api.nvim_set_hl(0, "FileType", { fg = "black", bg = "#3E8FB0" })
@@ -210,6 +211,48 @@ local function current_lsp_progress()
 
     return "%#LspClients# " .. lsp_spinners[frame + 1] .. " " .. table.concat(msgs, ", ") .. " %*"
 end
+
+-- fx
+local fx_ok, _ = pcall(require, "fx")
+local fx_status = { running = false, waiting = false, tool = nil }
+if fx_ok then
+    vim.api.nvim_create_autocmd("User", {
+        pattern = "Fx:*",
+        callback = function(ev)
+            local d = ev.data
+            if d.method == "session/prompt" then
+                fx_status.running = d.phase == "request"
+                fx_status.waiting = false
+                fx_status.tool = nil
+            elseif d.method == "session/request_permission" then
+                fx_status.waiting = d.phase == "request"
+            elseif d.method == "session/update" and d.phase == "notify" then
+                local u = (d.params or {}).update or {}
+                if u.sessionUpdate == "tool_call" then
+                    fx_status.tool = u.title
+                end
+            end
+            vim.cmd("redrawstatus")
+        end,
+    })
+end
+local function current_fx_status()
+    if fx_ok then
+        if not fx_status.running then
+            return " %#FX# Fx: idle %*"
+        end
+        local label = "running"
+        if fx_status.waiting then
+            label = "waiting"
+        elseif fx_status.tool then
+            label = fx_status.tool:gsub("%%", "%%%%")
+        end
+        return " %#FX# Fx: " .. label .. " %*"
+    else
+        return ""
+    end
+end
+
 -- cursor
 local function set_cursor_color()
     vim.api.nvim_set_hl(0, "myCursor", { fg = "#FFA500", bg = "#FFA500" })
@@ -367,6 +410,7 @@ function StatusLine()
         .. current_git_branch()
         .. current_lsp_clients()
         .. current_lsp_progress()
+        .. current_fx_status()
         .. current_showcmd()
         .. current_filetype()
         .. current_diagnostics()
