@@ -1,7 +1,7 @@
 {
   "plugins": {
     "async.nvim": {
-      "rev": "10a16178cdace61d3416a5652121ba70a2e4103c",
+      "rev": "ca8f5696c45bd4786b8840923d86b6932ce92ded",
       "src": "https://github.com/lewis6991/async.nvim.git"
     },
     "blink.cmp": {
@@ -38,6 +38,10 @@
       "rev": "3b753cf8c6a4dcde6edee8827d464ba9b8c4a6f0",
       "src": "https://tpope.io/vim/fugitive.git"
     },
+    "fx.nvim": {
+      "rev": "478e9e10fa39ae85ff70c8ab8ef88a218a2f28ac",
+      "src": "https://github.com/stanfish06/fx.nvim.git"
+    },
     "fzf-lua": {
       "rev": "05e44d38de0a79c11fba5f7bf8138791b1dbdd1e",
       "src": "https://github.com/ibhagwan/fzf-lua.git"
@@ -51,7 +55,7 @@
       "src": "https://github.com/justinmk/guh.nvim"
     },
     "mini.nvim": {
-      "rev": "a311ed247d527db9592bb434356badc705363746",
+      "rev": "9d01f392b33fb2ba36fbc87fc0bf4453e63ffb0a",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "noice.nvim": {
@@ -67,7 +71,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint.git"
     },
     "nvim-lspconfig": {
-      "rev": "bbe6b383a1e85d3a84b54a43f7d9d83567c150cb",
+      "rev": "85e732c62ac59ab7c12df71ddd020baa87948390",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
@@ -75,11 +79,11 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "nvim-treesitter-textobjects": {
-      "rev": "898ee307df58f854d11cd7edd06472574d48014e",
+      "rev": "5c7b0263797dfd1bd6202f2b219f3b53a80b2187",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
     },
     "obsidian.nvim": {
-      "rev": "67848b7602bc40f5fdb2f58d0db4e399f0f58030",
+      "rev": "50be6d70988af31b71cd4d8675ca928e6194c4fb",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim.git"
     },
     "plenary.nvim": {
