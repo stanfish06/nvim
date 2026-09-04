@@ -215,6 +215,34 @@ end
 -- fx
 local fx_ok, _ = pcall(require, "fx")
 local fx_status = { running = false, waiting = false, tool = nil }
+local fx_spinner_frame = 1
+local fx_spinner_timer = nil
+
+local function ensure_fx_spinner_timer()
+    if fx_spinner_timer then
+        return
+    end
+    fx_spinner_timer = vim.uv.new_timer()
+    if not fx_spinner_timer then
+        return
+    end
+    fx_spinner_timer:start(
+        0,
+        100,
+        vim.schedule_wrap(function()
+            if not fx_status.running then
+                if fx_spinner_timer then
+                    fx_spinner_timer:stop()
+                    fx_spinner_timer:close()
+                    fx_spinner_timer = nil
+                end
+                return
+            end
+            fx_spinner_frame = (fx_spinner_frame % #lsp_spinners) + 1
+            vim.cmd("redrawstatus")
+        end)
+    )
+end
 if fx_ok then
     vim.api.nvim_create_autocmd("User", {
         pattern = "Fx:*",
@@ -224,6 +252,9 @@ if fx_ok then
                 fx_status.running = d.phase == "request"
                 fx_status.waiting = false
                 fx_status.tool = nil
+                if fx_status.running then
+                    ensure_fx_spinner_timer()
+                end
             elseif d.method == "session/request_permission" then
                 fx_status.waiting = d.phase == "request"
             elseif d.method == "session/update" and d.phase == "notify" then
@@ -247,7 +278,7 @@ local function current_fx_status()
         elseif fx_status.tool then
             label = fx_status.tool:gsub("%%", "%%%%")
         end
-        return " %#FX# Fx: " .. label .. " %*"
+        return " %#FX# " .. lsp_spinners[fx_spinner_frame] .. " Fx: " .. label .. " %*"
     else
         return ""
     end
