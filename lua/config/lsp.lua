@@ -5,7 +5,7 @@ if vim.g.vscode then
 end
 
 local blink_ok = pcall(require, "blink.cmp")
-local BUF = "buffer"
+local BUF = "buf"
 
 -- lua
 vim.lsp.config("luals", {
