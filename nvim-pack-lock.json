@@ -10,7 +10,7 @@
       "version": "1.10.0 - 1.10.0"
     },
     "blink.lib": {
-      "rev": "c8fdc12c8a2fab6cf786dd7141a283f8079f902b",
+      "rev": "e12366919e3447e4227d61e2ce99e2374de76d6a",
       "src": "https://github.com/saghen/blink.lib.git"
     },
     "conform.nvim": {
@@ -71,7 +71,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint.git"
     },
     "nvim-lspconfig": {
-      "rev": "85e732c62ac59ab7c12df71ddd020baa87948390",
+      "rev": "84252f9832fb5b9024fe9f7258e7c2aff915e6fb",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
@@ -83,7 +83,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
     },
     "obsidian.nvim": {
-      "rev": "50be6d70988af31b71cd4d8675ca928e6194c4fb",
+      "rev": "f98e2be8923467194d8965d9cc342345fe634b02",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim.git"
     },
     "plenary.nvim": {

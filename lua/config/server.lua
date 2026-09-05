@@ -20,6 +20,39 @@
 
 local buf, win, nvim_servers
 local SERVER_LABEL_VAR = "nvim_server_label"
+local SEP = " │ " -- label / host separator inside server_display_name
+
+local function define_server_hl()
+    local function from(group, field, fallback)
+        local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = group, create = false })
+        if not ok or type(hl) ~= "table" then
+            return fallback
+        end
+        local v = hl[field]
+        return type(v) == "string" and v:match("^#[0-9a-fA-F]%x5$") and v or fallback
+    end
+
+    local popup_bg = from("NoicePopupmenu", "bg", "#1E1E2E")
+    local popup_fg = from("NoicePopupmenu", "fg", "#CDD6F4")
+    local border_fg = from("NoicePopupmenuBorder", "fg", "#94ffb8")
+    local accent_fg = from("NoiceCmdlinePopupBorder", "fg", "#89B4FA")
+
+    vim.api.nvim_set_hl(0, "NvimServer", { bg = popup_bg, fg = popup_fg })
+    vim.api.nvim_set_hl(0, "NvimServerBorder", { fg = border_fg })
+    vim.api.nvim_set_hl(0, "NvimServerTitle", { fg = border_fg, bold = true })
+    vim.api.nvim_set_hl(0, "NvimServerCursorLine", { bg = "#3A3A3A", fg = popup_fg })
+    vim.api.nvim_set_hl(0, "NvimServerCurrent", { fg = accent_fg, bold = true })
+    vim.api.nvim_set_hl(0, "NvimServerIdx", { fg = "#7E85A5" })
+    vim.api.nvim_set_hl(0, "NvimServerRemote", { fg = "#E5C07B" })
+end
+define_server_hl()
+vim.api.nvim_create_autocmd("ColorScheme", {
+    pattern = "*",
+    callback = define_server_hl,
+})
+local FLOAT_WINHL =
+    "NormalFloat:NvimServer,FloatBorder:NvimServerBorder,FloatTitle:NvimServerTitle,CursorLine:NvimServerCursorLine"
+local server_ns = vim.api.nvim_create_namespace("NvimServer")
 
 local function close_hover()
     if win and vim.api.nvim_win_is_valid(win) then
@@ -235,6 +268,37 @@ local function refresh_server_list()
     vim.bo[buf].modifiable = true
     vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines_display)
     vim.bo[buf].modifiable = false
+    vim.api.nvim_buf_clear_namespace(buf, server_ns, 0, -1)
+    for i, server in ipairs(nvim_servers) do
+        local line = lines_display[i] or ""
+        local row = i - 1
+        local prefix = "[" .. i .. "] "
+        pcall(vim.api.nvim_buf_set_extmark, buf, server_ns, row, 0, {
+            end_row = row,
+            end_col = math.min(#prefix, #line),
+            hl_group = "NvimServerIdx",
+        })
+        if server.meta and server.meta.host then
+            local s, e = line:find(server.meta.host, 1, true)
+            if s then
+                pcall(vim.api.nvim_buf_set_extmark, buf, server_ns, row, s - 1, {
+                    end_row = row,
+                    end_col = e,
+                    hl_group = "NvimServerRemote",
+                })
+            end
+        end
+        if server.path == vim.v.servername then
+            local s = line:find("  %(current%)$", 1)
+            if s then
+                pcall(vim.api.nvim_buf_set_extmark, buf, server_ns, row, s - 1, {
+                    end_row = row,
+                    end_col = #line,
+                    hl_group = "NvimServerCurrent",
+                })
+            end
+        end
+    end
 end
 
 local function rename_server()
@@ -352,6 +416,7 @@ local function open_hover()
         style = "minimal",
         title = "Available servers",
     })
+    vim.wo[win].winhighlight = FLOAT_WINHL
     vim.wo[win].cursorline = true
     refresh_server_list()
 
