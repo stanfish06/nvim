@@ -56,6 +56,8 @@ local package_list = {
     { name = "nui.nvim", src = "https://github.com/MunifTanjim/nui.nvim.git" },
     { name = "mini.nvim", src = "https://github.com/nvim-mini/mini.nvim.git" },
     { name = "fx.nvim", src = "https://github.com/stanfish06/fx.nvim.git" },
+    { name = "d2.vim", src = "https://github.com/d2lang/d2-vim.git" }, -- draw and render diagram in vim
+    { name = "tree-sitter-d2", src = "https://github.com/ravsii/tree-sitter-d2" },
 }
 
 -- Packages loaded in stable mode
@@ -223,6 +225,11 @@ if vim_pack_ok then
                         vim.notify("blink.cmp: native build failed: " .. tostring(err), vim.log.levels.WARN)
                     end
                 end
+            elseif name == "tree-sitter-d2" and kind == "install" and kind == "update" then
+                if not ev.data.active then
+                    vim.cmd.packadd("tree-sitter-d2")
+                end
+                vim.system({ "make", "nvim-install" }, { cwd = ev.data.path })
             end
         end,
     })

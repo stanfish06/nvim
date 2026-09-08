@@ -10,12 +10,16 @@
       "version": "1.10.0 - 1.10.0"
     },
     "blink.lib": {
-      "rev": "f55df8a6e0a7acccf45ef0ffbb4ce46110fcf7d0",
+      "rev": "fd9a48ebbe6ec30d5dfcc5b42c243941ccdca1aa",
       "src": "https://github.com/saghen/blink.lib.git"
     },
     "conform.nvim": {
       "rev": "016802de402556da54c36bd7359b441266b01cdd",
       "src": "https://github.com/stevearc/conform.nvim.git"
+    },
+    "d2.vim": {
+      "rev": "a950f1a276506ac4bbc274dd65ba98b15a1d490d",
+      "src": "https://github.com/d2lang/d2-vim.git"
     },
     "dark-theme": {
       "rev": "3361945ca8713f044eb31a9cc7e39a9b37e80065",
@@ -55,7 +59,7 @@
       "src": "https://github.com/justinmk/guh.nvim"
     },
     "mini.nvim": {
-      "rev": "ee23d71c02440668cbca5b0cd8640d79d5bc250b",
+      "rev": "455856f765c78220fe547fb0862708942b52c42c",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "noice.nvim": {
@@ -71,11 +75,11 @@
       "src": "https://github.com/mfussenegger/nvim-lint.git"
     },
     "nvim-lspconfig": {
-      "rev": "615d7b2712efb2f530a83a9d0466acafba6b1d6f",
+      "rev": "da1aff0332774a0f60d52bf972e815dfc226f276",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
-      "rev": "0d0969030ad955b510d7c8012b40252a25c12a6d",
+      "rev": "5cb0114e6242625db56dd6440e945ed1ece10bc7",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "nvim-treesitter-textobjects": {
@@ -129,6 +133,10 @@
     "tokyonight": {
       "rev": "cdc07ac78467a233fd62c493de29a17e0cf2b2b6",
       "src": "https://github.com/folke/tokyonight.nvim.git"
+    },
+    "tree-sitter-d2": {
+      "rev": "200434618a6bede20ebd4982aa4d4f1edeb0b5c1",
+      "src": "https://github.com/ravsii/tree-sitter-d2"
     }
   }
 }
