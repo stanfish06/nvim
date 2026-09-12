@@ -43,7 +43,7 @@
       "src": "https://tpope.io/vim/fugitive.git"
     },
     "fx.nvim": {
-      "rev": "e6f0f1ead0892f9d684f98c31b7c317f1a4d9baf",
+      "rev": "714ac2340bd5518a13c1ffb0e4b3fdefaa99eeba",
       "src": "https://github.com/stanfish06/fx.nvim.git"
     },
     "fzf-lua": {
@@ -79,7 +79,7 @@
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
-      "rev": "de9f0f3dbdab1952f136dc7bd67ff3bafdf994da",
+      "rev": "9a168f6357ed21c3a636e1727bc7d382abc451b8",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "nvim-treesitter-textobjects": {
