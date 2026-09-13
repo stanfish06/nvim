@@ -22,7 +22,7 @@
       "src": "https://github.com/d2lang/d2-vim.git"
     },
     "dark-theme": {
-      "rev": "3361945ca8713f044eb31a9cc7e39a9b37e80065",
+      "rev": "2022487148843a08257e1468fb2d6693c86b2b27",
       "src": "https://github.com/stanfish06/dark-theme.git"
     },
     "diffview.nvim": {
@@ -103,7 +103,7 @@
       "src": "https://github.com/ThePrimeagen/refactoring.nvim.git"
     },
     "render-markdown.nvim": {
-      "rev": "4663eb3ecd538bd5062628fb6d95bbe6bdca78f6",
+      "rev": "4286b83f505f3c0e2ca04763a77c9dda0d732340",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim.git"
     },
     "rose-pine": {
@@ -123,7 +123,7 @@
       "src": "https://github.com/craftzdog/solarized-osaka.nvim.git"
     },
     "tinted-vim": {
-      "rev": "66829e04041ceba72a9006d1c6c9d0c818e2b3dd",
+      "rev": "4242c2e29728af4d00fea05b094992747ad99a17",
       "src": "https://github.com/tinted-theming/tinted-vim.git"
     },
     "tiny-inline-diagnostic.nvim": {
