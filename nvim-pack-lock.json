@@ -103,7 +103,7 @@
       "src": "https://github.com/ThePrimeagen/refactoring.nvim.git"
     },
     "render-markdown.nvim": {
-      "rev": "4286b83f505f3c0e2ca04763a77c9dda0d732340",
+      "rev": "a778444a73080301a50c4a6f58c90d7e094dd59e",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim.git"
     },
     "rose-pine": {
