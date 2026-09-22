@@ -47,11 +47,11 @@
       "src": "https://github.com/stanfish06/fx.nvim.git"
     },
     "fzf-lua": {
-      "rev": "02bc882f208f3481aa959dbbee8ce5edad2fd8b2",
+      "rev": "13bb178a299f7493dd64427a58e61904c4b58ecb",
       "src": "https://github.com/ibhagwan/fzf-lua.git"
     },
     "gitsigns.nvim": {
-      "rev": "8d79f2410c76e62b92e51c28c82e28c1c5a3daeb",
+      "rev": "070a5d7b985546cc57e1fc61e5bc507fecac6045",
       "src": "https://github.com/lewis6991/gitsigns.nvim.git"
     },
     "guh.nvim": {
@@ -59,7 +59,7 @@
       "src": "https://github.com/justinmk/guh.nvim"
     },
     "mini.nvim": {
-      "rev": "ac5dffcc52b8378fbb15efeb0497a83e57a0b01c",
+      "rev": "561751e839b99a4baca36b9d963166b66d2536a6",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "noice.nvim": {
@@ -75,11 +75,11 @@
       "src": "https://github.com/mfussenegger/nvim-lint.git"
     },
     "nvim-lspconfig": {
-      "rev": "98e5981d14057a54cd49a35fb280dfd275ff65f8",
+      "rev": "ffd261c09c3dabd0bf1a438f47a8ae3b22f3c3ff",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
-      "rev": "9a168f6357ed21c3a636e1727bc7d382abc451b8",
+      "rev": "f603a2f4da48728f80257fb5fbb90145fd1dc173",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "nvim-treesitter-textobjects": {
@@ -87,7 +87,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
     },
     "obsidian.nvim": {
-      "rev": "c35d0bcf15223ad9b0c42ef2a394639f314e352e",
+      "rev": "84ca67203a42f3780695e6e39aa9d52e6d45342f",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim.git"
     },
     "plenary.nvim": {
@@ -99,7 +99,7 @@
       "src": "https://github.com/stevearc/quicker.nvim.git"
     },
     "refactoring.nvim": {
-      "rev": "64e10d782ae5b9653558482910213b8946651456",
+      "rev": "8bcf893eb3871bc87b42adffe2fb9b0b7dc9d328",
       "src": "https://github.com/ThePrimeagen/refactoring.nvim.git"
     },
     "render-markdown.nvim": {
