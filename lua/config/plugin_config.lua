@@ -564,8 +564,8 @@ local noice_opts = {
                 col = "50%",
             },
             size = {
-                width = 50,
-                height = 5,
+                width = "auto",
+                height = "auto",
             },
             border = {
                 style = "single",
