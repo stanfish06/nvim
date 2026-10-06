@@ -65,6 +65,9 @@ local STABLE_PKGS = {
     ["nvim-treesitter"] = true,
     ["nvim-lspconfig"] = true,
     ["dark-theme"] = true,
+    ["sneaks.vim"] = true,
+    ["rose-pine"] = true,
+    ["tokyonight"] = true,
 }
 
 local load_list = package_list
