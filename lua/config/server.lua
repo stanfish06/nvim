@@ -775,6 +775,10 @@ vim.keymap.set("n", "<leader>ss", function()
     open_hop_picker(nil)
 end, { desc = "Hop nvim servers / zoxide dirs" })
 
+vim.keymap.set("n", "<leader>sh", function()
+    open_hover()
+end, { desc = "Show active nvim servers" })
+
 vim.keymap.set("n", "<leader>sr", function()
     local hosts = ssh_hosts()
     if #hosts == 0 then
