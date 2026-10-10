@@ -3,7 +3,9 @@
 -- Commands / keymaps:
 --   :ShowNvimServers      management hover (connect/rename/kill/refresh)
 --   :NvimHop [host]       fuzzy picker over live servers + zoxide dirs; <CR>
---                         connects (or spawns a server at the dir), ctrl-x kills
+--                         connects (or spawns a server at the dir), ctrl-x kills,
+--                         ctrl-e (or <CR> on a query with no match) prompts for
+--                         a path zoxide doesn't know yet, prefilled with the query
 --                         (<leader>ss local, <leader>sr picks an ssh host first)
 --   :NvimRemote {host}    spawn a plain nvim server on {host} (at ssh landing
 --                         dir) and connect to it through a forwarded socket
@@ -530,7 +532,10 @@ end
 local function remote_spawn_script(dir)
     local lines = {}
     if dir then
-        table.insert(lines, "cd " .. vim.fn.shellescape(dir) .. " || exit 9")
+        -- expand a leading ~ remotely; shellescape alone would quote it literally
+        local target = (dir == "~" or dir:match("^~/")) and ('"$HOME"' .. vim.fn.shellescape(dir:sub(2)))
+            or vim.fn.shellescape(dir)
+        table.insert(lines, "cd " .. target .. " || exit 9")
         table.insert(lines, 'command -v zoxide >/dev/null 2>&1 && zoxide add "$PWD" >/dev/null 2>&1')
     end
     vim.list_extend(lines, {
@@ -623,6 +628,26 @@ end
 
 local open_hop_picker
 
+-- manual path entry for dirs zoxide doesn't know yet; local input gets dir completion
+local function prompt_hop_path(host, default)
+    vim.ui.input({
+        prompt = (host and (host .. " ") or "") .. "hop path: ",
+        default = (default and default ~= "") and default
+            or (host and "~/" or vim.fn.fnamemodify(vim.fn.getcwd(), ":~") .. "/"),
+        completion = not host and "dir" or nil,
+    }, function(input)
+        input = input and vim.trim(input) or ""
+        if input == "" then
+            return
+        end
+        if host then
+            remote_session(host, input)
+        else
+            connect_to(spawn_local_server(vim.fn.expand(input)))
+        end
+    end)
+end
+
 local function hop_entries(host)
     local entries, lookup = {}, {}
     local function add(text, item)
@@ -661,21 +686,20 @@ local function hop_entries(host)
     if not host and not served[home] and not home_listed then
         add("⌂ ~", { kind = "dir", dir = "~" })
     end
+    add("✎ enter path…", { kind = "input", host = host })
     return entries, lookup
 end
 
 open_hop_picker = function(host)
     local entries, lookup = hop_entries(host)
-    if #entries == 0 then
-        vim.notify("No servers or zoxide dirs to hop to", vim.log.levels.INFO)
-        return
-    end
     local function handle(text)
         local item = lookup[text]
         if not item then
             return
         end
-        if item.kind == "server" then
+        if item.kind == "input" then
+            prompt_hop_path(host)
+        elseif item.kind == "server" then
             connect_to(item.server.path)
         elseif item.host then
             remote_session(item.host, item.dir)
@@ -688,10 +712,16 @@ open_hop_picker = function(host)
         fzf.fzf_exec(entries, {
             prompt = (host and (host .. " ") or "") .. "hop> ",
             actions = {
-                ["default"] = function(selected)
+                ["default"] = function(selected, o)
                     if selected and selected[1] then
                         handle(selected[1])
+                    elseif o and o.last_query and o.last_query ~= "" then
+                        -- query matched nothing: treat it as a path
+                        prompt_hop_path(host, o.last_query)
                     end
+                end,
+                ["ctrl-e"] = function(_, o)
+                    prompt_hop_path(host, o and o.last_query)
                 end,
                 ["ctrl-x"] = function(selected)
                     local item = selected and selected[1] and lookup[selected[1]]

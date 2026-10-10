@@ -92,8 +92,8 @@ if ok and not is_vscode then
     vim.keymap.set("n", "<leader>sb", fzf.buffers)
     vim.keymap.set("n", "<leader>st", fzf.tabs)
     vim.keymap.set("n", "<leader>sm", fzf.marks)
-    -- git pickers live under <leader>s* so <leader>g* stays free for
-    -- gitsigns/fugitive hunk staging
+    vim.keymap.set("n", "<leader>sL", fzf.blines)
+    vim.keymap.set("n", "<leader>sg", fzf.grep_curbuf)
     vim.keymap.set("n", "<leader>sc", fzf.git_commits, { desc = "Git commits (repo)" })
     vim.keymap.set("n", "<leader>sC", fzf.git_bcommits, { desc = "Git commits (buffer)" })
     vim.keymap.set("n", "<leader>sB", fzf.git_branches, { desc = "Git branches" })
