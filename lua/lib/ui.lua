@@ -12,7 +12,7 @@ function Window.create_tmp_float_window()
         anchor = "NW",
         style = "minimal"
     }
-    vim.api.nvim_open_win(buf, 0, opts)
+    vim.api.nvim_open_win(buf, false, opts)
 end
 M.Window = Window
 return M
