@@ -39,112 +39,147 @@ local parser_repos = {
 }
 
 -- this function needs to be updated occasionally, as of 260130, glibc should be at least 2.30
-local function get_glibc_version()
-    local result = vim.fn.system("ldd --version 2>&1 | head -n1")
-    if vim.v.shell_error ~= 0 then
-        return nil
+--
+-- vim.fn.system() forks a shell and blocks the whole UI until it exits (see
+-- #237); vim.system() with a callback never blocks the main loop. The
+-- result only depends on the host, so it's cached after the first check
+-- instead of re-spawning a shell on every startup / :TSSync.
+local glibc_version_cache -- nil = not checked yet, false = check failed, number = version
+local function get_glibc_version(cb)
+    if glibc_version_cache ~= nil then
+        cb(glibc_version_cache or nil)
+        return
     end
-    local version = result:match("(%d+%.%d+)%s*$") or result:match("GLIBC (%d+%.%d+)")
-    if version then
-        return tonumber(version)
+    local ok = pcall(vim.system, { "ldd", "--version" }, { text = true }, function(result)
+        local version
+        if result.code == 0 then
+            local first_line = ((result.stdout or "") .. "\n" .. (result.stderr or "")):match("^[^\n]*") or ""
+            version = first_line:match("(%d+%.%d+)%s*$") or first_line:match("GLIBC (%d+%.%d+)")
+            version = version and tonumber(version)
+        end
+        glibc_version_cache = version or false
+        vim.schedule(function()
+            cb(version)
+        end)
+    end)
+    if not ok then
+        glibc_version_cache = false
+        cb(nil)
     end
-    return nil
 end
 
 local function has_tree_sitter_cli()
     return vim.fn.executable("tree-sitter") == 1
 end
 
-local function can_auto_install_parsers()
-    local glibc_version = get_glibc_version()
-    local has_cli = has_tree_sitter_cli()
+local function can_auto_install_parsers(cb)
+    get_glibc_version(function(glibc_version)
+        if glibc_version and glibc_version < 2.30 then
+            vim.notify(
+                string.format(
+                    "Tree-sitter parser install skipped: glibc %.2f < 2.30 (e.g. compile parsers manually)",
+                    glibc_version
+                ),
+                vim.log.levels.WARN
+            )
+            cb(false)
+            return
+        end
 
-    if glibc_version and glibc_version < 2.30 then
-        vim.notify(
-            string.format(
-                "Tree-sitter parser install skipped: glibc %.2f < 2.30 (e.g. compile parsers manually)",
-                glibc_version
-            ),
-            vim.log.levels.WARN
-        )
-        return false
-    end
+        if not has_tree_sitter_cli() then
+            vim.notify(
+                "Tree-sitter parser install skipped: tree-sitter-cli not found (e.g. use npm)",
+                vim.log.levels.WARN
+            )
+            cb(false)
+            return
+        end
 
-    if not has_cli then
-        vim.notify("Tree-sitter parser install skipped: tree-sitter-cli not found (e.g. use npm)", vim.log.levels.WARN)
-        return false
-    end
-
-    return true
+        cb(true)
+    end)
 end
 
 local ts_status, ts = pcall(require, "nvim-treesitter")
 local function ts_install()
-    if ts_status and can_auto_install_parsers() then
-        ts.install({
-            "c",
-            "python",
-            "julia",
-            "cpp",
-            "rust",
-            "bash",
-            "lua",
-            "vim",
-            "vimdoc",
-            "javascript",
-            "typescript",
-            "tsx",
-            "markdown",
-            "markdown_inline",
-            "latex",
-        })
+    if not ts_status then
+        return
     end
+    can_auto_install_parsers(function(ok)
+        if ok then
+            ts.install({
+                "c",
+                "python",
+                "julia",
+                "cpp",
+                "rust",
+                "bash",
+                "lua",
+                "vim",
+                "vimdoc",
+                "javascript",
+                "typescript",
+                "tsx",
+                "markdown",
+                "markdown_inline",
+                "latex",
+            })
+        end
+    end)
 end
 ts_install()
 
-local function build_latest_parsers(parser_dir)
-    if not can_auto_install_parsers() then
-        return
-    end
-    local cache_dir = vim.fn.stdpath("cache") .. "/treesitter-parsers-latest"
-    vim.fn.mkdir(cache_dir, "p")
-    vim.fn.mkdir(parser_dir, "p")
-    mod_async
-        .new(function()
-            local jobs = {}
-            for _, parser in ipairs(parser_repos) do
-                local job = mod_async.new(function()
-                    local repo_dir = cache_dir .. "/" .. parser.lang
-                    local result
-                    if vim.fn.isdirectory(repo_dir .. "/.git") == 1 then
-                        result = vim.system({ "git", "-C", repo_dir, "pull", "--ff-only", "--quiet" }):wait()
-                    else
-                        result = vim.system({ "git", "clone", "--depth", "1", "--quiet", parser.url, repo_dir }):wait()
-                    end
-                    if result.code ~= 0 then
-                        vim.notify(result.stderr, vim.log.levels.ERROR)
-                        return
-                    end
-                    local build_dir = parser.location and (repo_dir .. "/" .. parser.location) or repo_dir
-                    result = vim.system({
-                        "tree-sitter",
-                        "build",
-                        "-o",
-                        parser_dir .. "/" .. parser.lang .. ".so",
-                    }, { cwd = build_dir }):wait()
-                    if result.code ~= 0 then
-                        vim.notify(result.stderr, vim.log.levels.ERROR)
-                    end
-                end)
-                table.insert(jobs, job)
+local function build_latest_parsers(parser_dir, cb)
+    can_auto_install_parsers(function(ok)
+        if not ok then
+            if cb then
+                cb()
             end
-            for _, job in ipairs(jobs) do
-                while job:running() do
-                    mod_async.yield()
+            return
+        end
+        local cache_dir = vim.fn.stdpath("cache") .. "/treesitter-parsers-latest"
+        vim.fn.mkdir(cache_dir, "p")
+        vim.fn.mkdir(parser_dir, "p")
+        mod_async
+            .new(function()
+                local jobs = {}
+                for _, parser in ipairs(parser_repos) do
+                    local job = mod_async.new(function()
+                        local repo_dir = cache_dir .. "/" .. parser.lang
+                        local result
+                        if vim.fn.isdirectory(repo_dir .. "/.git") == 1 then
+                            result = vim.system({ "git", "-C", repo_dir, "pull", "--ff-only", "--quiet" }):wait()
+                        else
+                            result =
+                                vim.system({ "git", "clone", "--depth", "1", "--quiet", parser.url, repo_dir }):wait()
+                        end
+                        if result.code ~= 0 then
+                            vim.notify(result.stderr, vim.log.levels.ERROR)
+                            return
+                        end
+                        local build_dir = parser.location and (repo_dir .. "/" .. parser.location) or repo_dir
+                        result = vim.system({
+                            "tree-sitter",
+                            "build",
+                            "-o",
+                            parser_dir .. "/" .. parser.lang .. ".so",
+                        }, { cwd = build_dir }):wait()
+                        if result.code ~= 0 then
+                            vim.notify(result.stderr, vim.log.levels.ERROR)
+                        end
+                    end)
+                    table.insert(jobs, job)
                 end
-            end
-        end)
-        :wait()
+                for _, job in ipairs(jobs) do
+                    while job:running() do
+                        mod_async.yield()
+                    end
+                end
+            end)
+            :wait()
+        if cb then
+            cb()
+        end
+    end)
 end
 
 local ts_highlight_active = {}
@@ -167,7 +202,13 @@ vim.api.nvim_create_autocmd({ "BufDelete", "BufWipeout" }, {
 
 -- sometimes ts dont update all parsers and it fails things, you need to remove both parser and queries folder
 local function ts_update(opts)
-    if ts_status and can_auto_install_parsers() then
+    if not ts_status then
+        return
+    end
+    can_auto_install_parsers(function(ok)
+        if not ok then
+            return
+        end
         local parser_dir = require("nvim-treesitter.config").get_install_dir("parser")
         local queries_dir = require("nvim-treesitter.config").get_install_dir("queries")
         print("Remove parser and queries folders...")
@@ -175,10 +216,13 @@ local function ts_update(opts)
         vim.fn.delete(queries_dir, "rf")
         ts_install()
         if opts.args == "latest" then
-            build_latest_parsers(parser_dir)
+            build_latest_parsers(parser_dir, function()
+                print("You need to restart neovim after compilation")
+            end)
+        else
+            print("You need to restart neovim after compilation")
         end
-        print("You need to restart neovim after compilation")
-    end
+    end)
 end
 vim.api.nvim_create_user_command("TSBufToggle", ts_highlight, {})
 -- TSSync latest will pull and build latest parsers (but sitll use nvim-treesitter's query files)
