@@ -27,8 +27,9 @@ vim.api.nvim_create_autocmd("ColorScheme", {
         vim.api.nvim_set_hl(0, "ScopeLine", { fg = "#9CCFD8" })
         vim.api.nvim_set_hl(0, "SnacksIndent", { fg = "#382818" })
         vim.api.nvim_set_hl(0, "SnacksIndentScope", { fg = "#77DD77" })
-        vim.api.nvim_set_hl(0, "NoicePopupmenu", { bg = "#1E1E2E", fg = "#CDD6F4" })
-        vim.api.nvim_set_hl(0, "NoicePopupmenuBorder", { fg = "#94ffb8" })
+        -- native cmdline pum (<C-d> listing); kept distinct from blink's <Tab> menu
+        vim.api.nvim_set_hl(0, "NoicePopupmenu", { bg = "#1A2132", fg = "#CDD6F4" })
+        vim.api.nvim_set_hl(0, "NoicePopupmenuBorder", { fg = "#E5C07B" })
         vim.api.nvim_set_hl(0, "BlinkCmpMenu", { bg = "#1E1E2E", fg = "#CDD6F4" })
         vim.api.nvim_set_hl(0, "BlinkCmpMenuBorder", { fg = "#94ffb8" })
         vim.api.nvim_set_hl(0, "NoiceCmdlinePopup", { bg = "#1E1E2E", fg = "#CDD6F4" })
@@ -290,9 +291,11 @@ end
 
 -- cursor
 local function set_cursor_color()
-    vim.api.nvim_set_hl(0, "myCursor", { fg = "#FFA500", bg = "#FFA500" })
-    vim.api.nvim_set_hl(0, "myICursor", { fg = "#FFA500", bg = "#FFA500" })
+    -- #FFA500
+    vim.api.nvim_set_hl(0, "myCursor", { fg = "#EFEF00", bg = "#EFEF00" })
+    vim.api.nvim_set_hl(0, "myICursor", { fg = "#EFEF00", bg = "#EFEF00" })
 end
+
 vim.api.nvim_create_autocmd("ColorScheme", {
     group = augroup,
     pattern = "*",

@@ -140,6 +140,18 @@ if blink_ok and not is_vscode then
         sources = {
             default = { "lsp", "path", "snippets", "buffer" },
         },
+        cmdline = {
+            keymap = {
+                preset = "cmdline",
+                -- close blink's menu before the native <C-d> listing so the two don't overlap
+                ["<C-d>"] = {
+                    function(cmp)
+                        cmp.hide()
+                    end,
+                    "fallback",
+                },
+            },
+        },
     })
 end
 
@@ -443,6 +455,55 @@ if snacks_ok and not is_vscode then
             timeout = 3000,
         },
     })
+
+    -- wezterm has no kitty unicode placeholders, so snacks draws images at absolute
+    -- positions; force a full redraw to clear leftover image cells
+    if vim.env.TERM_PROGRAM == "WezTerm" then
+        local group = vim.api.nvim_create_augroup("snacks_image_wezterm_redraw", { clear = true })
+        local function redraw()
+            vim.defer_fn(function()
+                vim.cmd("mode")
+            end, 50)
+        end
+        vim.api.nvim_create_autocmd({ "BufWinLeave", "WinClosed" }, {
+            group = group,
+            pattern = "*." .. table.concat(snacks.image.config.formats, ",*."),
+            callback = redraw,
+        })
+        -- gt/:tabe keep the image window open on the old tab, so BufWinLeave never fires
+        vim.api.nvim_create_autocmd("TabLeave", {
+            group = group,
+            callback = function()
+                for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+                    if snacks.image.supports_file(vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(win))) then
+                        redraw()
+                        return
+                    end
+                end
+            end,
+        })
+        -- images draw over floats, so drop all placements while the cmdline popup
+        -- is open; re-attach visible image buffers when it closes
+        vim.api.nvim_create_autocmd("CmdlineEnter", {
+            group = group,
+            callback = function()
+                snacks.image.terminal.request({ a = "d", d = "a" })
+            end,
+        })
+        vim.api.nvim_create_autocmd("CmdlineLeave", {
+            group = group,
+            callback = function()
+                vim.schedule(function()
+                    for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+                        local buf = vim.api.nvim_win_get_buf(win)
+                        if vim.bo[buf].filetype == "image" then
+                            snacks.image.buf.attach(buf)
+                        end
+                    end
+                end)
+            end,
+        })
+    end
 
     local function search_notifications()
         vim.schedule(function()

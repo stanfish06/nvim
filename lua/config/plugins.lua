@@ -58,6 +58,7 @@ local package_list = {
     { name = "fx.nvim", src = "https://github.com/stanfish06/fx.nvim.git" },
     { name = "d2.vim", src = "https://github.com/d2lang/d2-vim.git" }, -- draw and render diagram in vim
     { name = "tree-sitter-d2", src = "https://github.com/ravsii/tree-sitter-d2" },
+    { name = "vimtex.git", src = "https://github.com/lervag/vimtex.git" }
 }
 
 -- Packages loaded in stable mode
