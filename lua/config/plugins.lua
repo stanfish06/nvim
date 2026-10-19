@@ -229,7 +229,7 @@ if vim_pack_ok then
                         vim.notify("blink.cmp: native build failed: " .. tostring(err), vim.log.levels.WARN)
                     end
                 end
-            elseif name == "tree-sitter-d2" and kind == "install" and kind == "update" then
+            elseif name == "tree-sitter-d2" then
                 if not ev.data.active then
                     vim.cmd.packadd("tree-sitter-d2")
                 end
