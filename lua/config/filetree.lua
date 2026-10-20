@@ -6,6 +6,7 @@ local state = {
     cwd = nil,
     entries = {},
     show_hidden = false,
+    cursor_memory = {},
 }
 
 local function path_join(...)
@@ -26,6 +27,39 @@ local function is_valid_buffer()
     return state.buf and vim.api.nvim_buf_is_valid(state.buf)
 end
 
+local function define_filetree_hl()
+    local function from(group, field, fallback)
+        local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = group, create = false, link = false })
+        if not ok or type(hl) ~= "table" or type(hl[field]) ~= "number" then
+            return fallback
+        end
+        return string.format("#%06x", hl[field])
+    end
+
+    local popup_bg = from("NoicePopupmenu", "bg", "#1A2132")
+    local popup_fg = from("NoicePopupmenu", "fg", "#CDD6F4")
+    local border_fg = from("FxBorder", "fg", "#3E8FB0")
+    local title_fg = from("FxTitle", "fg", "#E5C07B")
+    local accent_fg = from("NoiceCmdlinePopupBorder", "fg", "#89B4FA")
+
+    vim.api.nvim_set_hl(0, "FileTree", { bg = popup_bg, fg = popup_fg })
+    vim.api.nvim_set_hl(0, "FileTreeBorder", { fg = border_fg })
+    vim.api.nvim_set_hl(0, "FileTreeTitle", { fg = title_fg, bold = true })
+    vim.api.nvim_set_hl(0, "FileTreeFooter", { fg = "#7E85A5" })
+    vim.api.nvim_set_hl(0, "FileTreeCursorLine", { bg = "#3A3A3A", fg = popup_fg })
+    vim.api.nvim_set_hl(0, "FileTreeDir", { fg = accent_fg, bold = true })
+    vim.api.nvim_set_hl(0, "FileTreeParent", { fg = "#7E85A5" })
+    vim.api.nvim_set_hl(0, "FileTreeHidden", { fg = "#7E85A5" })
+end
+define_filetree_hl()
+vim.api.nvim_create_autocmd("ColorScheme", {
+    group = vim.api.nvim_create_augroup("FileTreeTheme", { clear = true }),
+    pattern = "*",
+    callback = define_filetree_hl,
+})
+local FLOAT_WINHL =
+    "NormalFloat:FileTree,FloatBorder:FileTreeBorder,FloatTitle:FileTreeTitle,FloatFooter:FileTreeFooter,CursorLine:FileTreeCursorLine"
+
 local function display_width()
     local ui = vim.api.nvim_list_uis()[1]
     if not ui then
@@ -44,19 +78,32 @@ end
 
 local function entry_icon(entry)
     if entry.is_parent then
-        return "󰁞", "Comment"
+        return "󰁞", "FileTreeParent"
     end
     if entry.is_dir then
-        return "", "Directory"
+        return "", "FileTreeDir"
     end
 
     local ok, devicons = pcall(require, "nvim-web-devicons")
     if ok then
         local icon, highlight = devicons.get_icon(entry.name, vim.fs.ext(entry.name), { default = true })
-        return icon or "󰈙", highlight or "Normal"
+        return icon or "󰈙", highlight or "FileTree"
     end
 
-    return "󰈙", "Normal"
+    return "󰈙", "FileTree"
+end
+
+local function entry_name_hl(entry)
+    if entry.is_parent then
+        return "FileTreeParent"
+    end
+    if entry.is_dir then
+        return "FileTreeDir"
+    end
+    if entry.name:sub(1, 1) == "." then
+        return "FileTreeHidden"
+    end
+    return nil
 end
 
 local function should_show(name)
@@ -128,10 +175,11 @@ local function set_highlights(entries)
             hl_group = highlight,
             priority = 100,
         })
-        if entry.is_dir then
+        local name_hl = entry_name_hl(entry)
+        if name_hl then
             vim.api.nvim_buf_set_extmark(state.buf, namespace, row - 1, name_start, {
                 end_col = name_end,
-                hl_group = "Directory",
+                hl_group = name_hl,
                 priority = 80,
             })
         end
@@ -147,31 +195,6 @@ local function footer()
     return " ↵ open  h parent  l expand  . hidden  r refresh  q quit "
 end
 
-function M.refresh(keep_row)
-    if not is_valid_window() or not is_valid_buffer() then
-        return
-    end
-
-    local row = keep_row and vim.api.nvim_win_get_cursor(state.win)[1] or 1
-    local entries, lines = scan_dir(state.cwd)
-    state.entries = entries
-
-    vim.bo[state.buf].modifiable = true
-    vim.api.nvim_buf_set_lines(state.buf, 0, -1, false, lines)
-    vim.bo[state.buf].modifiable = false
-    set_highlights(entries)
-    vim.api.nvim_win_set_config(state.win, { title = title(), footer = footer() })
-    vim.api.nvim_win_set_cursor(state.win, { math.min(row, #lines), 0 })
-end
-
-function M.close()
-    if is_valid_window() then
-        vim.api.nvim_win_close(state.win, true)
-    end
-    state.buf = nil
-    state.win = nil
-end
-
 local function selected_entry()
     if not is_valid_window() then
         return nil
@@ -180,13 +203,68 @@ local function selected_entry()
     return state.entries[row]
 end
 
+local function remember_cursor()
+    local entry = selected_entry()
+    if entry and state.cwd then
+        state.cursor_memory[state.cwd] = entry.path
+    end
+end
+
+local function row_for_path(entries, path)
+    if not path then
+        return nil
+    end
+    for row, entry in ipairs(entries) do
+        if entry.path == path then
+            return row
+        end
+    end
+    return nil
+end
+
+function M.refresh(keep_row, focus_path)
+    if not is_valid_window() or not is_valid_buffer() then
+        return
+    end
+
+    local prev_entry = selected_entry()
+    local prev_row = vim.api.nvim_win_get_cursor(state.win)[1]
+    local entries, lines = scan_dir(state.cwd)
+    state.entries = entries
+
+    vim.bo[state.buf].modifiable = true
+    vim.api.nvim_buf_set_lines(state.buf, 0, -1, false, lines)
+    vim.bo[state.buf].modifiable = false
+    set_highlights(entries)
+    vim.api.nvim_win_set_config(state.win, { title = title(), footer = footer() })
+
+    local row
+    if keep_row then
+        row = row_for_path(entries, prev_entry and prev_entry.path) or prev_row
+    else
+        row = row_for_path(entries, state.cursor_memory[state.cwd]) or row_for_path(entries, focus_path) or 1
+    end
+    vim.api.nvim_win_set_cursor(state.win, { math.min(row, #lines), 0 })
+end
+
+function M.close()
+    remember_cursor()
+    if is_valid_window() then
+        vim.api.nvim_win_close(state.win, true)
+    end
+    state.buf = nil
+    state.win = nil
+end
+
 function M.parent()
     local parent = vim.fn.fnamemodify(state.cwd, ":h")
     if parent == state.cwd then
         return
     end
+    remember_cursor()
+    local from = state.cwd
     state.cwd = parent
-    M.refresh(false)
+    M.refresh(false, from)
 end
 
 function M.open_entry(mode)
@@ -196,8 +274,10 @@ function M.open_entry(mode)
     end
 
     if entry.is_dir then
+        remember_cursor()
+        local from = state.cwd
         state.cwd = entry.path
-        M.refresh(false)
+        M.refresh(false, from)
         return
     end
 
@@ -248,6 +328,7 @@ local function create_buffer()
 end
 
 local function set_window_options(win)
+    vim.wo[win].winhighlight = FLOAT_WINHL
     vim.wo[win].cursorline = true
     vim.wo[win].number = false
     vim.wo[win].relativenumber = false
@@ -255,6 +336,17 @@ local function set_window_options(win)
     vim.wo[win].foldcolumn = "0"
     vim.wo[win].statuscolumn = ""
     vim.wo[win].winfixbuf = true
+end
+
+local function set_autocmds(buf)
+    vim.api.nvim_create_autocmd("CursorMoved", {
+        buffer = buf,
+        callback = function()
+            if state.buf == buf then
+                remember_cursor()
+            end
+        end,
+    })
 end
 
 local function set_keymaps(buf)
@@ -314,6 +406,7 @@ function M.open(opts)
 
     set_window_options(state.win)
     set_keymaps(state.buf)
+    set_autocmds(state.buf)
     M.refresh(false)
 end
 

@@ -49,6 +49,7 @@ local package_list = {
     { name = "tokyonight", src = "https://github.com/folke/tokyonight.nvim.git" },
     { name = "eldritch", src = "https://github.com/eldritch-theme/eldritch.nvim.git" },
     { name = "solarized-osaka.nvim", src = "https://github.com/craftzdog/solarized-osaka.nvim.git" },
+    { name = "poimandres.nvim", src = "https://github.com/olivercederborg/poimandres.nvim.git" },
     { name = "tinted-vim", src = "https://github.com/tinted-theming/tinted-vim.git" },
     { name = "snacks.nvim", src = "https://github.com/folke/snacks.nvim.git" },
     { name = "noice.nvim", src = "https://github.com/folke/noice.nvim.git" },
