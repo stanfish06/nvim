@@ -289,16 +289,69 @@ local function current_fx_status()
     end
 end
 
--- cursor
+-- cursor: base yellow tinted toward the fg of the token under the cursor
+local CURSOR_BASE = 0xEFEF00 -- alt: #FFA500
+local CURSOR_MIX = 0.75 -- share of the token color: 0 = plain base, 1 = token color
+local INSPECT_FILTER = { syntax = true, treesitter = true, semantic_tokens = true, extmarks = false }
+local cursor_bg -- last applied color; skips nvim_set_hl when unchanged
+
+local function blend(a, b, t)
+    local out = 0
+    for _, shift in ipairs({ 65536, 256, 1 }) do
+        local ca, cb = math.floor(a / shift) % 256, math.floor(b / shift) % 256
+        out = out + math.floor(ca + (cb - ca) * t + 0.5) * shift
+    end
+    return out
+end
+
+-- fg of the topmost highlight at the cursor: semantic tokens > treesitter > syntax
+local function token_fg()
+    local pos = vim.api.nvim_win_get_cursor(0)
+    local info = vim.inspect_pos(0, pos[1] - 1, pos[2], INSPECT_FILTER)
+    local groups = {}
+    for _, item in ipairs(info.syntax) do
+        groups[#groups + 1] = item.hl_group
+    end
+    for _, item in ipairs(info.treesitter) do
+        groups[#groups + 1] = item.hl_group
+    end
+    -- type and modifier tokens overlap; higher priority draws on top
+    table.sort(info.semantic_tokens, function(x, y)
+        return (x.opts.priority or 0) < (y.opts.priority or 0)
+    end)
+    for _, item in ipairs(info.semantic_tokens) do
+        groups[#groups + 1] = item.opts.hl_group
+    end
+    for i = #groups, 1, -1 do
+        local fg = vim.api.nvim_get_hl(0, { name = groups[i], link = false }).fg
+        if fg then
+            return fg
+        end
+    end
+end
+
 local function set_cursor_color()
-    -- #FFA500
-    vim.api.nvim_set_hl(0, "myCursor", { fg = "#EFEF00", bg = "#EFEF00" })
-    vim.api.nvim_set_hl(0, "myICursor", { fg = "#EFEF00", bg = "#EFEF00" })
+    local fg = token_fg()
+    local bg = fg and blend(CURSOR_BASE, fg, CURSOR_MIX) or CURSOR_BASE
+    if bg == cursor_bg then
+        return
+    end
+    cursor_bg = bg
+    vim.api.nvim_set_hl(0, "myCursor", { fg = bg, bg = bg })
+    vim.api.nvim_set_hl(0, "myICursor", { fg = bg, bg = bg })
 end
 
 vim.api.nvim_create_autocmd("ColorScheme", {
     group = augroup,
     pattern = "*",
+    callback = function()
+        -- colorscheme load clears myCursor; force a re-apply
+        cursor_bg = nil
+        set_cursor_color()
+    end,
+})
+vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI", "BufEnter", "WinEnter" }, {
+    group = augroup,
     callback = set_cursor_color,
 })
 set_cursor_color()
