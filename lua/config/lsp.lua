@@ -45,6 +45,7 @@ vim.lsp.enable("rust_analyzer")
 -- go
 vim.lsp.enable("gopls")
 vim.lsp.enable("sourcekit")
+vim.lsp.enable("terraformls")
 
 -- vim.list.unique() is 0.12+, and this module has to load on distro nvim reached over
 -- ssh (:NvimRemote), so dedupe by hand. Unlike vim.list.unique this returns a new

@@ -36,6 +36,12 @@ local parser_repos = {
         location = "tree-sitter-markdown-inline",
     },
     { lang = "latex", url = "https://github.com/latex-lsp/tree-sitter-latex" },
+    { lang = "hcl", url = "https://github.com/tree-sitter-grammars/tree-sitter-hcl" },
+    {
+        lang = "terraform",
+        url = "https://github.com/tree-sitter-grammars/tree-sitter-hcl",
+        location = "dialects/terraform",
+    },
 }
 
 -- this function needs to be updated occasionally, as of 260130, glibc should be at least 2.30
@@ -97,6 +103,8 @@ local function ts_install()
             "markdown",
             "markdown_inline",
             "latex",
+            "hcl",
+            "terraform",
         })
     end
 end
