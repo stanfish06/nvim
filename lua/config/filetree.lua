@@ -423,6 +423,12 @@ vim.api.nvim_create_user_command("FileTree", function(opts)
     M.toggle(opts)
 end, { nargs = "?", complete = "dir" })
 
-vim.keymap.set("n", "-", M.toggle, { desc = "Toggle file tree" })
+-- disable this in builtin dir
+vim.keymap.set("n", "-", function()
+    if vim.b.nvim_dir ~= nil then
+        return "<Plug>(nvim-dir-up)"
+    end
+    return "<Cmd>FileTree<CR>"
+end, { expr = true, remap = true, desc = "Toggle file tree" })
 
 return M
