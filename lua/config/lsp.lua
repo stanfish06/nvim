@@ -46,6 +46,11 @@ vim.lsp.enable("rust_analyzer")
 vim.lsp.enable("gopls")
 vim.lsp.enable("sourcekit")
 vim.lsp.enable("terraformls")
+-- lean: install via elan; lean.nvim enables leanls (lake serve), elan's bin dir is not on shell PATH
+local elan_bin = vim.fs.joinpath(vim.env.HOME, ".elan", "bin")
+if vim.fn.isdirectory(elan_bin) == 1 and not vim.env.PATH:find(elan_bin, 1, true) then
+    vim.env.PATH = elan_bin .. ":" .. vim.env.PATH
+end
 
 -- vim.list.unique() is 0.12+, and this module has to load on distro nvim reached over
 -- ssh (:NvimRemote), so dedupe by hand. Unlike vim.list.unique this returns a new

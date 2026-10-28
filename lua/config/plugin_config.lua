@@ -426,6 +426,9 @@ if obsidian_ok then
     })
 end
 
+-- lean (read on FileType; <LocalLeader>i infoview, \alpha -> α abbreviations)
+vim.g.lean_config = { mappings = true }
+
 -- quicker (improve quickfix ui)
 local quicker_ok, quicker = pcall(require, "quicker")
 if quicker_ok then
