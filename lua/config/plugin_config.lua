@@ -155,22 +155,49 @@ if blink_ok and not is_vscode then
     })
 end
 
+-- nvim-ts-autotag (close tags on `>`, rename the paired tag in html/jsx/tsx)
+local autotag_ok, autotag = pcall(require, "nvim-ts-autotag")
+if autotag_ok and not is_vscode then
+    autotag.setup()
+end
+
 -- conform (formatting)
 local conform_ok, conform = pcall(require, "conform")
 if conform_ok and not is_vscode then
+    -- deno_fmt in Deno projects, biome where biome.json exists, prettier otherwise;
+    -- the nearer config wins when a monorepo has both
+    local function web_formatters(bufnr)
+        local deno_root = vim.fs.root(bufnr, { "deno.json", "deno.jsonc" })
+        local biome_root = vim.fs.root(bufnr, { "biome.json", "biome.jsonc" })
+        if deno_root and (not biome_root or #deno_root >= #biome_root) then
+            return { "deno_fmt" }
+        elseif biome_root then
+            return { "biome" }
+        end
+        return { "prettier" }
+    end
+    local formatters_by_ft = {
+        lua = { "stylua" },
+        python = { "ruff_format" },
+        go = { "gofmt" },
+    }
+    for _, ft in ipairs({
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact",
+        "json",
+        "jsonc",
+        "css",
+        "html",
+    }) do
+        formatters_by_ft[ft] = web_formatters
+    end
     conform.setup({
         default_format_opts = {
             lsp_format = "fallback",
         },
-        formatters_by_ft = {
-            lua = { "stylua" },
-            python = { "ruff_format" },
-            javascript = { "prettier" },
-            javascriptreact = { "prettier" },
-            typescript = { "prettier" },
-            typescriptreact = { "prettier" },
-            go = { "gofmt" },
-        },
+        formatters_by_ft = formatters_by_ft,
     })
     local auto_format = false
 

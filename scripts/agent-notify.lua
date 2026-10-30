@@ -94,12 +94,22 @@ end
 
 -- vim.g.agent_notify_focused is set by lua/config/agent_notify.lua, and is nil
 -- on a server that has never seen a focus event
+--
+-- Stable-mode servers (init.lua skips config.agent_notify) opt out: the probe
+-- answers nil like a dead socket, and delivery refuses so require() can't pull
+-- the module in behind init.lua's back
 local PROBE = [[
+if vim.g.stable_mode then
+    return nil
+end
 return { ui = #vim.api.nvim_list_uis() > 0, focused = vim.g.agent_notify_focused }
 ]]
 
 local DELIVER = [[
 local payload = ...
+if vim.g.stable_mode then
+    return false
+end
 local ok, mod = pcall(require, "config.agent_notify")
 if ok and type(mod) == "table" and type(mod.handle) == "function" then
     mod.handle(payload)

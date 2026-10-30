@@ -16,6 +16,7 @@ local package_list = {
         version = vim.version.range("0.9.4"),
     }, -- this package breaks frequently, specify version
     { name = "nvim-lspconfig", src = "https://github.com/neovim/nvim-lspconfig" },
+    { name = "SchemaStore.nvim", src = "https://github.com/b0o/SchemaStore.nvim" }, -- json schemas for jsonls
     { name = "blink.lib", src = "https://github.com/saghen/blink.lib.git" },
     {
         -- in case auto-build failed, go into .local/share/nvim and rebuild manually
@@ -35,6 +36,7 @@ local package_list = {
         name = "nvim-treesitter-textobjects",
         src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git",
     },
+    { name = "nvim-ts-autotag", src = "https://github.com/windwp/nvim-ts-autotag" }, -- auto close/rename html and jsx tags
     { name = "async.nvim", src = "https://github.com/lewis6991/async.nvim.git" },
     { name = "refactoring.nvim", src = "https://github.com/ThePrimeagen/refactoring.nvim.git" },
     { name = "conform.nvim", src = "https://github.com/stevearc/conform.nvim.git" },

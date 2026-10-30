@@ -38,8 +38,77 @@ vim.lsp.enable("pyright")
 vim.lsp.enable("pyrefly")
 -- install using system package manager
 vim.lsp.enable("clangd")
--- npm instal -g typescript-language-server
+local function project_ts_major(bufnr)
+    for dir in vim.fs.parents(vim.api.nvim_buf_get_name(bufnr)) do
+        local pkg = vim.fs.joinpath(dir, "node_modules", "typescript", "package.json")
+        if vim.uv.fs_stat(pkg) then
+            local ok, meta = pcall(function()
+                return vim.json.decode(table.concat(vim.fn.readfile(pkg), "\n"))
+            end)
+            local version = ok and type(meta) == "table" and vim.version.parse(meta.version or "") or nil
+            return version and version.major or nil
+        end
+    end
+end
+
+-- wrap lspconfig's root_dir so only one of tsc/ts_ls attaches per buffer
+local function gate_ts_server(name, use)
+    local base = (vim.lsp.config[name] or {}).root_dir
+    if type(base) ~= "function" then
+        return
+    end
+    vim.lsp.config(name, {
+        root_dir = function(bufnr, on_dir)
+            if use(project_ts_major(bufnr)) then
+                base(bufnr, on_dir)
+            end
+        end,
+    })
+end
+gate_ts_server("tsc", function(major)
+    return major == nil or major >= 7
+end)
+gate_ts_server("ts_ls", function(major)
+    return major ~= nil and major < 7
+end)
+vim.lsp.enable("tsc")
 vim.lsp.enable("ts_ls")
+-- deno: denols attaches only under deno.json/deno.jsonc/deno.lock; tsc and ts_ls skip those roots
+vim.lsp.enable("denols")
+
+-- web: mise npm:vscode-langservers-extracted (html, cssls, jsonls, eslint), npm:@tailwindcss/language-server, biome.
+-- eslint, biome and tailwindcss attach only inside projects that configure them
+vim.lsp.config("cssls", {
+    settings = {
+        -- tailwind v4 at-rules (@theme, @utility, @apply) are checked by tailwindcss instead
+        css = { lint = { unknownAtRules = "ignore" } },
+    },
+})
+vim.lsp.config("jsonls", {
+    settings = { json = { validate = { enable = true } } },
+    -- load the SchemaStore catalog when jsonls starts, not at startup; mutate in place because
+    -- the client keeps a reference to this settings table
+    before_init = function(_, config)
+        local ok, schemastore = pcall(require, "schemastore")
+        if ok then
+            config.settings.json.schemas = schemastore.json.schemas()
+        end
+    end,
+})
+vim.lsp.config("tailwindcss", {
+    settings = {
+        tailwindCSS = {
+            -- class strings inside these helpers get completion, hover and lint
+            classFunctions = { "cn", "clsx", "cva", "tw" },
+        },
+    },
+})
+vim.lsp.enable("html")
+vim.lsp.enable("cssls")
+vim.lsp.enable("jsonls")
+vim.lsp.enable("eslint")
+vim.lsp.enable("biome")
+vim.lsp.enable("tailwindcss")
 -- rust
 vim.lsp.enable("rust_analyzer")
 -- go

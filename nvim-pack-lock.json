@@ -1,5 +1,9 @@
 {
   "plugins": {
+    "SchemaStore.nvim": {
+      "rev": "246ca2fa1323ee1312b84352ab09b8c2fa292888",
+      "src": "https://github.com/b0o/SchemaStore.nvim"
+    },
     "async.nvim": {
       "rev": "4182ab361c09ff251ac159c4a4110ec8e7723215",
       "src": "https://github.com/lewis6991/async.nvim.git"
@@ -89,6 +93,10 @@
     "nvim-treesitter-textobjects": {
       "rev": "5c7b0263797dfd1bd6202f2b219f3b53a80b2187",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
+    },
+    "nvim-ts-autotag": {
+      "rev": "d7220b55e16ed3c04e88086256def5d282429493",
+      "src": "https://github.com/windwp/nvim-ts-autotag"
     },
     "obsidian.nvim": {
       "rev": "0986cf17be09cb94905ed82eb8477474155ed933",

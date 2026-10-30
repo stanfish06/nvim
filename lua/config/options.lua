@@ -81,6 +81,14 @@ vim.o.expandtab = true
 vim.o.smartcase = true
 vim.o.tabstop = 4
 vim.o.shiftwidth = 4
+-- 2-space indent for web files
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "javascript", "javascriptreact", "typescript", "typescriptreact", "html", "css", "json", "jsonc" },
+    callback = function(ev)
+        vim.bo[ev.buf].tabstop = 2
+        vim.bo[ev.buf].shiftwidth = 2
+    end,
+})
 vim.o.history = 500
 vim.opt.cursorline = true
 vim.opt.cursorlineopt = "number"
@@ -225,10 +233,27 @@ local function term_fg_process(buf)
     return string.format("%d:%s", tpgid, name)
 end
 
+-- trapezoid edges for the active tab (old browser style), nerd font powerline
+-- extras: lower-right triangle draws "/", lower-left triangle draws "\"
+local TAB_EDGE_L, TAB_EDGE_R = "\u{e0ba}", "\u{e0b8}"
+
+-- edge fg = active tab bg, edge bg = tabline fill, so the slope joins the two
+local function define_tabline_hl()
+    local sel = vim.api.nvim_get_hl(0, { name = "TabLineSel", link = false })
+    local fill = vim.api.nvim_get_hl(0, { name = "TabLineFill", link = false })
+    local normal = vim.api.nvim_get_hl(0, { name = "Normal", link = false })
+    vim.api.nvim_set_hl(0, "TabLineSelEdge", { fg = sel.bg or normal.bg, bg = fill.bg })
+end
+define_tabline_hl()
+vim.api.nvim_create_autocmd("ColorScheme", {
+    group = vim.api.nvim_create_augroup("TabLineTheme", { clear = true }),
+    pattern = "*",
+    callback = define_tabline_hl,
+})
+
 function _G.TabLineCustom()
     local s = ""
     for i = 1, vim.fn.tabpagenr("$") do
-        local hl = i == vim.fn.tabpagenr() and "%#TabLineSel#" or "%#TabLine#"
         local buflist = vim.fn.tabpagebuflist(i)
         local buf = buflist[vim.fn.tabpagewinnr(i)]
         local name
@@ -238,7 +263,14 @@ function _G.TabLineCustom()
         if not name then
             name = vim.fn.fnamemodify(vim.fn.bufname(buf), ":t")
         end
-        s = s .. hl .. "%" .. i .. "T " .. (name == "" and "[No Name]" or name) .. " "
+        local label = " " .. (name == "" and "[No Name]" or name) .. " "
+        if i == vim.fn.tabpagenr() then
+            local edge = "%#TabLineSelEdge#"
+            s = s .. "%" .. i .. "T" .. edge .. TAB_EDGE_L .. "%#TabLineSel#" .. label .. edge .. TAB_EDGE_R
+        else
+            -- spaces in place of the edges so tabs don't shift when switching
+            s = s .. "%" .. i .. "T%#TabLine# " .. label .. " "
+        end
     end
     return s .. "%#TabLineFill#%T"
 end
