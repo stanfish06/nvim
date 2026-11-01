@@ -416,7 +416,10 @@ local function current_file()
     local color = "%#File# "
     local color_alt = "%#FileAlt#"
     local name
-    if full_path == "" then
+    local term_prefix, term_prog, term_args = full_path:match("^(term://.-//%d+:)(%S*)(.*)$")
+    if term_prefix then
+        name = term_prefix .. vim.fn.fnamemodify(term_prog, ":t") .. term_args
+    elseif full_path == "" then
         name = vim.fn.fnamemodify(root_path, ":~")
     elseif full_path:sub(1, #root_path + 1) == root_path .. "/" then
         -- file inside cwd: show its cwd-relative path prefixed with the cwd's basename
