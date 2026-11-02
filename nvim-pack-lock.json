@@ -59,11 +59,11 @@
       "src": "https://github.com/lewis6991/gitsigns.nvim.git"
     },
     "guh.nvim": {
-      "rev": "88933bcb2ec0b9dc472957665bc8455863449b93",
+      "rev": "bc1acccc79de2602d5643ec46c58115b2b4212f7",
       "src": "https://github.com/justinmk/guh.nvim"
     },
     "lean.nvim": {
-      "rev": "52a2eeb623e01033c82fbe8d73cdf6da4caf62ee",
+      "rev": "108592ebb16d57cbf84d994183327fe643dfa730",
       "src": "https://github.com/Julian/lean.nvim"
     },
     "mini.nvim": {
