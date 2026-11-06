@@ -49,7 +49,7 @@ local function draw_scope_lines()
             start_col = math.min(start_col, (first_line:find("%S") or 1) - 1)
             for i = start_row + 1, end_row do
                 local char = char_at(i + 1, start_col + 1) -- treesitter is 0 based
-                if char == " " or char == "" then
+                if char == "" or char:match("%s") then
                     local scope_char = "│"
                     if i == start_row + 1 and (end_row - start_row) > 1 then
                         scope_char = "┌"
