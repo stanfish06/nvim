@@ -1,11 +1,11 @@
 {
   "plugins": {
     "SchemaStore.nvim": {
-      "rev": "073910e2521e23681c44a8b1355e91765a60cbaa",
+      "rev": "e8c3d2225d6bf5e2cbe414952c247d7a3411849b",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "async.nvim": {
-      "rev": "734e3386dbdf8b60492c16d488bc4e372fdd658c",
+      "rev": "028d843a892b4920d8306216369aeee9fbcebae5",
       "src": "https://github.com/lewis6991/async.nvim.git"
     },
     "blink.cmp": {
@@ -51,23 +51,23 @@
       "src": "https://github.com/stanfish06/fx.nvim.git"
     },
     "fzf-lua": {
-      "rev": "07fce8ac8dffba4e11f1cbe5490d730a2cc5ec7a",
+      "rev": "ded1c96d3d9d74634287d722431c26690968a4bf",
       "src": "https://github.com/ibhagwan/fzf-lua.git"
     },
     "gitsigns.nvim": {
-      "rev": "4bcd99167c265f135886b282baad77afe06206b2",
+      "rev": "dc7698f932792a764d3db95fedee26c38e728355",
       "src": "https://github.com/lewis6991/gitsigns.nvim.git"
     },
     "guh.nvim": {
-      "rev": "b65ce60033b286a5d637a3448279632af2bf4866",
+      "rev": "39df7dc86785539231a04dd61e2b79f280a08ba4",
       "src": "https://github.com/justinmk/guh.nvim"
     },
     "lean.nvim": {
-      "rev": "108592ebb16d57cbf84d994183327fe643dfa730",
+      "rev": "755fee701e1f289699bdc983af6d1ddce74cfb65",
       "src": "https://github.com/Julian/lean.nvim"
     },
     "mini.nvim": {
-      "rev": "6d5a29e86a7352739506c28e0bc50fe214b5216f",
+      "rev": "4d32e018f7cfcc0ba95357465516be615c542fef",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "noice.nvim": {
@@ -83,11 +83,11 @@
       "src": "https://github.com/mfussenegger/nvim-lint.git"
     },
     "nvim-lspconfig": {
-      "rev": "adfbb74472f6c231b651b650a89f414c2680fb31",
+      "rev": "05588aab66016c6836634b87ca2d392d097515f2",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
-      "rev": "0195cd62fa89950f34c0e0d648ea7897ab85d4d3",
+      "rev": "04f17886f75416dfdc25374c950a52c63f0e98fe",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "nvim-treesitter-textobjects": {
@@ -99,7 +99,7 @@
       "src": "https://github.com/windwp/nvim-ts-autotag"
     },
     "obsidian.nvim": {
-      "rev": "15af492b64f4677959fe95008f1d5b782fe1f86a",
+      "rev": "f5fb6b7f5dab4a61ff605a150ef0b8f2391fb458",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim.git"
     },
     "plenary.nvim": {
@@ -119,7 +119,7 @@
       "src": "https://github.com/ThePrimeagen/refactoring.nvim.git"
     },
     "render-markdown.nvim": {
-      "rev": "8e8795368391036643b622875a6da6a51bcd33f4",
+      "rev": "8801162e041e34c64d0d1397cd1f353a14b01950",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim.git"
     },
     "rose-pine": {
@@ -139,7 +139,7 @@
       "src": "https://github.com/craftzdog/solarized-osaka.nvim.git"
     },
     "tinted-vim": {
-      "rev": "b7201d490772993a8baaa53736ab091b0abe998b",
+      "rev": "21e92ddf942b95009da8087335b0586efeb27eb1",
       "src": "https://github.com/tinted-theming/tinted-vim.git"
     },
     "tiny-inline-diagnostic.nvim": {
@@ -155,7 +155,7 @@
       "src": "https://github.com/ravsii/tree-sitter-d2"
     },
     "vimtex.git": {
-      "rev": "3f96503904db6acdb7108cd93a9580dd41e88555",
+      "rev": "cedc0a172e40d0d1d49670dd0d936d6e2df61de7",
       "src": "https://github.com/lervag/vimtex.git"
     }
   }
