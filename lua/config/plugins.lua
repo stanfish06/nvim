@@ -73,6 +73,7 @@ local STABLE_PKGS = {
     ["sneaks.vim"] = true,
     ["rose-pine"] = true,
     ["tokyonight"] = true,
+    ["fugitive.vim"] = true,
 }
 
 local load_list = package_list
